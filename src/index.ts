@@ -32,6 +32,7 @@ export default class DexieJSConnector implements Connector {
         this.config = config as ConnectorConfig;
         this.config.version = version;
         this.connectionConfig = connectionConfig;
+        this.containers = {};
     }
 
     abort(): void {
