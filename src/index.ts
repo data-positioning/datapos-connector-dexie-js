@@ -42,16 +42,13 @@ export default class DexieJSConnector implements Connector {
     }
 
     async establishContainer(settings: EstablishContainerSettings): Promise<EstablishContainerResult> {
-        console.log('aaaa', settings);
         const id = nanoid();
         this.containers[id] = await new Dexie(settings.name).open();
-        console.log('bbbb', id, this.containers[id]);
         return { id };
     }
 
     async find(settings: FindSettings & { container: Dexie }): Promise<FindResult> {
         try {
-            console.log('cccc', settings);
             const container = this.containers[settings.containerId];
             return container.tables.find((table) => table.name === settings.objectId) ? { folderPath: '/' } : undefined;
         } catch (error) {
@@ -61,7 +58,6 @@ export default class DexieJSConnector implements Connector {
 
     async list(settings: ListSettings & { container: Dexie }): Promise<ListResult> {
         try {
-            console.log('dddd', settings);
             const container = this.containers[settings.containerId];
             const connectionItemConfigs = container.tables.map(
                 (table) => ({ folderPath: '/', id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
