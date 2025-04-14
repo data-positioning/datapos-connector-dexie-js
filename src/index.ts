@@ -7,7 +7,16 @@ import Dexie from 'dexie';
 
 // Dependencies - Framework
 import { ConnectorError } from '@datapos/datapos-share-core';
-import type { ConnectionConfig, ConnectionItemConfig, Connector, ConnectorCallbackData, ConnectorConfig, FindSettings } from '@datapos/datapos-share-core';
+import type {
+    ConnectionConfig,
+    ConnectionItemConfig,
+    Connector,
+    ConnectorCallbackData,
+    ConnectorConfig,
+    EstablishContainerResult,
+    FindSettings
+} from '@datapos/datapos-share-core';
+import type { EstablishContainerSettings } from '@datapos/datapos-share-core';
 import type { FindResult } from '@datapos/datapos-share-core';
 import type { ListResult, ListSettings } from '@datapos/datapos-share-core';
 
@@ -37,8 +46,9 @@ export default class DexieJSConnector implements Connector {
         this.abortController = null;
     }
 
-    async establishContainer(id: string): Promise<Dexie | undefined> {
-        return await new Dexie(id).open();
+    async establishContainer(settings: EstablishContainerSettings): Promise<EstablishContainerResult> {
+        console.log('aaaa', settings);
+        return { container: await new Dexie(settings.id).open() };
     }
 
     async find(settings: FindSettings & { container: Dexie }): Promise<FindResult | undefined> {
