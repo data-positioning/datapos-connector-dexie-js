@@ -127,6 +127,7 @@ async function preview(
 
         // Fetch the first 50 rows.
         const container = connector.containers[settings.containerId];
+        console.log(999, connector.containers, container);
         const data = await container.table(itemConfig.name).limit(50).toArray();
         console.log(data);
         return { result: { data, typeId: 'table' } };
