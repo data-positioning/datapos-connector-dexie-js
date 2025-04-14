@@ -117,6 +117,7 @@ async function preview(
     settings: PreviewSettings
 ): Promise<{ error?: unknown; result?: PreviewResult }> {
     try {
+        console.log(9999, connector, callback, itemConfig, settings);
         // Create an abort controller. Get the signal for the abort controller and add an abort listener.
         connector.abortController = new AbortController();
         const signal = connector.abortController.signal;
