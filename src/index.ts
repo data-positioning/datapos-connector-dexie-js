@@ -4,18 +4,11 @@
 
 // Dependencies - Vendor
 import Dexie from 'dexie';
+import { nanoid } from 'nanoid';
 
 // Dependencies - Framework
 import { ConnectorError } from '@datapos/datapos-share-core';
-import type {
-    ConnectionConfig,
-    ConnectionItemConfig,
-    Connector,
-    ConnectorCallbackData,
-    ConnectorConfig,
-    EstablishContainerResult,
-    FindSettings
-} from '@datapos/datapos-share-core';
+import type { ConnectionConfig, ConnectionItemConfig, Connector, ConnectorConfig, EstablishContainerResult, FindSettings } from '@datapos/datapos-share-core';
 import type { EstablishContainerSettings } from '@datapos/datapos-share-core';
 import type { FindResult } from '@datapos/datapos-share-core';
 import type { ListResult, ListSettings } from '@datapos/datapos-share-core';
@@ -32,6 +25,7 @@ export default class DexieJSConnector implements Connector {
     abortController: AbortController | undefined;
     readonly config: ConnectorConfig;
     readonly connectionConfig: ConnectionConfig;
+    containers: Record<string, Dexie>;
 
     constructor(connectionConfig: ConnectionConfig) {
         this.abortController = null;
@@ -48,15 +42,17 @@ export default class DexieJSConnector implements Connector {
 
     async establishContainer(settings: EstablishContainerSettings): Promise<EstablishContainerResult> {
         console.log('aaaa', settings);
-        const container = await new Dexie(settings.id).open();
-        console.log('bbbb', container);
-        return { container };
+        const id = nanoid();
+        this.containers[id] = await new Dexie(settings.name).open();
+        console.log('bbbb', id, this.containers[id]);
+        return { id };
     }
 
     async find(settings: FindSettings & { container: Dexie }): Promise<FindResult> {
         try {
             console.log('cccc', settings);
-            return settings.container.tables.find((table) => table.name === settings.objectId) ? { folderPath: '/' } : undefined;
+            const container = this.containers[settings.containerId];
+            return container.tables.find((table) => table.name === settings.objectId) ? { folderPath: '/' } : undefined;
         } catch (error) {
             throw constructErrorAndTidyUp(this, ERROR_LIST_ITEMS_FAILED, 'find', error);
         }
@@ -65,7 +61,8 @@ export default class DexieJSConnector implements Connector {
     async list(settings: ListSettings & { container: Dexie }): Promise<ListResult> {
         try {
             console.log('dddd', settings);
-            const connectionItemConfigs = settings.container.tables.map(
+            const container = this.containers[settings.containerId];
+            const connectionItemConfigs = container.tables.map(
                 (table) => ({ folderPath: '/', id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
             );
             return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
