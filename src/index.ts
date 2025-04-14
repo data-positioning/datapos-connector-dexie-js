@@ -64,6 +64,7 @@ export default class DexieJSConnector implements Connector {
 
     async list(settings: ListSettings & { container: Dexie }): Promise<ListResult> {
         try {
+            console.log('dddd', settings);
             const connectionItemConfigs = settings.container.tables.map(
                 (table) => ({ folderPath: '/', id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
             );
