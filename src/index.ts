@@ -7,18 +7,30 @@ import Dexie from 'dexie';
 import { nanoid } from 'nanoid';
 
 // Dependencies - Framework
-import { ConnectorError } from '@datapos/datapos-share-core';
-import type { ConnectionConfig, ConnectionItemConfig, Connector, ConnectorConfig, EstablishContainerResult, FindSettings } from '@datapos/datapos-share-core';
-import type { EstablishContainerSettings } from '@datapos/datapos-share-core';
-import type { FindResult } from '@datapos/datapos-share-core';
+import { AbortError, ConnectorError } from '@datapos/datapos-share-core';
+import type { ConnectionConfig, ConnectionItemConfig, Connector, ConnectorCallbackData } from '@datapos/datapos-share-core';
+import type { ConnectorConfig, CreateInterface, CreateResult, CreateSettings } from '@datapos/datapos-share-core';
+import type { DropInterface, DropResult } from '@datapos/datapos-share-core';
+import type { EstablishContainerResult, EstablishContainerSettings } from '@datapos/datapos-share-core';
+import type { FindResult, FindSettings } from '@datapos/datapos-share-core';
 import type { ListResult, ListSettings } from '@datapos/datapos-share-core';
+import type { PreviewInterface, PreviewResult, PreviewSettings } from '@datapos/datapos-share-core';
 
 // Dependencies - Data
 import config from './config.json';
 import { version } from '../package.json';
 
+// Interfaces/Types - Connector
+declare module '@datapos/datapos-share-core' {
+    interface Connector {
+        containers: Record<string, Dexie>;
+    }
+}
 // Constants
+const CALLBACK_PREVIEW_ABORTED = 'Connector preview aborted.';
+const CALLBACK_READ_ABORTED = 'Connector read aborted.';
 const ERROR_LIST_ITEMS_FAILED = 'Connector list items failed.';
+const ERROR_PREVIEW_FAILED = 'Connector preview failed.';
 
 // Classes - File Store Emulator Connector
 export default class DexieJSConnector implements Connector {
@@ -56,6 +68,18 @@ export default class DexieJSConnector implements Connector {
         }
     }
 
+    getCreateInterface(): CreateInterface {
+        return { connector: this, create };
+    }
+
+    getDropInterface(): DropInterface {
+        return { connector: this, drop };
+    }
+
+    getPreviewInterface(): PreviewInterface {
+        return { connector: this, preview };
+    }
+
     async list(settings: ListSettings & { container: Dexie }): Promise<ListResult> {
         try {
             const container = this.containers[settings.containerId];
@@ -69,51 +93,82 @@ export default class DexieJSConnector implements Connector {
     }
 }
 
+// Interfaces - Create
+const create = async (
+    connector: Connector,
+    databaseName: string,
+    tableName: string,
+    typeId?: string,
+    structure?: Record<string, unknown>
+): Promise<{ error?: unknown; result?: CreateResult }> => {
+    return {};
+};
+
+// Interfaces - Drop
+const drop = async (connector: Connector, databaseName: string, tableName: string): Promise<{ error?: unknown; result?: DropResult }> => {
+    return {};
+};
+
+// Interfaces - Preview
+async function preview(
+    connector: Connector,
+    callback: (data: ConnectorCallbackData) => void,
+    itemConfig: ConnectionItemConfig,
+    settings: PreviewSettings
+): Promise<{ error?: unknown; result?: PreviewResult }> {
+    try {
+        // Create an abort controller. Get the signal for the abort controller and add an abort listener.
+        connector.abortController = new AbortController();
+        const signal = connector.abortController.signal;
+        signal.addEventListener('abort', () => {
+            throw constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'preview.2', new AbortError(CALLBACK_PREVIEW_ABORTED));
+        });
+
+        // Fetch the first 50 rows.
+        const container = connector.containers[settings.containerId];
+        const data = await container.table(itemConfig.name).limit(50).toArray();
+        console.log(data);
+        return { result: { data, typeId: 'table' } };
+    } catch (error) {
+        throw constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'preview.1', error);
+    }
+}
+
 // Utilities - Construct Error and Tidy Up
 function constructErrorAndTidyUp(connector: Connector, message: string, context: string, error: unknown): ConnectorError {
     connector.abortController = null;
     return new ConnectorError(message, { locator: `${config.id}.${context}` }, undefined, error);
 }
 
-// onMounted(async () => {
+// Utilities - Change Schema
+async function changeSchema(db: Dexie, schemaChanges: Record<string, string>) {
+    db.close();
+    const newDb = new Dexie(db.name);
+    newDb.on('blocked', () => false); // Silence console warning of blocked event.
+    if (db.tables.length === 0) {
+        await db.delete();
+        newDb.version(1).stores(schemaChanges);
+        return await newDb.open();
+    }
+    const currentSchema = db.tables.reduce(
+        (result, { name, schema }) => {
+            result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
+            return result;
+        },
+        {} as Record<string, string>
+    );
+    newDb.version(db.verno).stores(currentSchema);
+    newDb.version(db.verno + 1).stores(schemaChanges);
+    return await newDb.open();
+}
+
 //     const db = await new Dexie('myDatabase').open();
-//     // let db = await new Dexie("FriendDatabase").open();
-//     // db.version(1).stores({ friends: 'id,name,age' });
-//     const tableName = 'friends';
-//     await db.table(tableName).bulkPut([
+//     await db.table('friends').bulkPut([
 //         { id: 1, name: 'Josephine', age: 21 },
 //         { id: 2, name: 'Per', age: 75 },
 //         { id: 3, name: 'Simon', age: 5 },
 //         { id: 4, name: 'Sara', age: 50, notIndexedProperty: 'foo' }
 //     ]);
-//     const friends = await db.table(tableName).toArray();
-//     console.log('friends', friends);
+//     const friends = await db.table('friends').toArray();
 //     const db2 = await changeSchema(db, { friends2: 'id,name,age' });
 //     const friends2 = await db2.table('friends2').toArray();
-//     console.log('friends2', friends2);
-// });
-
-// // Utilities - Change Schema
-// async function changeSchema(db: Dexie, schemaChanges: Record<string, string>) {
-//     db.close();
-//     const newDb = new Dexie(db.name);
-//     newDb.on('blocked', () => false); // Silence console warning of blocked event.
-//     console.log('aaaa', db.tables.length);
-//     if (db.tables.length === 0) {
-//         await db.delete();
-//         newDb.version(1).stores(schemaChanges);
-//         return await newDb.open();
-//     }
-//     const currentSchema = db.tables.reduce(
-//         (result, { name, schema }) => {
-//             result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
-//             return result;
-//         },
-//         {} as Record<string, string>
-//     );
-//     console.log('Version: ' + db.verno);
-//     console.log('Current Schema: ', currentSchema);
-//     newDb.version(db.verno).stores(currentSchema);
-//     newDb.version(db.verno + 1).stores(schemaChanges);
-//     return await newDb.open();
-// }
