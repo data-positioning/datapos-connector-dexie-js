@@ -117,7 +117,6 @@ async function preview(
     settings: PreviewSettings
 ): Promise<{ error?: unknown; result?: PreviewResult }> {
     try {
-        console.log(8888, connector, callback, itemConfig, settings);
         // Create an abort controller. Get the signal for the abort controller and add an abort listener.
         connector.abortController = new AbortController();
         const signal = connector.abortController.signal;
@@ -127,10 +126,9 @@ async function preview(
 
         // Fetch the first 50 rows.
         const container = connector.containers[settings.containerId];
-        console.log(9999, connector.containers, container);
         const data = await container.table(itemConfig.name).limit(50).toArray();
         console.log(data);
-        return { result: { data, typeId: 'table' } };
+        return { result: { data, typeId: 'jsonArray' } };
     } catch (error) {
         throw constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'preview.1', error);
     }
