@@ -36,7 +36,7 @@ const CALLBACK_READ_ABORTED = 'Connector read aborted.';
 const ERROR_LIST_ITEMS_FAILED = 'Connector list items failed.';
 const ERROR_PREVIEW_FAILED = 'Connector preview failed.';
 
-// Classes - File Store Emulator Connector
+// Classes - Dexie.js Connector
 export default class DexieJSConnector implements Connector {
     abortController: AbortController | undefined;
     readonly config: ConnectorConfig;
@@ -109,7 +109,7 @@ export default class DexieJSConnector implements Connector {
     }
 }
 
-// Utilities - Create
+// Operations - Create
 async function create(
     connector: Connector,
     databaseName: string,
@@ -120,12 +120,12 @@ async function create(
     return {};
 }
 
-// Utilities - Drop
+// Operations - Drop
 async function drop(connector: Connector, databaseName: string, tableName: string): Promise<{ error?: unknown; result?: DropResult }> {
     return {};
 }
 
-// Utilities - Preview
+// Operations - Preview
 async function preview(
     connector: Connector,
     callback: (data: ConnectorCallbackData) => void,
@@ -149,17 +149,29 @@ async function preview(
     }
 }
 
-// Utilities - Put
-async function put(connector: Connector, databaseName: string, tableName: string, data: Record<string, unknown>[]): Promise<{ error?: unknown }> {
-    return {};
+// Operations - Put
+async function put(connector: Connector, containerId: string, tableName: string, data: Record<string, unknown> | Record<string, unknown>[]): Promise<{ error?: unknown }> {
+    try {
+        const container = connector.containers[containerId];
+        if (Array.isArray(data)) {
+            const x1 = await container.table(tableName).bulkPut(data);
+            console.log(x1);
+        } else {
+            const x2 = await container.table(tableName).put(data);
+            console.log(x2);
+        }
+        return {};
+    } catch (error) {
+        return error;
+    }
 }
 
-// Utilities - Remove
+// Operations - Remove
 async function remove(connector: Connector, databaseName: string, tableName: string, keys: Record<string, unknown>[]): Promise<{ error?: unknown }> {
     return {};
 }
 
-// Utilities - Retrieve
+// Operations - Retrieve
 async function retrieve(
     connector: Connector,
     callback: (data: ConnectorCallbackData) => void,
