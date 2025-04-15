@@ -14,18 +14,22 @@ import type { DropInterface, DropResult } from '@datapos/datapos-share-core';
 import type { EstablishContainerResult, EstablishContainerSettings } from '@datapos/datapos-share-core';
 import type { FindResult, FindSettings } from '@datapos/datapos-share-core';
 import type { ListResult, ListSettings } from '@datapos/datapos-share-core';
-import type { PreviewInterface, PreviewResult, PreviewSettings } from '@datapos/datapos-share-core';
+import type { DataViewPreviewConfig, PreviewInterface, PreviewResult, PreviewSettings } from '@datapos/datapos-share-core';
+import type { PutInterface } from '@datapos/datapos-share-core';
+import type { RetrieveInterface, RetrieveSettings } from '@datapos/datapos-share-core';
+import type { RemoveInterface } from '@datapos/datapos-share-core';
 
 // Dependencies - Data
 import config from './config.json';
 import { version } from '../package.json';
 
-// Interfaces/Types - Connector
+// Interfaces/Types - Connector (Dexie)
 declare module '@datapos/datapos-share-core' {
     interface Connector {
         containers: Record<string, Dexie>;
     }
 }
+
 // Constants
 const CALLBACK_PREVIEW_ABORTED = 'Connector preview aborted.';
 const CALLBACK_READ_ABORTED = 'Connector read aborted.';
@@ -80,6 +84,18 @@ export default class DexieJSConnector implements Connector {
         return { connector: this, preview };
     }
 
+    getPutInterface(): PutInterface {
+        return { connector: this, put };
+    }
+
+    getRetrieveInterface(): RetrieveInterface {
+        return { connector: this, retrieve };
+    }
+
+    getRemoveInterface(): RemoveInterface {
+        return { connector: this, remove };
+    }
+
     async list(settings: ListSettings & { container: Dexie }): Promise<ListResult> {
         try {
             const container = this.containers[settings.containerId];
@@ -93,23 +109,23 @@ export default class DexieJSConnector implements Connector {
     }
 }
 
-// Interfaces - Create
-const create = async (
+// Utilities - Create
+async function create(
     connector: Connector,
     databaseName: string,
     tableName: string,
     typeId?: string,
     structure?: Record<string, unknown>
-): Promise<{ error?: unknown; result?: CreateResult }> => {
+): Promise<{ error?: unknown; result?: CreateResult }> {
     return {};
-};
+}
 
-// Interfaces - Drop
-const drop = async (connector: Connector, databaseName: string, tableName: string): Promise<{ error?: unknown; result?: DropResult }> => {
+// Utilities - Drop
+async function drop(connector: Connector, databaseName: string, tableName: string): Promise<{ error?: unknown; result?: DropResult }> {
     return {};
-};
+}
 
-// Interfaces - Preview
+// Utilities - Preview
 async function preview(
     connector: Connector,
     callback: (data: ConnectorCallbackData) => void,
@@ -130,6 +146,31 @@ async function preview(
         return { result: { data, typeId: 'jsonArray' } };
     } catch (error) {
         throw constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'preview.1', error);
+    }
+}
+
+// Utilities - Put
+async function put(connector: Connector, databaseName: string, tableName: string, data: Record<string, unknown>[]): Promise<{ error?: unknown }> {
+    return {};
+}
+
+// Utilities - Remove
+async function remove(connector: Connector, databaseName: string, tableName: string, keys: Record<string, unknown>[]): Promise<{ error?: unknown }> {
+    return {};
+}
+
+// Utilities - Retrieve
+async function retrieve(
+    connector: Connector,
+    callback: (data: ConnectorCallbackData) => void,
+    itemConfig: ConnectionItemConfig,
+    previewConfig: DataViewPreviewConfig,
+    settings: RetrieveSettings
+): Promise<void> {
+    try {
+        return;
+    } catch (error) {
+        throw constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'read.1', error);
     }
 }
 
