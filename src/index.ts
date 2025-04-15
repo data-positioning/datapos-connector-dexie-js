@@ -127,7 +127,6 @@ async function preview(
         // Fetch the first 50 rows.
         const container = connector.containers[settings.containerId];
         const data = await container.table(itemConfig.name).limit(50).toArray();
-        console.log(data);
         return { result: { data, typeId: 'jsonArray' } };
     } catch (error) {
         throw constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'preview.1', error);
