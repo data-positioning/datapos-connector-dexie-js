@@ -155,13 +155,14 @@ async function put(connector: Connector, containerId: string, tableName: string,
         const container = connector.containers[containerId];
         if (Array.isArray(data)) {
             const x1 = await container.table(tableName).bulkPut(data);
-            console.log(x1);
+            console.log(1111, x1);
         } else {
             const x2 = await container.table(tableName).put(data);
-            console.log(x2);
+            console.log(2222, x2);
         }
         return {};
     } catch (error) {
+        console.log(3333, error);
         return error;
     }
 }
