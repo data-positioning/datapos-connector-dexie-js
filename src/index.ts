@@ -126,12 +126,7 @@ async function drop(connector: Connector, databaseName: string, tableName: strin
 }
 
 // Operations - Preview
-async function preview(
-    connector: Connector,
-    callback: (data: ConnectorCallbackData) => void,
-    itemConfig: ConnectionItemConfig,
-    settings: PreviewSettings
-): Promise<{ error?: unknown; result?: PreviewResult }> {
+async function preview(connector: Connector, itemConfig: ConnectionItemConfig, settings: PreviewSettings): Promise<{ error?: unknown; result?: PreviewResult }> {
     try {
         // Create an abort controller. Get the signal for the abort controller and add an abort listener.
         connector.abortController = new AbortController();
@@ -175,10 +170,10 @@ async function remove(connector: Connector, databaseName: string, tableName: str
 // Operations - Retrieve
 async function retrieve(
     connector: Connector,
-    callback: (data: ConnectorCallbackData) => void,
     itemConfig: ConnectionItemConfig,
     previewConfig: DataViewPreviewConfig,
-    settings: RetrieveSettings
+    settings: RetrieveSettings,
+    callback: (data: ConnectorCallbackData) => void
 ): Promise<void> {
     try {
         return;
