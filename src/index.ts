@@ -57,16 +57,15 @@ export default class DexieJSConnector implements Connector {
     }
 
     async establishContainer(settings: EstablishContainerSettings): Promise<EstablishContainerResult> {
-        const container = this.containers[settings.name];
-        if (!container) {
-            this.containers[settings.name] = await new Dexie(settings.name).open();
-        }
+        let container = this.containers[settings.name];
+        if (!container) this.containers[settings.name] = container = await new Dexie(settings.name).open();
         return { id: settings.name };
     }
 
     async find(settings: FindSettings & { container: Dexie }): Promise<FindResult> {
         try {
-            const container = this.containers[settings.containerId];
+            let container = this.containers[settings.containerName];
+            if (!container) this.containers[settings.containerName] = container = await new Dexie(settings.containerName).open();
             return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : undefined;
         } catch (error) {
             throw constructErrorAndTidyUp(this, ERROR_LIST_ITEMS_FAILED, 'find', error);
@@ -99,7 +98,8 @@ export default class DexieJSConnector implements Connector {
 
     async list(settings: ListSettings & { container: Dexie }): Promise<ListResult> {
         try {
-            const container = this.containers[settings.containerId];
+            let container = this.containers[settings.containerName];
+            if (!container) this.containers[settings.containerName] = container = await new Dexie(settings.containerName).open();
             const connectionItemConfigs = container.tables.map(
                 (table) => ({ folderPath: '/', id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
             );
@@ -111,8 +111,9 @@ export default class DexieJSConnector implements Connector {
 }
 
 // Operations - Create
-async function create(connector: Connector, containerId: string, objectName: string, structure: Record<string, string>): Promise<{ error?: unknown; result?: CreateResult }> {
-    const container = connector.containers[containerId];
+async function create(connector: Connector, containerName: string, objectName: string, structure: Record<string, string>): Promise<{ error?: unknown; result?: CreateResult }> {
+    let container = connector.containers[containerName];
+    if (!container) this.containers[containerName] = container = await new Dexie(containerName).open();
 
     container.close();
 
@@ -122,7 +123,7 @@ async function create(connector: Connector, containerId: string, objectName: str
     if (container.tables.length === 0) {
         await container.delete();
         newContainer.version(1).stores(structure);
-        connector.containers[containerId] = await newContainer.open();
+        connector.containers[containerName] = await newContainer.open();
         return {};
     }
 
@@ -135,14 +136,15 @@ async function create(connector: Connector, containerId: string, objectName: str
     );
     newContainer.version(container.verno).stores(currentSchema);
     newContainer.version(container.verno + 1).stores(structure);
-    connector.containers[containerId] = await newContainer.open();
+    connector.containers[containerName] = await newContainer.open();
 
     return {};
 }
 
 // Operations - Drop
-async function drop(connector: Connector, containerId: string, objectName: string): Promise<{ error?: unknown; result?: DropResult }> {
-    const container = connector.containers[containerId];
+async function drop(connector: Connector, containerName: string, objectName: string): Promise<{ error?: unknown; result?: DropResult }> {
+    let container = connector.containers[containerName];
+    if (!container) this.containers[containerName] = container = await new Dexie(containerName).open();
 
     container.close();
 
@@ -152,7 +154,7 @@ async function drop(connector: Connector, containerId: string, objectName: strin
     if (container.tables.length === 0) {
         await container.delete();
         newContainer.version(1).stores({});
-        connector.containers[containerId] = await newContainer.open();
+        connector.containers[containerName] = await newContainer.open();
         return {};
     }
 
@@ -165,7 +167,7 @@ async function drop(connector: Connector, containerId: string, objectName: strin
     );
     newContainer.version(container.verno).stores(currentSchema);
     newContainer.version(container.verno + 1).stores({ [objectName]: null });
-    connector.containers[containerId] = await newContainer.open();
+    connector.containers[containerName] = await newContainer.open();
 
     return {};
 }
@@ -181,7 +183,8 @@ async function preview(connector: Connector, itemConfig: ConnectionItemConfig, s
         });
 
         // Fetch the first 50 rows.
-        const container = connector.containers[settings.containerId];
+        let container = connector.containers[settings.containerName];
+        if (!container) this.containers[settings.containerName] = container = await new Dexie(settings.containerName).open();
         const data = await container.table(itemConfig.name).limit(50).toArray();
         return { result: { data, typeId: 'jsonArray' } };
     } catch (error) {
@@ -192,13 +195,14 @@ async function preview(connector: Connector, itemConfig: ConnectionItemConfig, s
 // Operations - Put
 async function put(
     connector: Connector,
-    containerId: string,
+    containerName: string,
     objectName: string,
     data: Record<string, unknown> | Record<string, unknown>[],
     callback: (data: ConnectorCallbackData) => void
 ): Promise<{ error?: unknown }> {
     try {
-        const container = connector.containers[containerId];
+        let container = connector.containers[containerName];
+        if (!container) this.containers[containerName] = container = await new Dexie(containerName).open();
         if (Array.isArray(data)) {
             const x1 = await container.table(objectName).bulkPut(data);
             console.log(1111, x1);
@@ -214,7 +218,7 @@ async function put(
 }
 
 // Operations - Remove
-async function remove(connector: Connector, containerId: string, objectName: string, keys: Record<string, unknown>[]): Promise<{ error?: unknown }> {
+async function remove(connector: Connector, containerName: string, objectName: string, keys: Record<string, unknown>[]): Promise<{ error?: unknown }> {
     return {};
 }
 
