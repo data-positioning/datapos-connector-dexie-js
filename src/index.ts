@@ -113,7 +113,7 @@ export default class DexieJSConnector implements Connector {
 // Operations - Create
 async function create(connector: Connector, containerName: string, objectName: string, structure: Record<string, string>): Promise<{ error?: unknown; result?: CreateResult }> {
     let container = connector.containers[containerName];
-    if (!container) this.containers[containerName] = container = await establishContainer(containerName);
+    if (!container) connector.containers[containerName] = container = await establishContainer(containerName);
 
     container.close();
 
@@ -144,7 +144,7 @@ async function create(connector: Connector, containerName: string, objectName: s
 // Operations - Drop
 async function drop(connector: Connector, containerName: string, objectName: string): Promise<{ error?: unknown; result?: DropResult }> {
     let container = connector.containers[containerName];
-    if (!container) this.containers[containerName] = container = await establishContainer(containerName);
+    if (!container) connector.containers[containerName] = container = await establishContainer(containerName);
 
     container.close();
 
@@ -184,7 +184,7 @@ async function preview(connector: Connector, itemConfig: ConnectionItemConfig, s
 
         // Fetch the first 50 rows.
         let container = connector.containers[settings.containerName];
-        if (!container) this.containers[settings.containerName] = container = await establishContainer(settings.containerName);
+        if (!container) connector.containers[settings.containerName] = container = await establishContainer(settings.containerName);
         const data = await container.table(itemConfig.name).limit(50).toArray();
         return { result: { data, typeId: 'jsonArray' } };
     } catch (error) {
@@ -202,7 +202,7 @@ async function put(
 ): Promise<{ error?: unknown }> {
     try {
         let container = connector.containers[containerName];
-        if (!container) this.containers[containerName] = container = await establishContainer(containerName);
+        if (!container) connector.containers[containerName] = container = await establishContainer(containerName);
         if (Array.isArray(data)) {
             const x1 = await container.table(objectName).bulkPut(data);
             console.log(1111, x1);
