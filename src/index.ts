@@ -65,8 +65,8 @@ export default class DexieJSConnector implements Connector {
 
     async find(settings: FindSettings & { container: Dexie }): Promise<FindResult> {
         try {
-            const container = this.containers[settings.containerId];
-            return container.tables.find((table) => table.name === settings.objectId) ? { folderPath: '/' } : undefined;
+            const container = this.containers[settings.containerName];
+            return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : undefined;
         } catch (error) {
             throw constructErrorAndTidyUp(this, ERROR_LIST_ITEMS_FAILED, 'find', error);
         }
@@ -98,7 +98,7 @@ export default class DexieJSConnector implements Connector {
 
     async list(settings: ListSettings & { container: Dexie }): Promise<ListResult> {
         try {
-            const container = this.containers[settings.containerId];
+            const container = this.containers[settings.containerName];
             const connectionItemConfigs = container.tables.map(
                 (table) => ({ folderPath: '/', id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
             );
@@ -112,8 +112,8 @@ export default class DexieJSConnector implements Connector {
 // Operations - Create
 async function create(
     connector: Connector,
-    databaseName: string,
-    tableName: string,
+    containerName: string,
+    objectName: string,
     typeId?: string,
     structure?: Record<string, unknown>
 ): Promise<{ error?: unknown; result?: CreateResult }> {
@@ -121,7 +121,7 @@ async function create(
 }
 
 // Operations - Drop
-async function drop(connector: Connector, databaseName: string, tableName: string): Promise<{ error?: unknown; result?: DropResult }> {
+async function drop(connector: Connector, containerName: string, objectName: string): Promise<{ error?: unknown; result?: DropResult }> {
     return {};
 }
 
@@ -136,7 +136,7 @@ async function preview(connector: Connector, itemConfig: ConnectionItemConfig, s
         });
 
         // Fetch the first 50 rows.
-        const container = connector.containers[settings.containerId];
+        const container = connector.containers[settings.containerName];
         const data = await container.table(itemConfig.name).limit(50).toArray();
         return { result: { data, typeId: 'jsonArray' } };
     } catch (error) {
@@ -147,18 +147,18 @@ async function preview(connector: Connector, itemConfig: ConnectionItemConfig, s
 // Operations - Put
 async function put(
     connector: Connector,
-    containerId: string,
-    tableName: string,
+    containerName: string,
+    objectName: string,
     data: Record<string, unknown> | Record<string, unknown>[],
     callback: (data: ConnectorCallbackData) => void
 ): Promise<{ error?: unknown }> {
     try {
-        const container = connector.containers[containerId];
+        const container = connector.containers[containerName];
         if (Array.isArray(data)) {
-            const x1 = await container.table(tableName).bulkPut(data);
+            const x1 = await container.table(objectName).bulkPut(data);
             console.log(1111, x1);
         } else {
-            const x2 = await container.table(tableName).put(data);
+            const x2 = await container.table(objectName).put(data);
             console.log(2222, x2);
         }
         return {};
@@ -169,7 +169,7 @@ async function put(
 }
 
 // Operations - Remove
-async function remove(connector: Connector, databaseName: string, tableName: string, keys: Record<string, unknown>[]): Promise<{ error?: unknown }> {
+async function remove(connector: Connector, containerName: string, objectName: string, keys: Record<string, unknown>[]): Promise<{ error?: unknown }> {
     return {};
 }
 
