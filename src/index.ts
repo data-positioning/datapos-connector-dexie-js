@@ -145,7 +145,13 @@ async function preview(connector: Connector, itemConfig: ConnectionItemConfig, s
 }
 
 // Operations - Put
-async function put(connector: Connector, containerId: string, tableName: string, data: Record<string, unknown> | Record<string, unknown>[]): Promise<{ error?: unknown }> {
+async function put(
+    connector: Connector,
+    containerId: string,
+    tableName: string,
+    data: Record<string, unknown> | Record<string, unknown>[],
+    callback: (data: ConnectorCallbackData) => void
+): Promise<{ error?: unknown }> {
     try {
         const container = connector.containers[containerId];
         if (Array.isArray(data)) {
