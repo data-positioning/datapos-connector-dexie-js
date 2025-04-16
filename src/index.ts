@@ -110,13 +110,13 @@ export default class DexieJSConnector implements Connector {
 }
 
 // Operations - Create
-async function create(connector: Connector, containerId: string, objectName: string, structure?: Record<string, string>): Promise<{ error?: unknown; result?: CreateResult }> {
+async function create(connector: Connector, containerId: string, objectName: string, structure: Record<string, string>): Promise<{ error?: unknown; result?: CreateResult }> {
     const container = connector.containers[containerId];
 
     container.close();
 
     const newContainer = new Dexie(container.name);
-    // newContainer.on('blocked', () => false); // Silence console warning of blocked event.
+    newContainer.on('blocked', () => false); // Silence console warning of blocked event.
 
     if (container.tables.length === 0) {
         await container.delete();
@@ -135,44 +135,37 @@ async function create(connector: Connector, containerId: string, objectName: str
     newContainer.version(container.verno).stores(currentSchema);
     newContainer.version(container.verno + 1).stores(structure);
     connector.containers[containerId] = await newContainer.open();
+
     return {};
 }
 
-// Utilities - Change Schema
-async function changeSchema(db: Dexie, schemaChanges: Record<string, string>) {
-    db.close();
-    const newDb = new Dexie(db.name);
-    newDb.on('blocked', () => false); // Silence console warning of blocked event.
-    if (db.tables.length === 0) {
-        await db.delete();
-        newDb.version(1).stores(schemaChanges);
-        return await newDb.open();
+// Operations - Drop
+async function drop(connector: Connector, containerId: string, objectName: string): Promise<{ error?: unknown; result?: DropResult }> {
+    const container = connector.containers[containerId];
+
+    container.close();
+
+    const newContainer = new Dexie(container.name);
+    newContainer.on('blocked', () => false); // Silence console warning of blocked event.
+
+    if (container.tables.length === 0) {
+        await container.delete();
+        newContainer.version(1).stores({});
+        connector.containers[containerId] = await newContainer.open();
+        return {};
     }
-    const currentSchema = db.tables.reduce(
+
+    const currentSchema = container.tables.reduce(
         (result, { name, schema }) => {
             result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
             return result;
         },
         {} as Record<string, string>
     );
-    newDb.version(db.verno).stores(currentSchema);
-    newDb.version(db.verno + 1).stores(schemaChanges);
-    return await newDb.open();
-}
+    newContainer.version(container.verno).stores(currentSchema);
+    newContainer.version(container.verno + 1).stores({ [objectName]: null });
+    connector.containers[containerId] = await newContainer.open();
 
-//     const db = await new Dexie('myDatabase').open();
-//     await db.table('friends').bulkPut([
-//         { id: 1, name: 'Josephine', age: 21 },
-//         { id: 2, name: 'Per', age: 75 },
-//         { id: 3, name: 'Simon', age: 5 },
-//         { id: 4, name: 'Sara', age: 50, notIndexedProperty: 'foo' }
-//     ]);
-//     const friends = await db.table('friends').toArray();
-//     const db2 = await changeSchema(db, { friends2: 'id,name,age' });
-//     const friends2 = await db2.table('friends2').toArray();
-
-// Operations - Drop
-async function drop(connector: Connector, containerId: string, objectName: string): Promise<{ error?: unknown; result?: DropResult }> {
     return {};
 }
 
