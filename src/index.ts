@@ -56,12 +56,6 @@ export default class DexieJSConnector implements Connector {
         this.abortController = null;
     }
 
-    async establishContainer(settings: EstablishContainerSettings): Promise<EstablishContainerResult> {
-        let container = this.containers[settings.name];
-        if (!container) this.containers[settings.name] = container = await establishContainer(settings.name);
-        return { id: settings.name };
-    }
-
     async find(settings: FindSettings & { container: Dexie }): Promise<FindResult> {
         try {
             let container = this.containers[settings.containerName];
