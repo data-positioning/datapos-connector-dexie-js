@@ -58,14 +58,14 @@ export default class DexieJSConnector implements Connector {
 
     async establishContainer(settings: EstablishContainerSettings): Promise<EstablishContainerResult> {
         let container = this.containers[settings.name];
-        if (!container) this.containers[settings.name] = container = await new Dexie(settings.name).open();
+        if (!container) this.containers[settings.name] = container = await establishContainer(settings.name);
         return { id: settings.name };
     }
 
     async find(settings: FindSettings & { container: Dexie }): Promise<FindResult> {
         try {
             let container = this.containers[settings.containerName];
-            if (!container) this.containers[settings.containerName] = container = await new Dexie(settings.containerName).open();
+            if (!container) this.containers[settings.containerName] = container = await establishContainer(settings.containerName);
             return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : undefined;
         } catch (error) {
             throw constructErrorAndTidyUp(this, ERROR_LIST_ITEMS_FAILED, 'find', error);
@@ -99,7 +99,7 @@ export default class DexieJSConnector implements Connector {
     async list(settings: ListSettings & { container: Dexie }): Promise<ListResult> {
         try {
             let container = this.containers[settings.containerName];
-            if (!container) this.containers[settings.containerName] = container = await new Dexie(settings.containerName).open();
+            if (!container) this.containers[settings.containerName] = container = await establishContainer(settings.containerName);
             const connectionItemConfigs = container.tables.map(
                 (table) => ({ folderPath: '/', id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
             );
@@ -113,7 +113,7 @@ export default class DexieJSConnector implements Connector {
 // Operations - Create
 async function create(connector: Connector, containerName: string, objectName: string, structure: Record<string, string>): Promise<{ error?: unknown; result?: CreateResult }> {
     let container = connector.containers[containerName];
-    if (!container) this.containers[containerName] = container = await new Dexie(containerName).open();
+    if (!container) this.containers[containerName] = container = await establishContainer(containerName);
 
     container.close();
 
@@ -144,7 +144,7 @@ async function create(connector: Connector, containerName: string, objectName: s
 // Operations - Drop
 async function drop(connector: Connector, containerName: string, objectName: string): Promise<{ error?: unknown; result?: DropResult }> {
     let container = connector.containers[containerName];
-    if (!container) this.containers[containerName] = container = await new Dexie(containerName).open();
+    if (!container) this.containers[containerName] = container = await establishContainer(containerName);
 
     container.close();
 
@@ -184,7 +184,7 @@ async function preview(connector: Connector, itemConfig: ConnectionItemConfig, s
 
         // Fetch the first 50 rows.
         let container = connector.containers[settings.containerName];
-        if (!container) this.containers[settings.containerName] = container = await new Dexie(settings.containerName).open();
+        if (!container) this.containers[settings.containerName] = container = await establishContainer(settings.containerName);
         const data = await container.table(itemConfig.name).limit(50).toArray();
         return { result: { data, typeId: 'jsonArray' } };
     } catch (error) {
@@ -202,7 +202,7 @@ async function put(
 ): Promise<{ error?: unknown }> {
     try {
         let container = connector.containers[containerName];
-        if (!container) this.containers[containerName] = container = await new Dexie(containerName).open();
+        if (!container) this.containers[containerName] = container = await establishContainer(containerName);
         if (Array.isArray(data)) {
             const x1 = await container.table(objectName).bulkPut(data);
             console.log(1111, x1);
@@ -241,4 +241,11 @@ async function retrieve(
 function constructErrorAndTidyUp(connector: Connector, message: string, context: string, error: unknown): ConnectorError {
     connector.abortController = null;
     return new ConnectorError(message, { locator: `${config.id}.${context}` }, undefined, error);
+}
+
+// Utilities - Establish Container
+async function establishContainer(name: string) {
+    const db = new Dexie(name);
+    if (!(await Dexie.exists(db.name))) db.version(1).stores({});
+    return await db.open();
 }
