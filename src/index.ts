@@ -4,7 +4,6 @@
 
 // Dependencies - Vendor
 import Dexie from 'dexie';
-import { nanoid } from 'nanoid';
 
 // Dependencies - Framework
 import { AbortError, ConnectorError } from '@datapos/datapos-share-core';
@@ -58,9 +57,8 @@ export default class DexieJSConnector implements Connector {
     }
 
     async establishContainer(settings: EstablishContainerSettings): Promise<EstablishContainerResult> {
-        const id = nanoid();
-        this.containers[id] = await new Dexie(settings.name).open();
-        return { id };
+        this.containers[settings.name] = await new Dexie(settings.name).open();
+        return { id: settings.name };
     }
 
     async find(settings: FindSettings & { container: Dexie }): Promise<FindResult> {
