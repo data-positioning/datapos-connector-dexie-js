@@ -42,7 +42,6 @@ export default class DexieJSConnector implements Connector {
     containers: Record<string, Dexie>;
 
     constructor(connectionConfig: ConnectionConfig) {
-        console.log(5678);
         this.abortController = null;
         this.config = config as ConnectorConfig;
         this.config.version = version;
@@ -66,27 +65,27 @@ export default class DexieJSConnector implements Connector {
     }
 
     getCreateInterface(): CreateInterface {
-        return { connector: this, create: this.create };
+        return { create: this.create };
     }
 
     getDropInterface(): DropInterface {
-        return { connector: this, drop: this.drop };
+        return { drop: this.drop };
     }
 
     getPreviewInterface(): PreviewInterface {
-        return { connector: this, preview: this.preview };
+        return { preview: this.preview };
     }
 
     getPutInterface(): PutInterface {
-        return { connector: this, put: this.put };
+        return { put: this.put };
     }
 
     getRetrieveInterface(): RetrieveInterface {
-        return { connector: this, retrieve: this.retrieve };
+        return { retrieve: this.retrieve };
     }
 
     getRemoveInterface(): RemoveInterface {
-        return { connector: this, remove: this.remove };
+        return { remove: this.remove };
     }
 
     async list(settings: ListSettings): Promise<ListResult> {
@@ -102,7 +101,7 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Create
-    private async create(connector: Connector, containerName: string, objectName: string, structure: Record<string, string>): Promise<{ error?: unknown; result?: CreateResult }> {
+    private async create(containerName: string, objectName: string, structure: Record<string, string>): Promise<{ error?: unknown; result?: CreateResult }> {
         const container = await this.establishContainer(containerName);
 
         container.close();
@@ -113,7 +112,7 @@ export default class DexieJSConnector implements Connector {
         if (container.tables.length === 0) {
             await container.delete();
             newContainer.version(1).stores(structure);
-            connector.containers[containerName] = await newContainer.open();
+            this.containers[containerName] = await newContainer.open();
             return {};
         }
 
@@ -126,13 +125,13 @@ export default class DexieJSConnector implements Connector {
         );
         newContainer.version(container.verno).stores(currentSchema);
         newContainer.version(container.verno + 1).stores(structure);
-        connector.containers[containerName] = await newContainer.open();
+        this.containers[containerName] = await newContainer.open();
 
         return {};
     }
 
     // Operations - Drop
-    private async drop(connector: Connector, containerName: string, objectName: string): Promise<{ error?: unknown; result?: DropResult }> {
+    private async drop(containerName: string, objectName: string): Promise<{ error?: unknown; result?: DropResult }> {
         const container = await this.establishContainer(containerName);
 
         container.close();
@@ -143,7 +142,7 @@ export default class DexieJSConnector implements Connector {
         if (container.tables.length === 0) {
             await container.delete();
             newContainer.version(1).stores({});
-            connector.containers[containerName] = await newContainer.open();
+            this.containers[containerName] = await newContainer.open();
             return {};
         }
 
@@ -156,17 +155,17 @@ export default class DexieJSConnector implements Connector {
         );
         newContainer.version(container.verno).stores(currentSchema);
         newContainer.version(container.verno + 1).stores({ [objectName]: null });
-        connector.containers[containerName] = await newContainer.open();
+        this.containers[containerName] = await newContainer.open();
 
         return {};
     }
 
     // Operations - Preview
-    private async preview(connector: Connector, itemConfig: ConnectionItemConfig, settings: PreviewSettings): Promise<{ error?: unknown; result?: PreviewResult }> {
+    private async preview(itemConfig: ConnectionItemConfig, settings: PreviewSettings): Promise<{ error?: unknown; result?: PreviewResult }> {
         try {
             // Create an abort controller. Get the signal for the abort controller and add an abort listener.
-            connector.abortController = new AbortController();
-            const signal = connector.abortController.signal;
+            this.abortController = new AbortController();
+            const signal = this.abortController.signal;
             signal.addEventListener('abort', () => {
                 throw this.constructErrorAndTidyUp(ERROR_PREVIEW_FAILED, 'preview.2', new AbortError(CALLBACK_PREVIEW_ABORTED));
             });
@@ -182,7 +181,6 @@ export default class DexieJSConnector implements Connector {
 
     // Operations - Put
     private async put(
-        connector: Connector,
         containerName: string,
         objectName: string,
         data: Record<string, unknown> | Record<string, unknown>[],
@@ -205,13 +203,12 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Remove
-    private async remove(connector: Connector, containerName: string, objectName: string, keys: Record<string, unknown>[]): Promise<{ error?: unknown }> {
+    private async remove(containerName: string, objectName: string, keys: Record<string, unknown>[]): Promise<{ error?: unknown }> {
         return {};
     }
 
     // Operations - Retrieve
     private async retrieve(
-        connector: Connector,
         itemConfig: ConnectionItemConfig,
         previewConfig: DataViewPreviewConfig,
         settings: RetrieveSettings,
