@@ -10,7 +10,6 @@ import { AbortError, ConnectorError } from '@datapos/datapos-share-core';
 import type { ConnectionConfig, ConnectionItemConfig, Connector, ConnectorCallbackData } from '@datapos/datapos-share-core';
 import type { ConnectorConfig, CreateInterface, CreateResult, CreateSettings } from '@datapos/datapos-share-core';
 import type { DropInterface, DropResult } from '@datapos/datapos-share-core';
-import type { EstablishContainerResult, EstablishContainerSettings } from '@datapos/datapos-share-core';
 import type { FindResult, FindSettings } from '@datapos/datapos-share-core';
 import type { ListResult, ListSettings } from '@datapos/datapos-share-core';
 import type { DataViewPreviewConfig, PreviewInterface, PreviewResult, PreviewSettings } from '@datapos/datapos-share-core';
@@ -56,190 +55,187 @@ export default class DexieJSConnector implements Connector {
         this.abortController = null;
     }
 
-    async find(settings: FindSettings & { container: Dexie }): Promise<FindResult> {
+    async find(settings: FindSettings): Promise<FindResult> {
         try {
-            let container = this.containers[settings.containerName];
-            if (!container) this.containers[settings.containerName] = container = await establishContainer(settings.containerName);
+            const container = await this.establishContainer(this, settings.containerName);
             return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : undefined;
         } catch (error) {
-            throw constructErrorAndTidyUp(this, ERROR_LIST_ITEMS_FAILED, 'find', error);
+            throw this.constructErrorAndTidyUp(this, ERROR_LIST_ITEMS_FAILED, 'find', error);
         }
     }
 
     getCreateInterface(): CreateInterface {
-        return { connector: this, create };
+        return { connector: this, create: this.create };
     }
 
     getDropInterface(): DropInterface {
-        return { connector: this, drop };
+        return { connector: this, drop: this.drop };
     }
 
     getPreviewInterface(): PreviewInterface {
-        return { connector: this, preview };
+        return { connector: this, preview: this.preview };
     }
 
     getPutInterface(): PutInterface {
-        return { connector: this, put };
+        return { connector: this, put: this.put };
     }
 
     getRetrieveInterface(): RetrieveInterface {
-        return { connector: this, retrieve };
+        return { connector: this, retrieve: this.retrieve };
     }
 
     getRemoveInterface(): RemoveInterface {
-        return { connector: this, remove };
+        return { connector: this, remove: this.remove };
     }
 
-    async list(settings: ListSettings & { container: Dexie }): Promise<ListResult> {
+    async list(settings: ListSettings): Promise<ListResult> {
         try {
-            let container = this.containers[settings.containerName];
-            if (!container) this.containers[settings.containerName] = container = await establishContainer(settings.containerName);
+            const container = await this.establishContainer(this, settings.containerName);
             const connectionItemConfigs = container.tables.map(
                 (table) => ({ folderPath: '/', id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
             );
             return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
         } catch (error) {
-            throw constructErrorAndTidyUp(this, ERROR_LIST_ITEMS_FAILED, 'listItems', error);
+            throw this.constructErrorAndTidyUp(this, ERROR_LIST_ITEMS_FAILED, 'listItems', error);
         }
     }
-}
 
-// Operations - Create
-async function create(connector: Connector, containerName: string, objectName: string, structure: Record<string, string>): Promise<{ error?: unknown; result?: CreateResult }> {
-    let container = connector.containers[containerName];
-    if (!container) connector.containers[containerName] = container = await establishContainer(containerName);
+    // Operations - Create
+    private async create(connector: Connector, containerName: string, objectName: string, structure: Record<string, string>): Promise<{ error?: unknown; result?: CreateResult }> {
+        const container = await this.establishContainer(connector, containerName);
 
-    container.close();
+        container.close();
 
-    const newContainer = new Dexie(container.name);
-    newContainer.on('blocked', () => false); // Silence console warning of blocked event.
+        const newContainer = new Dexie(container.name);
+        newContainer.on('blocked', () => false); // Silence console warning of blocked event.
 
-    if (container.tables.length === 0) {
-        await container.delete();
-        newContainer.version(1).stores(structure);
-        connector.containers[containerName] = await newContainer.open();
-        return {};
-    }
-
-    const currentSchema = container.tables.reduce(
-        (result, { name, schema }) => {
-            result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
-            return result;
-        },
-        {} as Record<string, string>
-    );
-    newContainer.version(container.verno).stores(currentSchema);
-    newContainer.version(container.verno + 1).stores(structure);
-    connector.containers[containerName] = await newContainer.open();
-
-    return {};
-}
-
-// Operations - Drop
-async function drop(connector: Connector, containerName: string, objectName: string): Promise<{ error?: unknown; result?: DropResult }> {
-    let container = connector.containers[containerName];
-    if (!container) connector.containers[containerName] = container = await establishContainer(containerName);
-
-    container.close();
-
-    const newContainer = new Dexie(container.name);
-    newContainer.on('blocked', () => false); // Silence console warning of blocked event.
-
-    if (container.tables.length === 0) {
-        await container.delete();
-        newContainer.version(1).stores({});
-        connector.containers[containerName] = await newContainer.open();
-        return {};
-    }
-
-    const currentSchema = container.tables.reduce(
-        (result, { name, schema }) => {
-            result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
-            return result;
-        },
-        {} as Record<string, string>
-    );
-    newContainer.version(container.verno).stores(currentSchema);
-    newContainer.version(container.verno + 1).stores({ [objectName]: null });
-    connector.containers[containerName] = await newContainer.open();
-
-    return {};
-}
-
-// Operations - Preview
-async function preview(connector: Connector, itemConfig: ConnectionItemConfig, settings: PreviewSettings): Promise<{ error?: unknown; result?: PreviewResult }> {
-    try {
-        // Create an abort controller. Get the signal for the abort controller and add an abort listener.
-        connector.abortController = new AbortController();
-        const signal = connector.abortController.signal;
-        signal.addEventListener('abort', () => {
-            throw constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'preview.2', new AbortError(CALLBACK_PREVIEW_ABORTED));
-        });
-
-        // Fetch the first 50 rows.
-        let container = connector.containers[settings.containerName];
-        if (!container) connector.containers[settings.containerName] = container = await establishContainer(settings.containerName);
-        const data = await container.table(itemConfig.name).limit(50).toArray();
-        return { result: { data, typeId: 'jsonArray' } };
-    } catch (error) {
-        throw constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'preview.1', error);
-    }
-}
-
-// Operations - Put
-async function put(
-    connector: Connector,
-    containerName: string,
-    objectName: string,
-    data: Record<string, unknown> | Record<string, unknown>[],
-    callback: (data: ConnectorCallbackData) => void
-): Promise<{ error?: unknown }> {
-    try {
-        let container = connector.containers[containerName];
-        if (!container) connector.containers[containerName] = container = await establishContainer(containerName);
-        if (Array.isArray(data)) {
-            const x1 = await container.table(objectName).bulkPut(data);
-            console.log(1111, x1);
-        } else {
-            const x2 = await container.table(objectName).put(data);
-            console.log(2222, x2);
+        if (container.tables.length === 0) {
+            await container.delete();
+            newContainer.version(1).stores(structure);
+            connector.containers[containerName] = await newContainer.open();
+            return {};
         }
+
+        const currentSchema = container.tables.reduce(
+            (result, { name, schema }) => {
+                result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
+                return result;
+            },
+            {} as Record<string, string>
+        );
+        newContainer.version(container.verno).stores(currentSchema);
+        newContainer.version(container.verno + 1).stores(structure);
+        connector.containers[containerName] = await newContainer.open();
+
         return {};
-    } catch (error) {
-        console.log(3333, error);
-        return error;
     }
-}
 
-// Operations - Remove
-async function remove(connector: Connector, containerName: string, objectName: string, keys: Record<string, unknown>[]): Promise<{ error?: unknown }> {
-    return {};
-}
+    // Operations - Drop
+    private async drop(connector: Connector, containerName: string, objectName: string): Promise<{ error?: unknown; result?: DropResult }> {
+        const container = await this.establishContainer(connector, containerName);
 
-// Operations - Retrieve
-async function retrieve(
-    connector: Connector,
-    itemConfig: ConnectionItemConfig,
-    previewConfig: DataViewPreviewConfig,
-    settings: RetrieveSettings,
-    callback: (data: ConnectorCallbackData) => void
-): Promise<void> {
-    try {
-        return;
-    } catch (error) {
-        throw constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'read.1', error);
+        container.close();
+
+        const newContainer = new Dexie(container.name);
+        newContainer.on('blocked', () => false); // Silence console warning of blocked event.
+
+        if (container.tables.length === 0) {
+            await container.delete();
+            newContainer.version(1).stores({});
+            connector.containers[containerName] = await newContainer.open();
+            return {};
+        }
+
+        const currentSchema = container.tables.reduce(
+            (result, { name, schema }) => {
+                result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
+                return result;
+            },
+            {} as Record<string, string>
+        );
+        newContainer.version(container.verno).stores(currentSchema);
+        newContainer.version(container.verno + 1).stores({ [objectName]: null });
+        connector.containers[containerName] = await newContainer.open();
+
+        return {};
     }
-}
 
-// Utilities - Construct Error and Tidy Up
-function constructErrorAndTidyUp(connector: Connector, message: string, context: string, error: unknown): ConnectorError {
-    connector.abortController = null;
-    return new ConnectorError(message, { locator: `${config.id}.${context}` }, undefined, error);
-}
+    // Operations - Preview
+    private async preview(connector: Connector, itemConfig: ConnectionItemConfig, settings: PreviewSettings): Promise<{ error?: unknown; result?: PreviewResult }> {
+        try {
+            // Create an abort controller. Get the signal for the abort controller and add an abort listener.
+            connector.abortController = new AbortController();
+            const signal = connector.abortController.signal;
+            signal.addEventListener('abort', () => {
+                throw this.constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'preview.2', new AbortError(CALLBACK_PREVIEW_ABORTED));
+            });
 
-// Utilities - Establish Container
-async function establishContainer(name: string) {
-    const db = new Dexie(name);
-    if (!(await Dexie.exists(db.name))) db.version(1).stores({});
-    return await db.open();
+            // Fetch the first 50 rows.
+            const container = await this.establishContainer(connector, settings.containerName);
+            const data = await container.table(itemConfig.name).limit(50).toArray();
+            return { result: { data, typeId: 'jsonArray' } };
+        } catch (error) {
+            throw this.constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'preview.1', error);
+        }
+    }
+
+    // Operations - Put
+    private async put(
+        connector: Connector,
+        containerName: string,
+        objectName: string,
+        data: Record<string, unknown> | Record<string, unknown>[],
+        callback: (data: ConnectorCallbackData) => void
+    ): Promise<{ error?: unknown }> {
+        try {
+            const container = await this.establishContainer(connector, containerName);
+            if (Array.isArray(data)) {
+                const x1 = await container.table(objectName).bulkPut(data);
+                console.log(1111, x1);
+            } else {
+                const x2 = await container.table(objectName).put(data);
+                console.log(2222, x2);
+            }
+            return {};
+        } catch (error) {
+            console.log(3333, error);
+            return error;
+        }
+    }
+
+    // Operations - Remove
+    private async remove(connector: Connector, containerName: string, objectName: string, keys: Record<string, unknown>[]): Promise<{ error?: unknown }> {
+        return {};
+    }
+
+    // Operations - Retrieve
+    private async retrieve(
+        connector: Connector,
+        itemConfig: ConnectionItemConfig,
+        previewConfig: DataViewPreviewConfig,
+        settings: RetrieveSettings,
+        callback: (data: ConnectorCallbackData) => void
+    ): Promise<void> {
+        try {
+            return;
+        } catch (error) {
+            throw this.constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'read.1', error);
+        }
+    }
+
+    // Utilities - Construct Error and Tidy Up
+    private constructErrorAndTidyUp(connector: Connector, message: string, context: string, error: unknown): ConnectorError {
+        connector.abortController = null;
+        return new ConnectorError(message, { locator: `${config.id}.${context}` }, undefined, error);
+    }
+
+    // Utilities - Establish Container
+    private async establishContainer(connector: Connector, name: string) {
+        if (!connector.containers[name]) {
+            const db = new Dexie(name);
+            if (!(await Dexie.exists(db.name))) db.version(1).stores({});
+            connector.containers[name] = await db.open();
+        }
+        return connector.containers[name];
+    }
 }
