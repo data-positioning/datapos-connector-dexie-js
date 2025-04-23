@@ -8,11 +8,11 @@ import Dexie from 'dexie';
 // Dependencies - Framework
 import { AbortError, ConnectorError } from '@datapos/datapos-share-core';
 import type { ConnectionConfig, ConnectionItemConfig, Connector, ConnectorCallbackData } from '@datapos/datapos-share-core';
-import type { ConnectorConfig, CreateInterface, CreateResult, CreateSettings } from '@datapos/datapos-share-core';
-import type { DropInterface, DropResult } from '@datapos/datapos-share-core';
+import type { ConnectorConfig, CreateResult, CreateSettings } from '@datapos/datapos-share-core';
+import type { DropResult } from '@datapos/datapos-share-core';
 import type { FindResult, FindSettings } from '@datapos/datapos-share-core';
 import type { ListResult, ListSettings } from '@datapos/datapos-share-core';
-import type { DataViewPreviewConfig, PreviewInterface, PreviewResult, PreviewSettings } from '@datapos/datapos-share-core';
+import type { DataViewPreviewConfig, PreviewResult, PreviewSettings } from '@datapos/datapos-share-core';
 import type { PutInterface } from '@datapos/datapos-share-core';
 import type { RetrieveInterface, RetrieveSettings } from '@datapos/datapos-share-core';
 import type { RemoveInterface } from '@datapos/datapos-share-core';
@@ -49,59 +49,15 @@ export default class DexieJSConnector implements Connector {
         this.containers = {};
     }
 
+    // Operations - Abort
     abort(): void {
         if (!this.abortController) return;
         this.abortController.abort();
         this.abortController = null;
     }
 
-    async find(settings: FindSettings): Promise<FindResult> {
-        try {
-            const container = await this.establishContainer(settings.containerName);
-            return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : undefined;
-        } catch (error) {
-            throw this.constructErrorAndTidyUp(ERROR_LIST_ITEMS_FAILED, 'find', error);
-        }
-    }
-
-    getCreateInterface(): CreateInterface {
-        return { create: this.create };
-    }
-
-    getDropInterface(): DropInterface {
-        return { drop: this.drop };
-    }
-
-    getPreviewInterface(): PreviewInterface {
-        return { preview: this.preview };
-    }
-
-    getPutInterface(): PutInterface {
-        return { put: this.put };
-    }
-
-    getRetrieveInterface(): RetrieveInterface {
-        return { retrieve: this.retrieve };
-    }
-
-    getRemoveInterface(): RemoveInterface {
-        return { remove: this.remove };
-    }
-
-    async list(settings: ListSettings): Promise<ListResult> {
-        try {
-            const container = await this.establishContainer(settings.containerName);
-            const connectionItemConfigs = container.tables.map(
-                (table) => ({ folderPath: '/', id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
-            );
-            return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
-        } catch (error) {
-            throw this.constructErrorAndTidyUp(ERROR_LIST_ITEMS_FAILED, 'listItems', error);
-        }
-    }
-
     // Operations - Create
-    private async create(containerName: string, objectName: string, structure: Record<string, string>): Promise<{ error?: unknown; result?: CreateResult }> {
+    async create(containerName: string, objectName: string, structure: Record<string, string>): Promise<{ error?: unknown; result?: CreateResult }> {
         const container = await this.establishContainer(containerName);
 
         container.close();
@@ -131,7 +87,7 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Drop
-    private async drop(containerName: string, objectName: string): Promise<{ error?: unknown; result?: DropResult }> {
+    async drop(containerName: string, objectName: string): Promise<{ error?: unknown; result?: DropResult }> {
         const container = await this.establishContainer(containerName);
 
         container.close();
@@ -160,8 +116,46 @@ export default class DexieJSConnector implements Connector {
         return {};
     }
 
+    // Operations - Find
+    async find(settings: FindSettings): Promise<FindResult> {
+        try {
+            const container = await this.establishContainer(settings.containerName);
+            return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : undefined;
+        } catch (error) {
+            throw this.constructErrorAndTidyUp(ERROR_LIST_ITEMS_FAILED, 'find', error);
+        }
+    }
+
+    // Operations - Get Put Interface
+    getPutInterface(): PutInterface {
+        return { put: this.put };
+    }
+
+    // Operations - Get Put Interface
+    getRetrieveInterface(): RetrieveInterface {
+        return { retrieve: this.retrieve };
+    }
+
+    // Operations - Get Remove Interface
+    getRemoveInterface(): RemoveInterface {
+        return { remove: this.remove };
+    }
+
+    // Operations - List
+    async list(settings: ListSettings): Promise<ListResult> {
+        try {
+            const container = await this.establishContainer(settings.containerName);
+            const connectionItemConfigs = container.tables.map(
+                (table) => ({ folderPath: '/', id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
+            );
+            return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
+        } catch (error) {
+            throw this.constructErrorAndTidyUp(ERROR_LIST_ITEMS_FAILED, 'listItems', error);
+        }
+    }
+
     // Operations - Preview
-    private async preview(itemConfig: ConnectionItemConfig, settings: PreviewSettings): Promise<{ error?: unknown; result?: PreviewResult }> {
+    async preview(itemConfig: ConnectionItemConfig, settings: PreviewSettings): Promise<PreviewResult> {
         try {
             // Create an abort controller. Get the signal for the abort controller and add an abort listener.
             this.abortController = new AbortController();
@@ -173,13 +167,29 @@ export default class DexieJSConnector implements Connector {
             // Fetch the first 50 rows.
             const container = await this.establishContainer(settings.containerName);
             const data = await container.table(itemConfig.name).limit(50).toArray();
-            return { result: { data, typeId: 'jsonArray' } };
+            return { data, typeId: 'jsonArray' };
         } catch (error) {
             throw this.constructErrorAndTidyUp(ERROR_PREVIEW_FAILED, 'preview.1', error);
         }
     }
 
-    // Operations - Put
+    // Utilities - Construct Error and Tidy Up
+    private constructErrorAndTidyUp(message: string, context: string, error: unknown): ConnectorError {
+        this.abortController = null;
+        return new ConnectorError(message, { locator: `${config.id}.${context}` }, undefined, error);
+    }
+
+    // Utilities - Establish Container
+    private async establishContainer(name: string) {
+        if (!this.containers[name]) {
+            const db = new Dexie(name);
+            if (!(await Dexie.exists(db.name))) db.version(1).stores({});
+            this.containers[name] = await db.open();
+        }
+        return this.containers[name];
+    }
+
+    // Utilities - Put
     private async put(
         containerName: string,
         objectName: string,
@@ -202,12 +212,12 @@ export default class DexieJSConnector implements Connector {
         }
     }
 
-    // Operations - Remove
+    // Utilities - Remove
     private async remove(containerName: string, objectName: string, keys: Record<string, unknown>[]): Promise<{ error?: unknown }> {
         return {};
     }
 
-    // Operations - Retrieve
+    // Utilities - Retrieve
     private async retrieve(
         itemConfig: ConnectionItemConfig,
         previewConfig: DataViewPreviewConfig,
@@ -219,21 +229,5 @@ export default class DexieJSConnector implements Connector {
         } catch (error) {
             throw this.constructErrorAndTidyUp(ERROR_PREVIEW_FAILED, 'read.1', error);
         }
-    }
-
-    // Utilities - Construct Error and Tidy Up
-    private constructErrorAndTidyUp(message: string, context: string, error: unknown): ConnectorError {
-        this.abortController = null;
-        return new ConnectorError(message, { locator: `${config.id}.${context}` }, undefined, error);
-    }
-
-    // Utilities - Establish Container
-    private async establishContainer(name: string) {
-        if (!this.containers[name]) {
-            const db = new Dexie(name);
-            if (!(await Dexie.exists(db.name))) db.version(1).stores({});
-            this.containers[name] = await db.open();
-        }
-        return this.containers[name];
     }
 }
