@@ -148,32 +148,43 @@ export default class DexieJSConnector implements Connector {
             const folderPathSegments = settings.folderPath.split('/');
             switch (folderPathSegments.length) {
                 case 2: {
+                    if (folderPathSegments[0]) throw new Error(`Invalid folder path '${settings.folderPath}'.`); // Invalid folder path if characters ahead of first separator.
                     const containerName = folderPathSegments[1];
                     if (containerName) {
-                        // TODO: Return list of containers...
+                        // Return list of table items in Dexie database.
+                        const container = await this.establishContainer(containerName);
+                        const connectionItemConfigs = container.tables.map(
+                            (table) => ({ folderPath: settings.folderPath, id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
+                        );
+                        return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
                     } else {
-                        // TODO: Return list of tables in container...
+                        // Return list of database items for Dexie instance.
+                        const databaseNames = await Dexie.getDatabaseNames();
+                        const connectionItemConfigs = databaseNames.map(
+                            (name) => ({ folderPath: settings.folderPath, id: name, label: name, name: name, typeId: 'object' }) as ConnectionItemConfig
+                        );
+                        return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
                     }
-                    break;
                 }
-                case 3: {
-                    const containerName = folderPathSegments[1];
-                    const objectName = folderPathSegments[2];
-                    if (containerName && objectName) {
-                        // TODO: Return list of records in table in container...
-                    } else {
-                        throw new Error(`Invalid folder path '${settings.folderPath}'.`);
-                    }
-                    break;
-                }
+                // case 3: {
+                //     if (folderPathSegments[0]) throw new Error(`Invalid folder path '${settings.folderPath}'.`); // Invalid folder path if characters ahead of first separator.
+                //     const containerName = folderPathSegments[1];
+                //     const objectName = folderPathSegments[2];
+                //     if (containerName && objectName) {
+                //         // Return list of records in table in Dexie database.
+                //         const container = await this.establishContainer(containerName);
+                //         const records = await container.table(objectName).toArray();
+                //         const connectionItemConfigs = records.map(
+                //             (record) => ({ folderPath: settings.folderPath, id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
+                //         );
+                //         return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
+                //     } else {
+                //         throw new Error(`Invalid folder path '${settings.folderPath}'.`);
+                //     }
+                // }
                 default:
                     throw new Error(`Invalid folder path '${settings.folderPath}'.`);
             }
-            const container = await this.establishContainer(containerName);
-            const connectionItemConfigs = container.tables.map(
-                (table) => ({ folderPath: '/', id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
-            );
-            return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
         } catch (error) {
             throw this.constructErrorAndTidyUp(ERROR_LIST_ITEMS_FAILED, 'listItems', error);
         }
