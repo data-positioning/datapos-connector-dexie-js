@@ -31,6 +31,7 @@ declare module '@datapos/datapos-share-core' {
 // Constants
 const CALLBACK_PREVIEW_ABORTED = 'Connector preview aborted.';
 const CALLBACK_READ_ABORTED = 'Connector read aborted.';
+const ERROR_FIND_ITEM_FAILED = 'Connector find item failed.';
 const ERROR_LIST_ITEMS_FAILED = 'Connector list items failed.';
 const ERROR_PREVIEW_FAILED = 'Connector preview failed.';
 
@@ -122,7 +123,7 @@ export default class DexieJSConnector implements Connector {
             const container = await this.establishContainer(settings.containerName);
             return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : undefined;
         } catch (error) {
-            throw this.constructErrorAndTidyUp(ERROR_LIST_ITEMS_FAILED, 'find', error);
+            throw this.constructErrorAndTidyUp(ERROR_FIND_ITEM_FAILED, 'find.1', error);
         }
     }
 
@@ -131,7 +132,7 @@ export default class DexieJSConnector implements Connector {
         return { put: this.put };
     }
 
-    // Operations - Get Put Interface
+    // Operations - Get Retrieve Interface
     getRetrieveInterface(): RetrieveInterface {
         return { retrieve: this.retrieve };
     }
@@ -144,7 +145,31 @@ export default class DexieJSConnector implements Connector {
     // Operations - List
     async list(settings: ListSettings): Promise<ListResult> {
         try {
-            const container = await this.establishContainer(settings.containerName);
+            const folderPathSegments = settings.folderPath.split('/');
+            switch (folderPathSegments.length) {
+                case 2: {
+                    const containerName = folderPathSegments[1];
+                    if (containerName) {
+                        // TODO: Return list of containers...
+                    } else {
+                        // TODO: Return list of tables in container...
+                    }
+                    break;
+                }
+                case 3: {
+                    const containerName = folderPathSegments[1];
+                    const objectName = folderPathSegments[2];
+                    if (containerName && objectName) {
+                        // TODO: Return list of records in table in container...
+                    } else {
+                        throw new Error(`Invalid folder path '${settings.folderPath}'.`);
+                    }
+                    break;
+                }
+                default:
+                    throw new Error(`Invalid folder path '${settings.folderPath}'.`);
+            }
+            const container = await this.establishContainer(containerName);
             const connectionItemConfigs = container.tables.map(
                 (table) => ({ folderPath: '/', id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
             );
