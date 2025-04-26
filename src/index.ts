@@ -7,7 +7,21 @@ import Dexie from 'dexie';
 
 // Dependencies - Framework
 import { AbortError, ConnectorError } from '@datapos/datapos-share-core';
-import type { ConnectionConfig, ConnectionItemConfig, Connector, ConnectorCallbackData } from '@datapos/datapos-share-core';
+import type {
+    ConnectionConfig,
+    ConnectionItemConfig,
+    Connector,
+    ConnectorCallbackData,
+    DropSettings,
+    PreviewData,
+    PutResult,
+    PutSettings,
+    RemoveResult,
+    RemoveSettings,
+    RetrieveRecord,
+    RetrieveSettingsForCSV,
+    RetrieveSummary
+} from '@datapos/datapos-share-core';
 import type { ConnectorConfig, CreateResult, CreateSettings } from '@datapos/datapos-share-core';
 import type { DropResult } from '@datapos/datapos-share-core';
 import type { FindResult, FindSettings } from '@datapos/datapos-share-core';
@@ -20,6 +34,7 @@ import type { RemoveInterface } from '@datapos/datapos-share-core';
 // Dependencies - Data
 import config from './config.json';
 import { version } from '../package.json';
+import { Callback, Options, Parser } from 'csv-parse/.';
 
 // Interfaces/Types - Connector (Dexie)
 declare module '@datapos/datapos-share-core' {
@@ -58,67 +73,69 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Create
-    async create(containerName: string, objectName: string, structure: Record<string, string>): Promise<{ error?: unknown; result?: CreateResult }> {
-        const container = await this.establishContainer(containerName);
+    async create(connector: Connector, connectionConfig: ConnectionConfig, settings: CreateSettings): Promise<CreateResult> {
+        console.log(1111, settings);
+        // const container = await this.establishContainer(containerName);
 
-        container.close();
+        // container.close();
 
-        const newContainer = new Dexie(container.name);
-        newContainer.on('blocked', () => false); // Silence console warning of blocked event.
+        // const newContainer = new Dexie(container.name);
+        // newContainer.on('blocked', () => false); // Silence console warning of blocked event.
 
-        if (container.tables.length === 0) {
-            await container.delete();
-            newContainer.version(1).stores(structure);
-            this.containers[containerName] = await newContainer.open();
-            return {};
-        }
+        // if (container.tables.length === 0) {
+        //     await container.delete();
+        //     newContainer.version(1).stores(structure);
+        //     this.containers[containerName] = await newContainer.open();
+        //     return {};
+        // }
 
-        const currentSchema = container.tables.reduce(
-            (result, { name, schema }) => {
-                result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
-                return result;
-            },
-            {} as Record<string, string>
-        );
-        newContainer.version(container.verno).stores(currentSchema);
-        newContainer.version(container.verno + 1).stores(structure);
-        this.containers[containerName] = await newContainer.open();
+        // const currentSchema = container.tables.reduce(
+        //     (result, { name, schema }) => {
+        //         result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
+        //         return result;
+        //     },
+        //     {} as Record<string, string>
+        // );
+        // newContainer.version(container.verno).stores(currentSchema);
+        // newContainer.version(container.verno + 1).stores(structure);
+        // this.containers[containerName] = await newContainer.open();
 
         return {};
     }
 
     // Operations - Drop
-    async drop(containerName: string, objectName: string): Promise<{ error?: unknown; result?: DropResult }> {
-        const container = await this.establishContainer(containerName);
+    async drop(connector: Connector, connectionConfig: ConnectionConfig, settings: DropSettings): Promise<DropResult> {
+        console.log(2222, settings);
+        // const container = await this.establishContainer(containerName);
 
-        container.close();
+        // container.close();
 
-        const newContainer = new Dexie(container.name);
-        newContainer.on('blocked', () => false); // Silence console warning of blocked event.
+        // const newContainer = new Dexie(container.name);
+        // newContainer.on('blocked', () => false); // Silence console warning of blocked event.
 
-        if (container.tables.length === 0) {
-            await container.delete();
-            newContainer.version(1).stores({});
-            this.containers[containerName] = await newContainer.open();
-            return {};
-        }
+        // if (container.tables.length === 0) {
+        //     await container.delete();
+        //     newContainer.version(1).stores({});
+        //     this.containers[containerName] = await newContainer.open();
+        //     return {};
+        // }
 
-        const currentSchema = container.tables.reduce(
-            (result, { name, schema }) => {
-                result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
-                return result;
-            },
-            {} as Record<string, string>
-        );
-        newContainer.version(container.verno).stores(currentSchema);
-        newContainer.version(container.verno + 1).stores({ [objectName]: null });
-        this.containers[containerName] = await newContainer.open();
+        // const currentSchema = container.tables.reduce(
+        //     (result, { name, schema }) => {
+        //         result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
+        //         return result;
+        //     },
+        //     {} as Record<string, string>
+        // );
+        // newContainer.version(container.verno).stores(currentSchema);
+        // newContainer.version(container.verno + 1).stores({ [objectName]: null });
+        // this.containers[containerName] = await newContainer.open();
 
         return {};
     }
 
     // Operations - Find
-    async find(settings: FindSettings): Promise<FindResult> {
+    async find(connector: Connector, connectionConfig: ConnectionConfig, settings: FindSettings): Promise<FindResult> {
         try {
             const container = await this.establishContainer(settings.containerName);
             return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : undefined;
@@ -143,7 +160,7 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - List
-    async list(settings: ListSettings): Promise<ListResult> {
+    async list(connector: Connector, connectionConfig: ConnectionConfig, settings: ListSettings): Promise<ListResult> {
         try {
             const folderPathSegments = settings.folderPath.split('/');
             switch (folderPathSegments.length) {
@@ -191,19 +208,19 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Preview
-    async preview(itemConfig: ConnectionItemConfig, settings: PreviewSettings): Promise<PreviewResult> {
+    async preview(connector: Connector, connectionConfig: ConnectionConfig, settings: PreviewSettings): Promise<PreviewData> {
         try {
-            // Create an abort controller. Get the signal for the abort controller and add an abort listener.
-            this.abortController = new AbortController();
-            const signal = this.abortController.signal;
-            signal.addEventListener('abort', () => {
-                throw this.constructErrorAndTidyUp(ERROR_PREVIEW_FAILED, 'preview.2', new AbortError(CALLBACK_PREVIEW_ABORTED));
-            });
+            // // Create an abort controller. Get the signal for the abort controller and add an abort listener.
+            // this.abortController = new AbortController();
+            // const signal = this.abortController.signal;
+            // signal.addEventListener('abort', () => {
+            //     throw this.constructErrorAndTidyUp(ERROR_PREVIEW_FAILED, 'preview.2', new AbortError(CALLBACK_PREVIEW_ABORTED));
+            // });
 
-            // Fetch the first 50 rows.
-            const container = await this.establishContainer(settings.containerName);
-            const data = await container.table(itemConfig.name).limit(50).toArray();
-            return { data, typeId: 'jsonArray' };
+            // // Fetch the first 50 rows.
+            // const container = await this.establishContainer(settings.containerName);
+            // const data = await container.table(itemConfig.name).limit(50).toArray();
+            return { data: [], typeId: 'jsonArray' };
         } catch (error) {
             throw this.constructErrorAndTidyUp(ERROR_PREVIEW_FAILED, 'preview.1', error);
         }
@@ -227,38 +244,51 @@ export default class DexieJSConnector implements Connector {
 
     // Utilities - Put
     private async put(
-        containerName: string,
-        objectName: string,
+        connector: Connector,
+        connectionConfig: ConnectionConfig,
         data: Record<string, unknown> | Record<string, unknown>[],
+        settings: PutSettings,
+        chunk: (count: number) => void,
+        complete: (result: PutResult) => void,
         callback: (data: ConnectorCallbackData) => void
-    ): Promise<{ error?: unknown }> {
+    ): Promise<void> {
         try {
-            const container = await this.establishContainer(containerName);
-            if (Array.isArray(data)) {
-                const x1 = await container.table(objectName).bulkPut(data);
-                console.log(1111, x1);
-            } else {
-                const x2 = await container.table(objectName).put(data);
-                console.log(2222, x2);
-            }
-            return {};
+            // const container = await this.establishContainer(containerName);
+            // if (Array.isArray(data)) {
+            //     const x1 = await container.table(objectName).bulkPut(data);
+            //     console.log(1111, x1);
+            // } else {
+            //     const x2 = await container.table(objectName).put(data);
+            //     console.log(2222, x2);
+            // }
+            return;
         } catch (error) {
             console.log(3333, error);
-            return error;
+            return;
         }
     }
 
     // Utilities - Remove
-    private async remove(containerName: string, objectName: string, keys: Record<string, unknown>[]): Promise<{ error?: unknown }> {
-        return {};
+    private async remove(
+        connector: Connector,
+        connectionConfig: ConnectionConfig,
+        settings: RemoveSettings,
+        chunk: (count: number) => void,
+        complete: (result: RemoveResult) => void,
+        callback: (data: ConnectorCallbackData) => void
+    ): Promise<void> {
+        return;
     }
 
     // Utilities - Retrieve
     private async retrieve(
-        itemConfig: ConnectionItemConfig,
-        previewConfig: DataViewPreviewConfig,
-        settings: RetrieveSettings,
-        callback: (data: ConnectorCallbackData) => void
+        connector: Connector,
+        connectionConfig: ConnectionConfig,
+        settings: RetrieveSettingsForCSV,
+        chunk: (records: RetrieveRecord[]) => void,
+        complete: (result: RetrieveSummary) => void,
+        callback: (data: ConnectorCallbackData) => void,
+        tools: { csvParse: (options?: Options, callback?: Callback) => Parser | undefined }
     ): Promise<void> {
         try {
             return;
