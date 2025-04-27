@@ -10,12 +10,12 @@ import type { DropSettings } from '@datapos/datapos-share-core';
 import type { PutSettings } from '@datapos/datapos-share-core';
 import type { RemoveSettings } from '@datapos/datapos-share-core';
 import { AbortError, ConnectorError } from '@datapos/datapos-share-core';
-import type { ConnectionConfig, ConnectionItemConfig, Connector } from '@datapos/datapos-share-core';
+import type { ConnectionConfig, ConnectionItemConfig, Connector, TableRecord } from '@datapos/datapos-share-core';
 import type { ConnectorConfig, CreateSettings } from '@datapos/datapos-share-core';
 import type { FindResult, FindSettings } from '@datapos/datapos-share-core';
 import type { ListResult, ListSettings } from '@datapos/datapos-share-core';
 import type { PreviewData, PreviewSettings } from '@datapos/datapos-share-core';
-import type { RetrieveRecord, RetrieveSettings, RetrieveSummary } from '@datapos/datapos-share-core';
+import type { RetrieveSettings, RetrieveSummary, RetrieveTools } from '@datapos/datapos-share-core';
 
 // Dependencies - Data
 import config from './config.json';
@@ -165,22 +165,6 @@ export default class DexieJSConnector implements Connector {
                         return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
                     }
                 }
-                // case 3: {
-                //     if (folderPathSegments[0]) throw new Error(`Invalid folder path '${settings.folderPath}'.`); // Invalid folder path if characters ahead of first separator.
-                //     const containerName = folderPathSegments[1];
-                //     const objectName = folderPathSegments[2];
-                //     if (containerName && objectName) {
-                //         // Return list of records in table in Dexie database.
-                //         const container = await establishContainer(connector,containerName);
-                //         const records = await container.table(objectName).toArray();
-                //         const connectionItemConfigs = records.map(
-                //             (record) => ({ folderPath: settings.folderPath, id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
-                //         );
-                //         return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
-                //     } else {
-                //         throw new Error(`Invalid folder path '${settings.folderPath}'.`);
-                //     }
-                // }
                 default:
                     throw new Error(`Invalid folder path '${settings.folderPath}'.`);
             }
@@ -195,7 +179,7 @@ export default class DexieJSConnector implements Connector {
             const pathSegments = settings.path.split('/');
             if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
             const container = await establishContainer(connector, pathSegments[1]);
-            const data = await container.table(pathSegments[2]).limit(50).toArray(); // Fetch the first 50 rows.
+            const data = await container.table<TableRecord>(pathSegments[2]).limit(50).toArray(); // Fetch the first 50 rows.
             return { data, typeId: 'jsonArray' };
         } catch (error) {
             throw constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'preview.1', error);
@@ -210,11 +194,9 @@ export default class DexieJSConnector implements Connector {
             const container = await establishContainer(connector, pathSegments[1]);
             const data = settings.data;
             if (Array.isArray(data)) {
-                const x1 = await container.table(pathSegments[2]).bulkPut(data);
-                console.log('PUT 1', x1);
+                await container.table(pathSegments[2]).bulkPut(data);
             } else {
-                const x2 = await container.table(pathSegments[2]).put(data);
-                console.log('PUT 2', x2);
+                await container.table(pathSegments[2]).put(data);
             }
             return;
         } catch (error) {
@@ -246,11 +228,16 @@ export default class DexieJSConnector implements Connector {
     async retrieve(
         connector: DexieJSConnector,
         settings: RetrieveSettings,
-        chunk: (records: RetrieveRecord[]) => void,
+        chunk: (records: TableRecord[]) => void,
         complete: (result: RetrieveSummary) => void,
-        tools: { csvParse: (options?: Options, callback?: Callback) => Parser | undefined }
+        tools: RetrieveTools
     ): Promise<void> {
         try {
+            const pathSegments = settings.path.split('/');
+            if (pathSegments.length !== 3) throw new Error(`Invalid retrieve path '${settings.path}'.`);
+            const container = await establishContainer(connector, pathSegments[1]);
+            const records = await container.table<TableRecord>(pathSegments[2]).toArray();
+            chunk(records);
             return;
         } catch (error) {
             throw constructErrorAndTidyUp(connector, ERROR_RETRIEVE_FAILED, 'retrieve.1', error);
