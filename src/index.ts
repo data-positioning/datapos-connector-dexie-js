@@ -79,7 +79,7 @@ export default class DexieJSConnector implements Connector {
             console.log(4444);
             if (container.tables.length === 0) {
                 await container.delete();
-                newContainer.version(1).stores({ [pathSegments[2]]: settings.structure });
+                newContainer.version(1).stores({ [pathSegments[2]]: settings.structure || '' });
                 connector.containers[pathSegments[1]] = await newContainer.open();
                 return {};
             }
@@ -93,7 +93,7 @@ export default class DexieJSConnector implements Connector {
                 {} as Record<string, string>
             );
             newContainer.version(container.verno).stores(currentSchema);
-            newContainer.version(container.verno + 1).stores({ [pathSegments[2]]: settings.structure });
+            newContainer.version(container.verno + 1).stores({ [pathSegments[2]]: settings.structure || '' });
             connector.containers[pathSegments[1]] = await newContainer.open();
             console.log(7777);
             return {};
