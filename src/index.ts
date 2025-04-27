@@ -65,18 +65,14 @@ export default class DexieJSConnector implements Connector {
     // Operations - Create
     async create(connector: DexieJSConnector, settings: CreateSettings): Promise<CreateResult> {
         try {
-            console.log(1111, settings, settings.path);
-            const pathSegments = settings.path.split('/');
-            console.log(2222, pathSegments);
+            const pathSegments = settings.path?.split('/');
             if (pathSegments.length !== 3) throw new Error(`Invalid create path '${settings.path}'.`);
             const container = await establishContainer(connector, pathSegments[1]);
 
-            console.log(3333);
             container.close();
             const newContainer = new Dexie(container.name);
             newContainer.on('blocked', () => false); // Silence console warning of blocked event.
 
-            console.log(4444);
             if (container.tables.length === 0) {
                 await container.delete();
                 newContainer.version(1).stores({ [pathSegments[2]]: settings.structure || '' });
@@ -84,7 +80,6 @@ export default class DexieJSConnector implements Connector {
                 return {};
             }
 
-            console.log(5555);
             const currentSchema = container.tables.reduce(
                 (result, { name, schema }) => {
                     result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
@@ -95,7 +90,6 @@ export default class DexieJSConnector implements Connector {
             newContainer.version(container.verno).stores(currentSchema);
             newContainer.version(container.verno + 1).stores({ [pathSegments[2]]: settings.structure || '' });
             connector.containers[pathSegments[1]] = await newContainer.open();
-            console.log(7777);
             return {};
         } catch (error) {
             throw constructErrorAndTidyUp(connector, ERROR_CREATE_FAILED, 'create.1', error);
