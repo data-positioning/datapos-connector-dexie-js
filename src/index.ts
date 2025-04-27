@@ -208,7 +208,7 @@ export default class DexieJSConnector implements Connector {
             const pathSegments = settings.path.split('/');
             if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
             const container = await establishContainer(connector, pathSegments[1]);
-            const data = settings.chunk();
+            const data = settings.data;
             if (Array.isArray(data)) {
                 const x1 = await container.table(pathSegments[2]).bulkPut(data);
                 console.log('PUT 1', x1);
@@ -228,7 +228,7 @@ export default class DexieJSConnector implements Connector {
             const pathSegments = settings.path.split('/');
             if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
             const container = await establishContainer(connector, pathSegments[1]);
-            const keys = settings.chunk();
+            const keys = settings.keys;
             if (keys.length === 0) {
                 await container.table(pathSegments[2]).clear();
             } else if (keys.length === 1) {
