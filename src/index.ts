@@ -6,35 +6,21 @@
 import Dexie from 'dexie';
 
 // Dependencies - Framework
-import { AbortError, ConnectorError } from '@datapos/datapos-share-core';
-import type {
-    ConnectionConfig,
-    ConnectionItemConfig,
-    Connector,
-    ConnectorCallbackData,
-    DropSettings,
-    PreviewData,
-    PutResult,
-    PutSettings,
-    RemoveResult,
-    RemoveSettings,
-    RetrieveRecord,
-    RetrieveSettingsForCSV,
-    RetrieveSummary
-} from '@datapos/datapos-share-core';
+import { ConnectorError } from '@datapos/datapos-share-core';
+import type { ConnectionConfig, ConnectionItemConfig, Connector } from '@datapos/datapos-share-core';
 import type { ConnectorConfig, CreateResult, CreateSettings } from '@datapos/datapos-share-core';
-import type { DropResult } from '@datapos/datapos-share-core';
+import type { DropResult, DropSettings } from '@datapos/datapos-share-core';
 import type { FindResult, FindSettings } from '@datapos/datapos-share-core';
 import type { ListResult, ListSettings } from '@datapos/datapos-share-core';
-import type { DataViewPreviewConfig, PreviewResult, PreviewSettings } from '@datapos/datapos-share-core';
-import type { PutInterface } from '@datapos/datapos-share-core';
-import type { RetrieveInterface, RetrieveSettings } from '@datapos/datapos-share-core';
-import type { RemoveInterface } from '@datapos/datapos-share-core';
+import type { PreviewData, PreviewSettings } from '@datapos/datapos-share-core';
+import type { PutResult, PutSettings } from '@datapos/datapos-share-core';
+import type { RemoveResult, RemoveSettings } from '@datapos/datapos-share-core';
+import type { RetrieveRecord, RetrieveSettings, RetrieveSummary } from '@datapos/datapos-share-core';
 
 // Dependencies - Data
 import config from './config.json';
 import { version } from '../package.json';
-import { Callback, Options, Parser } from 'csv-parse/.';
+import type { Callback, Options, Parser } from 'csv-parse/.';
 
 // Interfaces/Types - Connector (Dexie)
 declare module '@datapos/datapos-share-core' {
@@ -66,14 +52,15 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Abort
-    abort(): void {
-        if (!this.abortController) return;
-        this.abortController.abort();
-        this.abortController = null;
+    abort(connector: DexieJSConnector): void {
+        if (!connector.abortController) return;
+        connector.abortController.abort();
+        connector.abortController = null;
+        return;
     }
 
     // Operations - Create
-    async create(connector: Connector, connectionConfig: ConnectionConfig, settings: CreateSettings): Promise<CreateResult> {
+    async create(connector: DexieJSConnector, settings: CreateSettings): Promise<CreateResult> {
         console.log(1111, settings);
         // const container = await this.establishContainer(containerName);
 
@@ -104,7 +91,7 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Drop
-    async drop(connector: Connector, connectionConfig: ConnectionConfig, settings: DropSettings): Promise<DropResult> {
+    async drop(connector: DexieJSConnector, settings: DropSettings): Promise<DropResult> {
         console.log(2222, settings);
         // const container = await this.establishContainer(containerName);
 
@@ -135,7 +122,7 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Find
-    async find(connector: Connector, connectionConfig: ConnectionConfig, settings: FindSettings): Promise<FindResult> {
+    async find(connector: DexieJSConnector, settings: FindSettings): Promise<FindResult> {
         try {
             const container = await this.establishContainer(settings.containerName);
             return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : undefined;
@@ -144,23 +131,8 @@ export default class DexieJSConnector implements Connector {
         }
     }
 
-    // Operations - Get Put Interface
-    getPutInterface(): PutInterface {
-        return { put: this.put };
-    }
-
-    // Operations - Get Retrieve Interface
-    getRetrieveInterface(): RetrieveInterface {
-        return { retrieve: this.retrieve };
-    }
-
-    // Operations - Get Remove Interface
-    getRemoveInterface(): RemoveInterface {
-        return { remove: this.remove };
-    }
-
     // Operations - List
-    async list(connector: Connector, connectionConfig: ConnectionConfig, settings: ListSettings): Promise<ListResult> {
+    async list(connector: DexieJSConnector, settings: ListSettings): Promise<ListResult> {
         try {
             const folderPathSegments = settings.folderPath.split('/');
             switch (folderPathSegments.length) {
@@ -208,7 +180,7 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Preview
-    async preview(connector: Connector, connectionConfig: ConnectionConfig, settings: PreviewSettings): Promise<PreviewData> {
+    async preview(connector: DexieJSConnector, settings: PreviewSettings): Promise<PreviewData> {
         try {
             // // Create an abort controller. Get the signal for the abort controller and add an abort listener.
             // this.abortController = new AbortController();
@@ -243,14 +215,12 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Utilities - Put
-    private async put(
-        connector: Connector,
-        connectionConfig: ConnectionConfig,
+    async put(
+        connector: DexieJSConnector,
         data: Record<string, unknown> | Record<string, unknown>[],
         settings: PutSettings,
         chunk: (count: number) => void,
-        complete: (result: PutResult) => void,
-        callback: (data: ConnectorCallbackData) => void
+        complete: (result: PutResult) => void
     ): Promise<void> {
         try {
             // const container = await this.establishContainer(containerName);
@@ -269,25 +239,16 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Utilities - Remove
-    private async remove(
-        connector: Connector,
-        connectionConfig: ConnectionConfig,
-        settings: RemoveSettings,
-        chunk: (count: number) => void,
-        complete: (result: RemoveResult) => void,
-        callback: (data: ConnectorCallbackData) => void
-    ): Promise<void> {
+    async remove(connector: DexieJSConnector, settings: RemoveSettings, chunk: (count: number) => void, complete: (result: RemoveResult) => void): Promise<void> {
         return;
     }
 
     // Utilities - Retrieve
-    private async retrieve(
-        connector: Connector,
-        connectionConfig: ConnectionConfig,
-        settings: RetrieveSettingsForCSV,
+    async retrieve(
+        connector: DexieJSConnector,
+        settings: RetrieveSettings,
         chunk: (records: RetrieveRecord[]) => void,
         complete: (result: RetrieveSummary) => void,
-        callback: (data: ConnectorCallbackData) => void,
         tools: { csvParse: (options?: Options, callback?: Callback) => Parser | undefined }
     ): Promise<void> {
         try {
