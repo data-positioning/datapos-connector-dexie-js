@@ -6,7 +6,7 @@
 import Dexie from 'dexie';
 
 // Dependencies - Framework
-import { ConnectorError } from '@datapos/datapos-share-core';
+import { AbortError, ConnectorError } from '@datapos/datapos-share-core';
 import type { ConnectionConfig, ConnectionItemConfig, Connector } from '@datapos/datapos-share-core';
 import type { ConnectorConfig, CreateResult, CreateSettings } from '@datapos/datapos-share-core';
 import type { DropResult, DropSettings } from '@datapos/datapos-share-core';
@@ -30,11 +30,13 @@ declare module '@datapos/datapos-share-core' {
 }
 
 // Constants
-const CALLBACK_PREVIEW_ABORTED = 'Connector preview aborted.';
-const CALLBACK_READ_ABORTED = 'Connector read aborted.';
+const CALLBACK_RETRIEVE_ABORTED = 'Connector retrieve aborted.';
 const ERROR_FIND_ITEM_FAILED = 'Connector find item failed.';
 const ERROR_LIST_ITEMS_FAILED = 'Connector list items failed.';
 const ERROR_PREVIEW_FAILED = 'Connector preview failed.';
+const ERROR_PUT_FAILED = 'Connector put failed.';
+const ERROR_REMOVE_FAILED = 'Connector remove failed.';
+const ERROR_RETRIEVE_FAILED = 'Connector retrieve failed.';
 
 // Classes - Dexie.js Connector
 export default class DexieJSConnector implements Connector {
@@ -182,23 +184,17 @@ export default class DexieJSConnector implements Connector {
     // Operations - Preview
     async preview(connector: DexieJSConnector, settings: PreviewSettings): Promise<PreviewData> {
         try {
-            // // Create an abort controller. Get the signal for the abort controller and add an abort listener.
-            // connector.abortController = new AbortController();
-            // const signal = connector.abortController.signal;
-            // signal.addEventListener('abort', () => {
-            //     throw constructErrorAndTidyUp(connector,ERROR_PREVIEW_FAILED, 'preview.2', new AbortError(CALLBACK_PREVIEW_ABORTED));
-            // });
-
-            // // Fetch the first 50 rows.
-            // const container = await establishContainer(connector,settings.containerName);
-            // const data = await container.table(itemConfig.name).limit(50).toArray();
-            return { data: [], typeId: 'jsonArray' };
+            const pathSegments = settings.path.split('/');
+            if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
+            const container = await establishContainer(connector, pathSegments[1]);
+            const data = await container.table(pathSegments[2]).limit(50).toArray(); // Fetch the first 50 rows.
+            return { data, typeId: 'jsonArray' };
         } catch (error) {
             throw constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'preview.1', error);
         }
     }
 
-    // Utilities - Put
+    // Operations - Put
     async put(
         connector: DexieJSConnector,
         data: Record<string, unknown> | Record<string, unknown>[],
@@ -207,27 +203,32 @@ export default class DexieJSConnector implements Connector {
         complete: (result: PutResult) => void
     ): Promise<void> {
         try {
-            // const container = await establishContainer(connector,containerName);
-            // if (Array.isArray(data)) {
-            //     const x1 = await container.table(objectName).bulkPut(data);
-            //     console.log(1111, x1);
-            // } else {
-            //     const x2 = await container.table(objectName).put(data);
-            //     console.log(2222, x2);
-            // }
+            const pathSegments = settings.path.split('/');
+            if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
+            const container = await establishContainer(connector, pathSegments[1]);
+            if (Array.isArray(data)) {
+                const x1 = await container.table(pathSegments[2]).bulkPut(data);
+                console.log('PUT 1', x1);
+            } else {
+                const x2 = await container.table(pathSegments[2]).put(data);
+                console.log('PUT 2', x2);
+            }
             return;
         } catch (error) {
-            console.log(3333, error);
-            return;
+            throw constructErrorAndTidyUp(connector, ERROR_PUT_FAILED, 'put.1', error);
         }
     }
 
-    // Utilities - Remove
+    // Operations - Remove
     async remove(connector: DexieJSConnector, settings: RemoveSettings, chunk: (count: number) => void, complete: (result: RemoveResult) => void): Promise<void> {
-        return;
+        try {
+            return;
+        } catch (error) {
+            throw constructErrorAndTidyUp(connector, ERROR_REMOVE_FAILED, 'remove.1', error);
+        }
     }
 
-    // Utilities - Retrieve
+    // Operations - Retrieve
     async retrieve(
         connector: DexieJSConnector,
         settings: RetrieveSettings,
@@ -238,7 +239,7 @@ export default class DexieJSConnector implements Connector {
         try {
             return;
         } catch (error) {
-            throw constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'read.1', error);
+            throw constructErrorAndTidyUp(connector, ERROR_RETRIEVE_FAILED, 'retrieve.1', error);
         }
     }
 }
