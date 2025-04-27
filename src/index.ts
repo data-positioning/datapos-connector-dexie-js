@@ -30,13 +30,14 @@ declare module '@datapos/datapos-share-core' {
 }
 
 // Constants
-const CALLBACK_RETRIEVE_ABORTED = 'Connector retrieve aborted.';
+const CALLBACK_RETRIEVE_ABORTED = 'Connector retrieve item aborted.';
+const ERROR_CREATE_FAILED = 'Connector create item failed.';
 const ERROR_FIND_ITEM_FAILED = 'Connector find item failed.';
 const ERROR_LIST_ITEMS_FAILED = 'Connector list items failed.';
-const ERROR_PREVIEW_FAILED = 'Connector preview failed.';
-const ERROR_PUT_FAILED = 'Connector put failed.';
-const ERROR_REMOVE_FAILED = 'Connector remove failed.';
-const ERROR_RETRIEVE_FAILED = 'Connector retrieve failed.';
+const ERROR_PREVIEW_FAILED = 'Connector preview item failed.';
+const ERROR_PUT_FAILED = 'Connector put items failed.';
+const ERROR_REMOVE_FAILED = 'Connector remove items failed.';
+const ERROR_RETRIEVE_FAILED = 'Connector retrieve items failed.';
 
 // Classes - Dexie.js Connector
 export default class DexieJSConnector implements Connector {
@@ -63,38 +64,40 @@ export default class DexieJSConnector implements Connector {
 
     // Operations - Create
     async create(connector: DexieJSConnector, settings: CreateSettings): Promise<CreateResult> {
-        console.log(1111, settings);
-        // const container = await establishContainer(connector,containerName);
+        try {
+            const pathSegments = settings.path.split('/');
+            if (pathSegments.length !== 3) throw new Error(`Invalid create path '${settings.path}'.`);
+            const container = await establishContainer(connector, pathSegments[1]);
 
-        // container.close();
+            container.close();
+            const newContainer = new Dexie(container.name);
+            newContainer.on('blocked', () => false); // Silence console warning of blocked event.
 
-        // const newContainer = new Dexie(container.name);
-        // newContainer.on('blocked', () => false); // Silence console warning of blocked event.
+            if (container.tables.length === 0) {
+                await container.delete();
+                newContainer.version(1).stores({ [pathSegments[1]]: '++id' });
+                connector.containers[pathSegments[1]] = await newContainer.open();
+                return {};
+            }
 
-        // if (container.tables.length === 0) {
-        //     await container.delete();
-        //     newContainer.version(1).stores(structure);
-        //     connector.containers[containerName] = await newContainer.open();
-        //     return {};
-        // }
-
-        // const currentSchema = container.tables.reduce(
-        //     (result, { name, schema }) => {
-        //         result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
-        //         return result;
-        //     },
-        //     {} as Record<string, string>
-        // );
-        // newContainer.version(container.verno).stores(currentSchema);
-        // newContainer.version(container.verno + 1).stores(structure);
-        // connector.containers[containerName] = await newContainer.open();
-
-        return {};
+            const currentSchema = container.tables.reduce(
+                (result, { name, schema }) => {
+                    result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
+                    return result;
+                },
+                {} as Record<string, string>
+            );
+            newContainer.version(container.verno).stores(currentSchema);
+            newContainer.version(container.verno + 1).stores({ [pathSegments[1]]: '++id' });
+            connector.containers[pathSegments[1]] = await newContainer.open();
+            return {};
+        } catch (error) {
+            throw constructErrorAndTidyUp(connector, ERROR_CREATE_FAILED, 'create.1', error);
+        }
     }
 
     // Operations - Drop
     async drop(connector: DexieJSConnector, settings: DropSettings): Promise<DropResult> {
-        console.log(2222, settings);
         // const container = await establishContainer(connector,containerName);
 
         // container.close();
