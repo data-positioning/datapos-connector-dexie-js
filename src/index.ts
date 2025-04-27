@@ -67,6 +67,7 @@ export default class DexieJSConnector implements Connector {
         try {
             console.log(1111, settings, settings.path);
             const pathSegments = settings.path.split('/');
+            console.log(2222, pathSegments);
             if (pathSegments.length !== 3) throw new Error(`Invalid create path '${settings.path}'.`);
             const container = await establishContainer(connector, pathSegments[1]);
 
