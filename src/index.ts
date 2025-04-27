@@ -6,15 +6,15 @@
 import Dexie from 'dexie';
 
 // Dependencies - Framework
+import type { DropSettings } from '@datapos/datapos-share-core';
+import type { PutSettings } from '@datapos/datapos-share-core';
+import type { RemoveSettings } from '@datapos/datapos-share-core';
 import { AbortError, ConnectorError } from '@datapos/datapos-share-core';
 import type { ConnectionConfig, ConnectionItemConfig, Connector } from '@datapos/datapos-share-core';
-import type { ConnectorConfig, CreateResult, CreateSettings } from '@datapos/datapos-share-core';
-import type { DropResult, DropSettings } from '@datapos/datapos-share-core';
+import type { ConnectorConfig, CreateSettings } from '@datapos/datapos-share-core';
 import type { FindResult, FindSettings } from '@datapos/datapos-share-core';
 import type { ListResult, ListSettings } from '@datapos/datapos-share-core';
 import type { PreviewData, PreviewSettings } from '@datapos/datapos-share-core';
-import type { PutResult, PutSettings } from '@datapos/datapos-share-core';
-import type { RemoveResult, RemoveSettings } from '@datapos/datapos-share-core';
 import type { RetrieveRecord, RetrieveSettings, RetrieveSummary } from '@datapos/datapos-share-core';
 
 // Dependencies - Data
@@ -30,8 +30,9 @@ declare module '@datapos/datapos-share-core' {
 }
 
 // Constants
-const CALLBACK_RETRIEVE_ABORTED = 'Connector retrieve item aborted.';
-const ERROR_CREATE_FAILED = 'Connector create item failed.';
+const CALLBACK_RETRIEVE_ABORTED = 'Connector retrieve items aborted.';
+const ERROR_CREATE_FAILED = 'Connector create object failed.';
+const ERROR_DROP_FAILED = 'Connector drop object failed.';
 const ERROR_FIND_ITEM_FAILED = 'Connector find item failed.';
 const ERROR_LIST_ITEMS_FAILED = 'Connector list items failed.';
 const ERROR_PREVIEW_FAILED = 'Connector preview item failed.';
@@ -63,7 +64,7 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Create
-    async create(connector: DexieJSConnector, settings: CreateSettings): Promise<CreateResult> {
+    async create(connector: DexieJSConnector, settings: CreateSettings): Promise<void> {
         try {
             const pathSegments = settings.path?.split('/');
             if (pathSegments.length !== 3) throw new Error(`Invalid create path '${settings.path}'.`);
@@ -77,7 +78,7 @@ export default class DexieJSConnector implements Connector {
                 await container.delete();
                 newContainer.version(1).stores({ [pathSegments[2]]: settings.structure || '' });
                 connector.containers[pathSegments[1]] = await newContainer.open();
-                return {};
+                return;
             }
 
             const currentSchema = container.tables.reduce(
@@ -90,40 +91,44 @@ export default class DexieJSConnector implements Connector {
             newContainer.version(container.verno).stores(currentSchema);
             newContainer.version(container.verno + 1).stores({ [pathSegments[2]]: settings.structure || '' });
             connector.containers[pathSegments[1]] = await newContainer.open();
-            return {};
+            return;
         } catch (error) {
             throw constructErrorAndTidyUp(connector, ERROR_CREATE_FAILED, 'create.1', error);
         }
     }
 
     // Operations - Drop
-    async drop(connector: DexieJSConnector, settings: DropSettings): Promise<DropResult> {
-        // const container = await establishContainer(connector,containerName);
+    async drop(connector: DexieJSConnector, settings: DropSettings): Promise<void> {
+        try {
+            const pathSegments = settings.path?.split('/');
+            if (pathSegments.length !== 3) throw new Error(`Invalid drop path '${settings.path}'.`);
+            const container = await establishContainer(connector, pathSegments[1]);
 
-        // container.close();
+            container.close();
+            const newContainer = new Dexie(container.name);
+            newContainer.on('blocked', () => false); // Silence console warning of blocked event.
 
-        // const newContainer = new Dexie(container.name);
-        // newContainer.on('blocked', () => false); // Silence console warning of blocked event.
+            if (container.tables.length === 0) {
+                await container.delete();
+                newContainer.version(1).stores({});
+                connector.containers[pathSegments[1]] = await newContainer.open();
+                return;
+            }
 
-        // if (container.tables.length === 0) {
-        //     await container.delete();
-        //     newContainer.version(1).stores({});
-        //     connector.containers[containerName] = await newContainer.open();
-        //     return {};
-        // }
-
-        // const currentSchema = container.tables.reduce(
-        //     (result, { name, schema }) => {
-        //         result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
-        //         return result;
-        //     },
-        //     {} as Record<string, string>
-        // );
-        // newContainer.version(container.verno).stores(currentSchema);
-        // newContainer.version(container.verno + 1).stores({ [objectName]: null });
-        // connector.containers[containerName] = await newContainer.open();
-
-        return {};
+            const currentSchema = container.tables.reduce(
+                (result, { name, schema }) => {
+                    result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
+                    return result;
+                },
+                {} as Record<string, string>
+            );
+            newContainer.version(container.verno).stores(currentSchema);
+            newContainer.version(container.verno + 1).stores({ [pathSegments[2]]: null });
+            connector.containers[pathSegments[1]] = await newContainer.open();
+            return;
+        } catch (error) {
+            throw constructErrorAndTidyUp(connector, ERROR_DROP_FAILED, 'drop.1', error);
+        }
     }
 
     // Operations - Find
@@ -198,18 +203,12 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Put
-    async put(
-        connector: DexieJSConnector,
-        // data: Record<string, unknown> | Record<string, unknown>[],
-        settings: PutSettings,
-        chunk: (count: number) => void,
-        complete: (result: PutResult) => void
-    ): Promise<void> {
+    async put(connector: DexieJSConnector, settings: PutSettings): Promise<void> {
         try {
             const pathSegments = settings.path.split('/');
             if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
             const container = await establishContainer(connector, pathSegments[1]);
-            const data = settings.data;
+            const data = settings.chunk();
             if (Array.isArray(data)) {
                 const x1 = await container.table(pathSegments[2]).bulkPut(data);
                 console.log('PUT 1', x1);
@@ -224,8 +223,19 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Remove
-    async remove(connector: DexieJSConnector, settings: RemoveSettings, chunk: (count: number) => void, complete: (result: RemoveResult) => void): Promise<void> {
+    async remove(connector: DexieJSConnector, settings: RemoveSettings): Promise<void> {
         try {
+            const pathSegments = settings.path.split('/');
+            if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
+            const container = await establishContainer(connector, pathSegments[1]);
+            const keys = settings.chunk();
+            if (keys.length === 0) {
+                await container.table(pathSegments[2]).clear();
+            } else if (keys.length === 1) {
+                await container.table(pathSegments[2]).delete(keys[0]);
+            } else {
+                await container.table(pathSegments[2]).bulkDelete(keys);
+            }
             return;
         } catch (error) {
             throw constructErrorAndTidyUp(connector, ERROR_REMOVE_FAILED, 'remove.1', error);
