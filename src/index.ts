@@ -100,7 +100,6 @@ export default class DexieJSConnector implements Connector {
     // Operations - Drop
     async drop(connector: DexieJSConnector, settings: DropSettings): Promise<void> {
         try {
-            console.log(1111, settings);
             const pathSegments = settings.path?.split('/');
             if (pathSegments.length !== 3) throw new Error(`Invalid drop path '${settings.path}'.`);
             const container = await establishContainer(connector, pathSegments[1]);
@@ -109,7 +108,6 @@ export default class DexieJSConnector implements Connector {
             const newContainer = new Dexie(container.name);
             newContainer.on('blocked', () => false); // Silence console warning of blocked event.
 
-            console.log(2222, container.tables);
             if (container.tables.length === 0) {
                 await container.delete();
                 newContainer.version(1).stores({});
@@ -117,21 +115,15 @@ export default class DexieJSConnector implements Connector {
                 return;
             }
 
-            console.log(3333);
             const currentSchema = container.tables.reduce(
                 (result, { name, schema }) => {
-                    console.log(4444);
                     result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
-                    console.log(5555);
                     return result;
                 },
                 {} as Record<string, string>
             );
-            console.log(7777);
             newContainer.version(container.verno).stores(currentSchema);
-            console.log(8888, pathSegments[2]);
             newContainer.version(container.verno + 1).stores({ [pathSegments[2]]: null });
-            console.log(9999);
             connector.containers[pathSegments[1]] = await newContainer.open();
             return;
         } catch (error) {
