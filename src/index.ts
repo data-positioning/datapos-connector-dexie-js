@@ -193,10 +193,10 @@ export default class DexieJSConnector implements Connector {
             if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
             const container = await establishContainer(connector, pathSegments[1]);
             const data = settings.data;
-            if (Array.isArray(data)) {
+            if (data.length === 1) {
+                await container.table(pathSegments[2]).put(data[0]);
+            } else if (data.length > 1) {
                 await container.table(pathSegments[2]).bulkPut(data);
-            } else {
-                await container.table(pathSegments[2]).put(data);
             }
             return;
         } catch (error) {
@@ -212,11 +212,11 @@ export default class DexieJSConnector implements Connector {
             const container = await establishContainer(connector, pathSegments[1]);
             const keys = settings.keys;
             if (keys.length === 0) {
-                await container.table(pathSegments[2]).clear();
+                await container.table(pathSegments[2]).clear(); // Remove all records.
             } else if (keys.length === 1) {
-                await container.table(pathSegments[2]).delete(keys[0]);
+                await container.table(pathSegments[2]).delete(keys[0]); // Remove single record.
             } else {
-                await container.table(pathSegments[2]).bulkDelete(keys);
+                await container.table(pathSegments[2]).bulkDelete(keys); // Remove multiple records.
             }
             return;
         } catch (error) {
