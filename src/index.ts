@@ -10,12 +10,12 @@ import { AbortError } from '@datapos/datapos-share-core';
 import type { DropSettings } from '@datapos/datapos-share-core';
 import type { PutSettings } from '@datapos/datapos-share-core';
 import type { RemoveSettings } from '@datapos/datapos-share-core';
-import type { ConnectionConfig, ConnectionItemConfig, Connector, TableRecord } from '@datapos/datapos-share-core';
+import type { ConnectionConfig, ConnectionItemConfig, Connector } from '@datapos/datapos-share-core';
 import type { ConnectorConfig, CreateSettings } from '@datapos/datapos-share-core';
 import type { FindResult, FindSettings } from '@datapos/datapos-share-core';
 import type { ListResult, ListSettings } from '@datapos/datapos-share-core';
 import type { PreviewData, PreviewSettings } from '@datapos/datapos-share-core';
-import type { RetrieveSettings, RetrieveSummary, RetrieveTools } from '@datapos/datapos-share-core';
+import type { RetrieveSettings, RetrieveSummary } from '@datapos/datapos-share-core';
 
 // Dependencies - Data
 import config from './config.json';
@@ -57,7 +57,7 @@ export default class DexieJSConnector implements Connector {
     // Operations - Create
     async create(connector: DexieJSConnector, settings: CreateSettings): Promise<void> {
         const pathSegments = settings.path?.split('/');
-        if (pathSegments.length !== 3) throw new Error(`Invalid create path '${settings.path}'.`);
+        if (pathSegments.length !== 3) throw new Error(`Encountered invalid create object path '${settings.path}'.`);
         const container = await establishContainer(connector, pathSegments[1]);
 
         container.close();
@@ -87,7 +87,7 @@ export default class DexieJSConnector implements Connector {
     // Operations - Drop
     async drop(connector: DexieJSConnector, settings: DropSettings): Promise<void> {
         const pathSegments = settings.path?.split('/');
-        if (pathSegments.length !== 3) throw new Error(`Invalid drop path '${settings.path}'.`);
+        if (pathSegments.length !== 3) throw new Error(`Encountered invalid drop object path '${settings.path}'.`);
         const container = await establishContainer(connector, pathSegments[1]);
 
         container.close();
@@ -125,7 +125,7 @@ export default class DexieJSConnector implements Connector {
         const folderPathSegments = settings.folderPath.split('/');
         switch (folderPathSegments.length) {
             case 2: {
-                if (folderPathSegments[0]) throw new Error(`Invalid folder path '${settings.folderPath}'.`); // Invalid folder path if characters ahead of first separator.
+                if (folderPathSegments[0]) throw new Error(`Encountered invalid list items folder path '${settings.folderPath}'.`); // Invalid folder path if characters ahead of first separator.
                 const containerName = folderPathSegments[1];
                 if (containerName) {
                     // Return list of table items in Dexie database.
@@ -151,22 +151,22 @@ export default class DexieJSConnector implements Connector {
     // Operations - Preview
     async preview(connector: DexieJSConnector, settings: PreviewSettings): Promise<PreviewData> {
         const pathSegments = settings.path.split('/');
-        if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
+        if (pathSegments.length !== 3) throw new Error(`Encountered invalid preview object path '${settings.path}'.`);
         const container = await establishContainer(connector, pathSegments[1]);
-        const data = await container.table<TableRecord>(pathSegments[2]).limit(50).toArray(); // Fetch the first 50 rows.
+        const data = await container.table<Record<string, unknown>>(pathSegments[2]).limit(50).toArray(); // Fetch the first 50 rows.
         return { data, typeId: 'jsonArray' };
     }
 
     // Operations - Put
     async put(connector: DexieJSConnector, settings: PutSettings): Promise<void> {
         const pathSegments = settings.path.split('/');
-        if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
+        if (pathSegments.length !== 3) throw new Error(`Encountered invalid put record(s) path '${settings.path}'.`);
         const container = await establishContainer(connector, pathSegments[1]);
-        const data = settings.data;
-        if (data.length === 1) {
-            await container.table(pathSegments[2]).put(data[0]);
-        } else if (data.length > 1) {
-            await container.table(pathSegments[2]).bulkPut(data);
+        const records = settings.records;
+        if (records.length === 1) {
+            await container.table(pathSegments[2]).put(records[0]);
+        } else if (records.length > 1) {
+            await container.table(pathSegments[2]).bulkPut(records);
         }
         return;
     }
@@ -174,7 +174,7 @@ export default class DexieJSConnector implements Connector {
     // Operations - Remove
     async remove(connector: DexieJSConnector, settings: RemoveSettings): Promise<void> {
         const pathSegments = settings.path.split('/');
-        if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
+        if (pathSegments.length !== 3) throw new Error(`Encountered invalid remove record(s) path '${settings.path}'.`);
         const container = await establishContainer(connector, pathSegments[1]);
         const keys = settings.keys;
         if (keys.length === 0) {
@@ -191,14 +191,13 @@ export default class DexieJSConnector implements Connector {
     async retrieve(
         connector: DexieJSConnector,
         settings: RetrieveSettings,
-        chunk: (records: TableRecord[]) => void,
-        complete: (result: RetrieveSummary) => void,
-        tools: RetrieveTools
+        chunk: (records: Record<string, unknown>[]) => void,
+        complete: (result: RetrieveSummary) => void
     ): Promise<void> {
         const pathSegments = settings.path.split('/');
-        if (pathSegments.length !== 3) throw new Error(`Invalid retrieve path '${settings.path}'.`);
+        if (pathSegments.length !== 3) throw new Error(`Encountered invalid retrieve record(s) path '${settings.path}'.`);
         const container = await establishContainer(connector, pathSegments[1]);
-        const records = await container.table<TableRecord>(pathSegments[2]).toArray();
+        const records = await container.table<Record<string, unknown>>(pathSegments[2]).toArray();
         chunk(records);
         return;
     }
