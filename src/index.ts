@@ -245,9 +245,10 @@ export default class DexieJSConnector implements Connector {
 }
 
 // Utilities - Construct Error and Tidy Up
-function constructErrorAndTidyUp(connector: DexieJSConnector, message: string, context: string, error: unknown): ConnectorError {
+function constructErrorAndTidyUp(connector: DexieJSConnector, message: string, context: string, error: unknown) {
     connector.abortController = null;
-    return new ConnectorError(message, { locator: `${config.id}.${context}` }, undefined, error);
+    return error;
+    // return new ConnectorError(message, { locator: `${config.id}.${context}` }, undefined, error);
 }
 
 // Utilities - Establish Container
