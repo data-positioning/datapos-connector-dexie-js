@@ -142,33 +142,29 @@ export default class DexieJSConnector implements Connector {
 
     // Operations - List
     async list(connector: DexieJSConnector, settings: ListSettings): Promise<ListResult> {
-        try {
-            const folderPathSegments = settings.folderPath.split('/');
-            switch (folderPathSegments.length) {
-                case 2: {
-                    if (folderPathSegments[0]) throw new Error(`Invalid folder path '${settings.folderPath}'.`); // Invalid folder path if characters ahead of first separator.
-                    const containerName = folderPathSegments[1];
-                    if (containerName) {
-                        // Return list of table items in Dexie database.
-                        const container = await establishContainer(connector, containerName);
-                        const connectionItemConfigs = container.tables.map(
-                            (table) => ({ folderPath: settings.folderPath, id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
-                        );
-                        return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
-                    } else {
-                        // Return list of database items for Dexie instance.
-                        const databaseNames = await Dexie.getDatabaseNames();
-                        const connectionItemConfigs = databaseNames.map(
-                            (name) => ({ folderPath: settings.folderPath, id: name, label: name, name: name, typeId: 'object' }) as ConnectionItemConfig
-                        );
-                        return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
-                    }
+        const folderPathSegments = settings.folderPath.split('/');
+        switch (folderPathSegments.length) {
+            case 2: {
+                if (folderPathSegments[0]) throw new Error(`Invalid folder path '${settings.folderPath}'.`); // Invalid folder path if characters ahead of first separator.
+                const containerName = folderPathSegments[1];
+                if (containerName) {
+                    // Return list of table items in Dexie database.
+                    const container = await establishContainer(connector, containerName);
+                    const connectionItemConfigs = container.tables.map(
+                        (table) => ({ folderPath: settings.folderPath, id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
+                    );
+                    return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
+                } else {
+                    // Return list of database items for Dexie instance.
+                    const databaseNames = await Dexie.getDatabaseNames();
+                    const connectionItemConfigs = databaseNames.map(
+                        (name) => ({ folderPath: settings.folderPath, id: name, label: name, name: name, typeId: 'object' }) as ConnectionItemConfig
+                    );
+                    return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
                 }
-                default:
-                    throw new Error(`Invalid folder path '${settings.folderPath}'.`);
             }
-        } catch (error) {
-            throw constructErrorAndTidyUp(connector, ERROR_LIST_ITEMS_FAILED, 'list.1', error);
+            default:
+                throw new Error(`Invalid folder path '${settings.folderPath}'.`);
         }
     }
 
