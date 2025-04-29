@@ -20,7 +20,6 @@ import type { RetrieveSettings, RetrieveSummary, RetrieveTools } from '@datapos/
 // Dependencies - Data
 import config from './config.json';
 import { version } from '../package.json';
-import type { Callback, Options, Parser } from 'csv-parse/.';
 
 // Interfaces/Types - Connector (Dexie)
 declare module '@datapos/datapos-share-core' {
@@ -30,15 +29,15 @@ declare module '@datapos/datapos-share-core' {
 }
 
 // Constants
-const CALLBACK_RETRIEVE_ABORTED = 'Connector retrieve items aborted.';
-const ERROR_CREATE_FAILED = 'Connector create object failed.';
-const ERROR_DROP_FAILED = 'Connector drop object failed.';
-const ERROR_FIND_ITEM_FAILED = 'Connector find item failed.';
-const ERROR_LIST_ITEMS_FAILED = 'Connector list items failed.';
-const ERROR_PREVIEW_FAILED = 'Connector preview item failed.';
-const ERROR_PUT_FAILED = 'Connector put items failed.';
-const ERROR_REMOVE_FAILED = 'Connector remove items failed.';
-const ERROR_RETRIEVE_FAILED = 'Connector retrieve items failed.';
+const CALLBACK_RETRIEVE_ABORTED = 'Connector failed to abort retrieve items operation.';
+const ERROR_CREATE_FAILED = 'Connector failed to execute create object operation.';
+const ERROR_DROP_FAILED = 'Connector failed to execute drop object operation.';
+const ERROR_FIND_ITEM_FAILED = 'Connector failed to execute find item operation.';
+const ERROR_LIST_ITEMS_FAILED = 'Connector failed to execute list items operation.';
+const ERROR_PREVIEW_FAILED = 'Connector failed to execute preview item operation.';
+const ERROR_PUT_FAILED = 'Connector failed to execute put item(s) operation.';
+const ERROR_REMOVE_FAILED = 'Connector failed to execute remove item(s) operation.';
+const ERROR_RETRIEVE_FAILED = 'Connector failed to execute retrieve records operation.';
 
 // Classes - Dexie.js Connector
 export default class DexieJSConnector implements Connector {
