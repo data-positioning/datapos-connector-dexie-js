@@ -144,7 +144,7 @@ export default class DexieJSConnector implements Connector {
                 }
             }
             default:
-                throw new Error(`Invalid folder path '${settings.folderPath}'.`);
+                throw new Error(`Encountered invalid list items folder path '${settings.folderPath}'.`);
         }
     }
 
