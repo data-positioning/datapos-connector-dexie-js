@@ -6,10 +6,10 @@
 import Dexie from 'dexie';
 
 // Dependencies - Framework
+import { AbortError } from '@datapos/datapos-share-core';
 import type { DropSettings } from '@datapos/datapos-share-core';
 import type { PutSettings } from '@datapos/datapos-share-core';
 import type { RemoveSettings } from '@datapos/datapos-share-core';
-import { AbortError, ConnectorError } from '@datapos/datapos-share-core';
 import type { ConnectionConfig, ConnectionItemConfig, Connector, TableRecord } from '@datapos/datapos-share-core';
 import type { ConnectorConfig, CreateSettings } from '@datapos/datapos-share-core';
 import type { FindResult, FindSettings } from '@datapos/datapos-share-core';
@@ -30,14 +30,6 @@ declare module '@datapos/datapos-share-core' {
 
 // Constants
 const CALLBACK_RETRIEVE_ABORTED = 'Connector failed to abort retrieve items operation.';
-const ERROR_CREATE_FAILED = 'Connector failed to execute create object operation.';
-const ERROR_DROP_FAILED = 'Connector failed to execute drop object operation.';
-const ERROR_FIND_ITEM_FAILED = 'Connector failed to execute find item operation.';
-const ERROR_LIST_ITEMS_FAILED = 'Connector failed to execute list items operation.';
-const ERROR_PREVIEW_FAILED = 'Connector failed to execute preview item operation.';
-const ERROR_PUT_FAILED = 'Connector failed to execute put item(s) operation.';
-const ERROR_REMOVE_FAILED = 'Connector failed to execute remove item(s) operation.';
-const ERROR_RETRIEVE_FAILED = 'Connector failed to execute retrieve records operation.';
 
 // Classes - Dexie.js Connector
 export default class DexieJSConnector implements Connector {
@@ -64,80 +56,68 @@ export default class DexieJSConnector implements Connector {
 
     // Operations - Create
     async create(connector: DexieJSConnector, settings: CreateSettings): Promise<void> {
-        try {
-            const pathSegments = settings.path?.split('/');
-            if (pathSegments.length !== 3) throw new Error(`Invalid create path '${settings.path}'.`);
-            const container = await establishContainer(connector, pathSegments[1]);
+        const pathSegments = settings.path?.split('/');
+        if (pathSegments.length !== 3) throw new Error(`Invalid create path '${settings.path}'.`);
+        const container = await establishContainer(connector, pathSegments[1]);
 
-            container.close();
-            const newContainer = new Dexie(container.name);
-            newContainer.on('blocked', () => false); // Silence console warning of blocked event.
+        container.close();
+        const newContainer = new Dexie(container.name);
+        newContainer.on('blocked', () => false); // Silence console warning of blocked event.
 
-            if (container.tables.length === 0) {
-                await container.delete();
-                newContainer.version(1).stores({ [pathSegments[2]]: settings.structure || '' });
-                connector.containers[pathSegments[1]] = await newContainer.open();
-                return;
-            }
-
-            const currentSchema = container.tables.reduce(
-                (result, { name, schema }) => {
-                    result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
-                    return result;
-                },
-                {} as Record<string, string>
-            );
-            newContainer.version(container.verno).stores(currentSchema);
-            newContainer.version(container.verno + 1).stores({ [pathSegments[2]]: settings.structure || '' });
+        if (container.tables.length === 0) {
+            await container.delete();
+            newContainer.version(1).stores({ [pathSegments[2]]: settings.structure || '' });
             connector.containers[pathSegments[1]] = await newContainer.open();
             return;
-        } catch (error) {
-            throw constructErrorAndTidyUp(connector, ERROR_CREATE_FAILED, 'create.1', error);
         }
+
+        const currentSchema = container.tables.reduce(
+            (result, { name, schema }) => {
+                result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
+                return result;
+            },
+            {} as Record<string, string>
+        );
+        newContainer.version(container.verno).stores(currentSchema);
+        newContainer.version(container.verno + 1).stores({ [pathSegments[2]]: settings.structure || '' });
+        connector.containers[pathSegments[1]] = await newContainer.open();
+        return;
     }
 
     // Operations - Drop
     async drop(connector: DexieJSConnector, settings: DropSettings): Promise<void> {
-        try {
-            const pathSegments = settings.path?.split('/');
-            if (pathSegments.length !== 3) throw new Error(`Invalid drop path '${settings.path}'.`);
-            const container = await establishContainer(connector, pathSegments[1]);
+        const pathSegments = settings.path?.split('/');
+        if (pathSegments.length !== 3) throw new Error(`Invalid drop path '${settings.path}'.`);
+        const container = await establishContainer(connector, pathSegments[1]);
 
-            container.close();
-            const newContainer = new Dexie(container.name);
-            newContainer.on('blocked', () => false); // Silence console warning of blocked event.
+        container.close();
+        const newContainer = new Dexie(container.name);
+        newContainer.on('blocked', () => false); // Silence console warning of blocked event.
 
-            if (container.tables.length === 0) {
-                await container.delete();
-                newContainer.version(1).stores({});
-                connector.containers[pathSegments[1]] = await newContainer.open();
-                return;
-            }
-
-            const currentSchema = container.tables.reduce(
-                (result, { name, schema }) => {
-                    result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
-                    return result;
-                },
-                {} as Record<string, string>
-            );
-            newContainer.version(container.verno).stores(currentSchema);
-            newContainer.version(container.verno + 1).stores({ [pathSegments[2]]: null });
+        if (container.tables.length === 0) {
+            await container.delete();
+            newContainer.version(1).stores({});
             connector.containers[pathSegments[1]] = await newContainer.open();
             return;
-        } catch (error) {
-            throw constructErrorAndTidyUp(connector, ERROR_DROP_FAILED, 'drop.1', error);
         }
+
+        const currentSchema = container.tables.reduce(
+            (result, { name, schema }) => {
+                result[name] = [schema.primKey.src, ...schema.indexes.map((idx) => idx.src)].join(',');
+                return result;
+            },
+            {} as Record<string, string>
+        );
+        newContainer.version(container.verno).stores(currentSchema);
+        newContainer.version(container.verno + 1).stores({ [pathSegments[2]]: null });
+        connector.containers[pathSegments[1]] = await newContainer.open();
+        return;
     }
 
     // Operations - Find
     async find(connector: DexieJSConnector, settings: FindSettings): Promise<FindResult> {
-        try {
-            const container = await establishContainer(connector, settings.containerName);
-            return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : undefined;
-        } catch (error) {
-            throw constructErrorAndTidyUp(connector, ERROR_FIND_ITEM_FAILED, 'find.1', error);
-        }
+        const container = await establishContainer(connector, settings.containerName);
+        return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : undefined;
     }
 
     // Operations - List
@@ -170,53 +150,41 @@ export default class DexieJSConnector implements Connector {
 
     // Operations - Preview
     async preview(connector: DexieJSConnector, settings: PreviewSettings): Promise<PreviewData> {
-        try {
-            const pathSegments = settings.path.split('/');
-            if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
-            const container = await establishContainer(connector, pathSegments[1]);
-            const data = await container.table<TableRecord>(pathSegments[2]).limit(50).toArray(); // Fetch the first 50 rows.
-            return { data, typeId: 'jsonArray' };
-        } catch (error) {
-            throw constructErrorAndTidyUp(connector, ERROR_PREVIEW_FAILED, 'preview.1', error);
-        }
+        const pathSegments = settings.path.split('/');
+        if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
+        const container = await establishContainer(connector, pathSegments[1]);
+        const data = await container.table<TableRecord>(pathSegments[2]).limit(50).toArray(); // Fetch the first 50 rows.
+        return { data, typeId: 'jsonArray' };
     }
 
     // Operations - Put
     async put(connector: DexieJSConnector, settings: PutSettings): Promise<void> {
-        try {
-            const pathSegments = settings.path.split('/');
-            if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
-            const container = await establishContainer(connector, pathSegments[1]);
-            const data = settings.data;
-            if (data.length === 1) {
-                await container.table(pathSegments[2]).put(data[0]);
-            } else if (data.length > 1) {
-                await container.table(pathSegments[2]).bulkPut(data);
-            }
-            return;
-        } catch (error) {
-            throw constructErrorAndTidyUp(connector, ERROR_PUT_FAILED, 'put.1', error);
+        const pathSegments = settings.path.split('/');
+        if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
+        const container = await establishContainer(connector, pathSegments[1]);
+        const data = settings.data;
+        if (data.length === 1) {
+            await container.table(pathSegments[2]).put(data[0]);
+        } else if (data.length > 1) {
+            await container.table(pathSegments[2]).bulkPut(data);
         }
+        return;
     }
 
     // Operations - Remove
     async remove(connector: DexieJSConnector, settings: RemoveSettings): Promise<void> {
-        try {
-            const pathSegments = settings.path.split('/');
-            if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
-            const container = await establishContainer(connector, pathSegments[1]);
-            const keys = settings.keys;
-            if (keys.length === 0) {
-                await container.table(pathSegments[2]).clear(); // Remove all records.
-            } else if (keys.length === 1) {
-                await container.table(pathSegments[2]).delete(keys[0]); // Remove single record.
-            } else {
-                await container.table(pathSegments[2]).bulkDelete(keys); // Remove multiple records.
-            }
-            return;
-        } catch (error) {
-            throw constructErrorAndTidyUp(connector, ERROR_REMOVE_FAILED, 'remove.1', error);
+        const pathSegments = settings.path.split('/');
+        if (pathSegments.length !== 3) throw new Error(`Invalid preview path '${settings.path}'.`);
+        const container = await establishContainer(connector, pathSegments[1]);
+        const keys = settings.keys;
+        if (keys.length === 0) {
+            await container.table(pathSegments[2]).clear(); // Remove all records.
+        } else if (keys.length === 1) {
+            await container.table(pathSegments[2]).delete(keys[0]); // Remove single record.
+        } else {
+            await container.table(pathSegments[2]).bulkDelete(keys); // Remove multiple records.
         }
+        return;
     }
 
     // Operations - Retrieve
@@ -227,24 +195,13 @@ export default class DexieJSConnector implements Connector {
         complete: (result: RetrieveSummary) => void,
         tools: RetrieveTools
     ): Promise<void> {
-        try {
-            const pathSegments = settings.path.split('/');
-            if (pathSegments.length !== 3) throw new Error(`Invalid retrieve path '${settings.path}'.`);
-            const container = await establishContainer(connector, pathSegments[1]);
-            const records = await container.table<TableRecord>(pathSegments[2]).toArray();
-            chunk(records);
-            return;
-        } catch (error) {
-            throw constructErrorAndTidyUp(connector, ERROR_RETRIEVE_FAILED, 'retrieve.1', error);
-        }
+        const pathSegments = settings.path.split('/');
+        if (pathSegments.length !== 3) throw new Error(`Invalid retrieve path '${settings.path}'.`);
+        const container = await establishContainer(connector, pathSegments[1]);
+        const records = await container.table<TableRecord>(pathSegments[2]).toArray();
+        chunk(records);
+        return;
     }
-}
-
-// Utilities - Construct Error and Tidy Up
-function constructErrorAndTidyUp(connector: DexieJSConnector, message: string, context: string, error: unknown) {
-    connector.abortController = null;
-    return error;
-    // return new ConnectorError(message, { locator: `${config.id}.${context}` }, undefined, error);
 }
 
 // Utilities - Establish Container
