@@ -57,6 +57,7 @@ export default class DexieJSConnector implements Connector {
     // Operations - Create
     async create(connector: DexieJSConnector, settings: CreateSettings): Promise<void> {
         const pathSegments = settings.path?.split('/');
+        console.log('Create', pathSegments);
         if (pathSegments.length !== 3) throw new Error(`Encountered invalid create object path '${settings.path}'.`);
         const container = await establishContainer(connector, pathSegments[1]);
 
@@ -116,6 +117,7 @@ export default class DexieJSConnector implements Connector {
 
     // Operations - Find
     async find(connector: DexieJSConnector, settings: FindSettings): Promise<FindResult> {
+        console.log('Find', settings);
         const container = await establishContainer(connector, settings.containerName);
         return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : {};
     }
