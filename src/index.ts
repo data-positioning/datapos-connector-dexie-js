@@ -29,7 +29,7 @@ declare module '@datapos/datapos-share-core' {
 }
 
 // Constants
-const CALLBACK_RETRIEVE_ABORTED = 'Connector failed to abort retrieve items operation.';
+const CALLBACK_RETRIEVE_ABORTED = 'Connector failed to abort retrieve all records operation.';
 
 // Classes - Dexie.js Connector
 export default class DexieJSConnector implements Connector {
