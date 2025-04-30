@@ -117,7 +117,7 @@ export default class DexieJSConnector implements Connector {
     // Operations - Find
     async find(connector: DexieJSConnector, settings: FindSettings): Promise<FindResult> {
         const container = await establishContainer(connector, settings.containerName);
-        return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : undefined;
+        return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : {};
     }
 
     // Operations - List
