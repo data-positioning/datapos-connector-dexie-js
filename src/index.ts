@@ -126,7 +126,7 @@ export default class DexieJSConnector implements Connector {
     async list(connector: DexieJSConnector, settings: ListSettings): Promise<ListResult> {
         const folderPathSegments = settings.folderPath.split('/');
         switch (folderPathSegments.length) {
-            case 3: {
+            case 2: {
                 if (folderPathSegments[0]) throw new Error(`${ERROR_INVALID_FOLDER_PATH} '${settings.folderPath}'.`); // Invalid folder path if characters ahead of first separator.
                 const containerName = folderPathSegments[1];
                 if (containerName) {
