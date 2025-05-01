@@ -30,6 +30,8 @@ declare module '@datapos/datapos-share-core' {
 
 // Constants
 const CALLBACK_RETRIEVE_ABORTED = 'Connector failed to abort retrieve all records operation.';
+const ERROR_INVALID_FOLDER_PATH = 'Encountered invalid folder path';
+const ERROR_INVALID_OBJECT_PATH = 'Encountered invalid object path';
 
 // Classes - Dexie.js Connector
 export default class DexieJSConnector implements Connector {
@@ -57,7 +59,7 @@ export default class DexieJSConnector implements Connector {
     // Operations - Create
     async create(connector: DexieJSConnector, settings: CreateSettings): Promise<void> {
         const pathSegments = settings.path?.split('/');
-        if (pathSegments.length !== 3) throw new Error(`Encountered invalid create object path '${settings.path}'.`);
+        if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);
         const container = await establishContainer(connector, pathSegments[1]);
 
         container.close();
@@ -87,7 +89,7 @@ export default class DexieJSConnector implements Connector {
     // Operations - Drop
     async drop(connector: DexieJSConnector, settings: DropSettings): Promise<void> {
         const pathSegments = settings.path?.split('/');
-        if (pathSegments.length !== 3) throw new Error(`Encountered invalid drop object path '${settings.path}'.`);
+        if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);
         const container = await establishContainer(connector, pathSegments[1]);
 
         container.close();
@@ -125,7 +127,7 @@ export default class DexieJSConnector implements Connector {
         const folderPathSegments = settings.folderPath.split('/');
         switch (folderPathSegments.length) {
             case 3: {
-                if (folderPathSegments[0]) throw new Error(`Encountered invalid list items folder path '${settings.folderPath}'.`); // Invalid folder path if characters ahead of first separator.
+                if (folderPathSegments[0]) throw new Error(`${ERROR_INVALID_FOLDER_PATH} '${settings.folderPath}'.`); // Invalid folder path if characters ahead of first separator.
                 const containerName = folderPathSegments[1];
                 if (containerName) {
                     // Return list of table items in Dexie database.
@@ -144,14 +146,14 @@ export default class DexieJSConnector implements Connector {
                 }
             }
             default:
-                throw new Error(`Encountered invalid list items folder path '${settings.folderPath}'.`);
+                throw new Error(`${ERROR_INVALID_FOLDER_PATH} '${settings.folderPath}'.`);
         }
     }
 
     // Operations - Preview
     async preview(connector: DexieJSConnector, settings: PreviewSettings): Promise<PreviewData> {
         const pathSegments = settings.path.split('/');
-        if (pathSegments.length !== 3) throw new Error(`Encountered invalid preview object path '${settings.path}'.`);
+        if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);
         const container = await establishContainer(connector, pathSegments[1]);
         const data = await container.table<Record<string, unknown>>(pathSegments[2]).limit(50).toArray(); // Fetch the first 50 rows.
         return { data, typeId: 'jsonArray' };
@@ -160,7 +162,7 @@ export default class DexieJSConnector implements Connector {
     // Operations - Put
     async put(connector: DexieJSConnector, settings: PutSettings): Promise<void> {
         const pathSegments = settings.path.split('/');
-        if (pathSegments.length !== 3) throw new Error(`Encountered invalid put record(s) path '${settings.path}'.`);
+        if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);
         const container = await establishContainer(connector, pathSegments[1]);
         const records = settings.records;
         if (records.length === 1) {
@@ -174,7 +176,7 @@ export default class DexieJSConnector implements Connector {
     // Operations - Remove
     async remove(connector: DexieJSConnector, settings: RemoveSettings): Promise<void> {
         const pathSegments = settings.path.split('/');
-        if (pathSegments.length !== 3) throw new Error(`Encountered invalid remove record(s) path '${settings.path}'.`);
+        if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);
         const container = await establishContainer(connector, pathSegments[1]);
         const keys = settings.keys;
         if (keys.length === 0) {
@@ -195,7 +197,7 @@ export default class DexieJSConnector implements Connector {
         complete: (result: RetrieveSummary) => void
     ): Promise<void> {
         const pathSegments = settings.path.split('/');
-        if (pathSegments.length !== 3) throw new Error(`Encountered invalid retrieve record(s) path '${settings.path}'.`);
+        if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);
         const container = await establishContainer(connector, pathSegments[1]);
         const records = await container.table<Record<string, unknown>>(pathSegments[2]).toArray();
         chunk(records);
