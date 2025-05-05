@@ -125,7 +125,11 @@ export default class DexieJSConnector implements Connector {
 
     // Operations - Get (Record)
     async get(connector: DexieJSConnector, settings: GetSettings): Promise<GetResult> {
-        return;
+        const pathSegments = settings.path.split('/');
+        if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);
+        const container = await establishContainer(connector, pathSegments[1]);
+        const record = await container.table<Record<string, unknown>>(pathSegments[2]).get(settings.id);
+        return { record };
     }
 
     // Operations - List (Items)
