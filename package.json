@@ -3,7 +3,7 @@
     "license": "ISC",
     "private": true,
     "type": "module",
-    "version": "0.2.143",
+    "version": "0.2.144",
     "peerDependencies": {
         "@datapos/datapos-share-core": "^0.1.800",
         "csv-parse": "^5.6.0",
@@ -35,7 +35,7 @@
         "updateOperations": "npm install --save-dev @datapos/datapos-dev-operations@latest",
         "updateShareCore": "npm install @datapos/datapos-share-core@latest",
         "uploadConnectorConfig": "node -e \"import('@datapos/datapos-dev-operations/scriptHelpers.js').then(m => m.uploadConnectorConfig())\"",
-        "uploadConnectorToR2": "npx wrangler r2 object put datapos-engine/connectors/datapos-connector-dexie-js-es.js --file=dist/datapos-connector-dexie-js-es.js --content-type application/javascript --jurisdiction=eu --remote"
+        "uploadConnectorToR2": "npx wrangler r2 object put datapos-engine-eu/connectors/datapos-connector-dexie-js-es.js --file=dist/datapos-connector-dexie-js-es.js --content-type application/javascript --jurisdiction=eu --remote"
     },
     "dependencies": {
         "dexie": "^4.0.11"
