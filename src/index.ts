@@ -10,7 +10,7 @@ import { AbortError } from '@datapos/datapos-share-core';
 import type { DropSettings } from '@datapos/datapos-share-core';
 import type { RemoveSettings } from '@datapos/datapos-share-core';
 import type { UpsertSettings } from '@datapos/datapos-share-core';
-import type { ConnectionConfig, ConnectionItemConfig, Connector } from '@datapos/datapos-share-core';
+import type { ConnectionConfig, ConnectionNodeConfig, Connector } from '@datapos/datapos-share-core';
 import type { ConnectorConfig, CreateSettings } from '@datapos/datapos-share-core';
 import type { FindResult, FindSettings } from '@datapos/datapos-share-core';
 import type { GetResult, GetSettings } from '@datapos/datapos-share-core';
@@ -132,7 +132,7 @@ export default class DexieJSConnector implements Connector {
         return { record };
     }
 
-    // Operations - List (Items)
+    // Operations - List (Nodes)
     async list(connector: DexieJSConnector, settings: ListSettings): Promise<ListResult> {
         const folderPathSegments = settings.folderPath.split('/');
         switch (folderPathSegments.length) {
@@ -140,19 +140,19 @@ export default class DexieJSConnector implements Connector {
                 if (folderPathSegments[0]) throw new Error(`${ERROR_INVALID_FOLDER_PATH} '${settings.folderPath}'.`); // Invalid folder path if characters ahead of first separator.
                 const containerName = folderPathSegments[1];
                 if (containerName) {
-                    // Return list of table items in Dexie database.
+                    // Return list of table nodes in Dexie database.
                     const container = await establishContainer(connector, containerName);
-                    const connectionItemConfigs = container.tables.map(
-                        (table) => ({ folderPath: settings.folderPath, id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionItemConfig
+                    const connectionNodeConfigs = container.tables.map(
+                        (table) => ({ folderPath: settings.folderPath, id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionNodeConfig
                     );
-                    return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
+                    return { cursor: undefined, isMore: false, connectionNodeConfigs, totalCount: connectionNodeConfigs.length };
                 } else {
-                    // Return list of database items for Dexie instance.
+                    // Return list of database nodes for Dexie instance.
                     const databaseNames = await Dexie.getDatabaseNames();
-                    const connectionItemConfigs = databaseNames.map(
-                        (name) => ({ folderPath: settings.folderPath, id: name, label: name, name: name, typeId: 'object' }) as ConnectionItemConfig
+                    const connectionNodeConfigs = databaseNames.map(
+                        (name) => ({ folderPath: settings.folderPath, id: name, label: name, name: name, typeId: 'object' }) as ConnectionNodeConfig
                     );
-                    return { cursor: undefined, isMore: false, connectionItemConfigs, totalCount: connectionItemConfigs.length };
+                    return { cursor: undefined, isMore: false, connectionNodeConfigs, totalCount: connectionNodeConfigs.length };
                 }
             }
             default:
