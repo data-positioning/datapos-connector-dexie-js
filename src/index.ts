@@ -15,7 +15,7 @@ import type { ConnectorConfig, CreateSettings } from '@datapos/datapos-share-cor
 import type { FindResult, FindSettings } from '@datapos/datapos-share-core';
 import type { GetResult, GetSettings } from '@datapos/datapos-share-core';
 import type { ListResult, ListSettings } from '@datapos/datapos-share-core';
-import type { PreviewData, PreviewSettings } from '@datapos/datapos-share-core';
+import type { PreviewResult, PreviewSettings } from '@datapos/datapos-share-core';
 import type { RetrieveSettings, RetrieveSummary } from '@datapos/datapos-share-core';
 
 // Dependencies - Data
@@ -161,7 +161,7 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Preview (Object)
-    async preview(connector: DexieJSConnector, settings: PreviewSettings): Promise<PreviewData> {
+    async preview(connector: DexieJSConnector, settings: PreviewSettings): Promise<PreviewResult> {
         const pathSegments = settings.path.split('/');
         if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);
         const container = await establishContainer(connector, pathSegments[1]);
