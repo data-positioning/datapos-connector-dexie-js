@@ -7,7 +7,7 @@ import Dexie from 'dexie';
 
 // Dependencies - Framework
 import type { DropSettings } from '@datapos/datapos-share-core';
-import { OperationsError } from '@datapos/datapos-share-core';
+import { OperationalError } from '@datapos/datapos-share-core';
 import type { RemoveSettings } from '@datapos/datapos-share-core';
 import type { UpsertSettings } from '@datapos/datapos-share-core';
 import type { ConnectionConfig, ConnectionNodeConfig, Connector } from '@datapos/datapos-share-core';
