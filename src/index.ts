@@ -141,7 +141,7 @@ export default class DexieJSConnector implements Connector {
                 // Return list of database nodes for Dexie instance.
                 const databaseNames = await Dexie.getDatabaseNames();
                 const connectionNodeConfigs = databaseNames.map(
-                    (name) => ({ folderPath: settings.folderPath, id: name, label: name, name, typeId: 'object' }) as ConnectionNodeConfig
+                    (name) => ({ folderPath: settings.folderPath, id: name, label: name, name, typeId: 'folder' }) as ConnectionNodeConfig
                 );
                 return { cursor: undefined, isMore: false, connectionNodeConfigs, totalCount: connectionNodeConfigs.length };
             }
@@ -152,14 +152,14 @@ export default class DexieJSConnector implements Connector {
                     // Return list of table nodes in Dexie database.
                     const container = await establishContainer(connector, containerName);
                     const connectionNodeConfigs = container.tables.map(
-                        (table) => ({ folderPath: settings.folderPath, id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionNodeConfig
+                        (table) => ({ folderPath: settings.folderPath, id: table.name, label: table.name, name: table.name, typeId: 'folder' }) as ConnectionNodeConfig
                     );
                     return { cursor: undefined, isMore: false, connectionNodeConfigs, totalCount: connectionNodeConfigs.length };
                 } else {
                     // Return list of database nodes for Dexie instance.
                     const databaseNames = await Dexie.getDatabaseNames();
                     const connectionNodeConfigs = databaseNames.map(
-                        (name) => ({ folderPath: settings.folderPath, id: name, label: name, name, typeId: 'object' }) as ConnectionNodeConfig
+                        (name) => ({ folderPath: settings.folderPath, id: name, label: name, name, typeId: 'folder' }) as ConnectionNodeConfig
                     );
                     return { cursor: undefined, isMore: false, connectionNodeConfigs, totalCount: connectionNodeConfigs.length };
                 }
