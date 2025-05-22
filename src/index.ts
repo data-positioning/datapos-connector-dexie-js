@@ -138,6 +138,7 @@ export default class DexieJSConnector implements Connector {
         console.log(settings.folderPath, folderPathSegments);
         switch (folderPathSegments.length) {
             case 1: {
+                if (folderPathSegments[0]) throw new Error(`${ERROR_INVALID_FOLDER_PATH} '${settings.folderPath}'.`); // Invalid folder path if characters ahead of first separator.
                 // Return list of database nodes for Dexie instance.
                 const databaseNames = await Dexie.getDatabaseNames();
                 const connectionNodeConfigs = databaseNames.map(
@@ -148,21 +149,13 @@ export default class DexieJSConnector implements Connector {
             case 2: {
                 if (folderPathSegments[0]) throw new Error(`${ERROR_INVALID_FOLDER_PATH} '${settings.folderPath}'.`); // Invalid folder path if characters ahead of first separator.
                 const containerName = folderPathSegments[1];
-                if (containerName) {
-                    // Return list of table nodes in Dexie database.
-                    const container = await establishContainer(connector, containerName);
-                    const connectionNodeConfigs = container.tables.map(
-                        (table) => ({ folderPath: settings.folderPath, id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionNodeConfig
-                    );
-                    return { cursor: undefined, isMore: false, connectionNodeConfigs, totalCount: connectionNodeConfigs.length };
-                } else {
-                    // Return list of database nodes for Dexie instance.
-                    const databaseNames = await Dexie.getDatabaseNames();
-                    const connectionNodeConfigs = databaseNames.map(
-                        (name) => ({ folderPath: settings.folderPath, id: name, label: name, name, typeId: 'folder' }) as ConnectionNodeConfig
-                    );
-                    return { cursor: undefined, isMore: false, connectionNodeConfigs, totalCount: connectionNodeConfigs.length };
-                }
+                if (!containerName) throw new Error(`${ERROR_INVALID_FOLDER_PATH} '${settings.folderPath}'.`); // Invalid folder path if no container name.
+                // Return list of table nodes in Dexie database.
+                const container = await establishContainer(connector, containerName);
+                const connectionNodeConfigs = container.tables.map(
+                    (table) => ({ folderPath: settings.folderPath, id: table.name, label: table.name, name: table.name, typeId: 'object' }) as ConnectionNodeConfig
+                );
+                return { cursor: undefined, isMore: false, connectionNodeConfigs, totalCount: connectionNodeConfigs.length };
             }
             default:
                 throw new Error(`${ERROR_INVALID_FOLDER_PATH} '${settings.folderPath}'.`);
