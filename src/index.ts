@@ -137,6 +137,14 @@ export default class DexieJSConnector implements Connector {
         const folderPathSegments = settings.folderPath.split('/');
         console.log(settings.folderPath, folderPathSegments);
         switch (folderPathSegments.length) {
+            case 1: {
+                // Return list of database nodes for Dexie instance.
+                const databaseNames = await Dexie.getDatabaseNames();
+                const connectionNodeConfigs = databaseNames.map(
+                    (name) => ({ folderPath: settings.folderPath, id: name, label: name, name, typeId: 'object' }) as ConnectionNodeConfig
+                );
+                return { cursor: undefined, isMore: false, connectionNodeConfigs, totalCount: connectionNodeConfigs.length };
+            }
             case 2: {
                 if (folderPathSegments[0]) throw new Error(`${ERROR_INVALID_FOLDER_PATH} '${settings.folderPath}'.`); // Invalid folder path if characters ahead of first separator.
                 const containerName = folderPathSegments[1];
