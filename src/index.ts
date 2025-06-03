@@ -6,12 +6,11 @@
 import Dexie from 'dexie';
 
 // Dependencies - Framework
+import type { CreateSettings } from '@datapos/datapos-share-core';
 import type { DropSettings } from '@datapos/datapos-share-core';
-import { OperationalError } from '@datapos/datapos-share-core';
 import type { RemoveSettings } from '@datapos/datapos-share-core';
 import type { UpsertSettings } from '@datapos/datapos-share-core';
-import type { ConnectionConfig, ConnectionNodeConfig, Connector } from '@datapos/datapos-share-core';
-import type { ConnectorConfig, CreateSettings } from '@datapos/datapos-share-core';
+import type { ConnectionConfig, ConnectionNodeConfig, Connector, ConnectorConfig } from '@datapos/datapos-share-core';
 import type { FindResult, FindSettings } from '@datapos/datapos-share-core';
 import type { GetResult, GetSettings } from '@datapos/datapos-share-core';
 import type { ListResult, ListSettings } from '@datapos/datapos-share-core';
