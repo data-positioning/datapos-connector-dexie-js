@@ -3,7 +3,7 @@
     "license": "ISC",
     "private": true,
     "type": "module",
-    "version": "0.2.175",
+    "version": "0.2.176",
     "peerDependencies": {
         "@datapos/datapos-share-core": "^0.1.865",
         "csv-parse": "^5.6.0",
@@ -11,31 +11,31 @@
         "nanoid": "^5.1.5"
     },
     "devDependencies": {
-        "@datapos/datapos-dev-operations": "^0.2.25",
-        "@eslint/js": "^9.27.0",
-        "@types/node": "^22.15.21",
-        "eslint": "^9.27.0",
+        "@datapos/datapos-development": "^0.3.13",
+        "@eslint/js": "^9.28.0",
+        "@types/node": "^22.15.29",
+        "eslint": "^9.28.0",
         "globals": "^16.2.0",
         "prettier": "^3.5.3",
         "typescript": "^5.8.3",
-        "typescript-eslint": "^8.32.1",
+        "typescript-eslint": "^8.33.1",
         "vite": "^6.3.5",
         "vite-plugin-dts": "^4.5.4"
     },
     "scripts": {
         "build": "npx vite build",
-        "buildConfig": "node -e \"import('@datapos/datapos-dev-operations/scriptHelpers.js').then(m => m.buildConfig())\"",
-        "bumpVersion": "node -e \"import('@datapos/datapos-dev-operations/scriptHelpers.js').then(m => m.bumpVersion())\"",
+        "buildConfig": "node -e \"import('@datapos/datapos-development').then(m => m.buildConfig())\"",
+        "bumpVersion": "node -e \"import('@datapos/datapos-development').then(m => m.bumpVersion())\"",
         "check": "npx npm-check-updates && npm outdated",
         "format": "prettier --write *.ts",
         "lint": "npx eslint src/**/*.ts",
         "release": "npm run syncWithGitHub && npm run build && npm run uploadModuleToR2 && npm run uploadModuleConfig",
-        "syncWithGitHub": "npm run bumpVersion && npm run buildConfig && node -e \"import('@datapos/datapos-dev-operations/scriptHelpers.js').then(m => m.syncWithGitHub())\"",
+        "syncWithGitHub": "npm run bumpVersion && npm run buildConfig && node -e \"import('@datapos/datapos-development').then(m => m.syncWithGitHub())\"",
         "updateDependencies": "npm run updateOperations && npm run updateShareCore",
-        "updateOperations": "npm install --save-dev @datapos/datapos-dev-operations@latest",
+        "updateOperations": "npm install --save-dev @datapos/datapos-development@latest",
         "updateShareCore": "npm install @datapos/datapos-share-core@latest",
-        "uploadModuleConfig": "node -e \"import('@datapos/datapos-dev-operations/scriptHelpers.js').then(m => m.uploadModuleConfig())\"",
-        "uploadModuleToR2": "node -e \"import('@datapos/datapos-dev-operations/scriptHelpers.js').then(m => m.uploadModuleToR2('datapos-connector-dexie-js.es.js', 'datapos-engine-eu/connectors/datapos-connector-dexie-js.es.js'))\""
+        "uploadModuleConfig": "node -e \"import('@datapos/datapos-development').then(m => m.uploadModuleConfig())\"",
+        "uploadModuleToR2": "node -e \"import('@datapos/datapos-development').then(m => m.uploadModuleToR2('datapos-connector-dexie-js.es.js', 'datapos-engine-eu/connectors/datapos-connector-dexie-js.es.js'))\""
     },
     "dependencies": {
         "dexie": "^4.0.11"
