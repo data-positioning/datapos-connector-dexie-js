@@ -1,16 +1,17 @@
-// Dependencies - Vendor
-import globals from 'globals';
-import pluginJs from '@eslint/js';
-import tseslint from 'typescript-eslint';
+// Dependencies
+import tseslint from '@typescript-eslint/eslint-plugin';
+import tseslintParser from '@typescript-eslint/parser';
+import importPlugin from 'eslint-plugin-import';
 
 // Exposures
-/** @type {import('eslint').Linter.Config[]} */
 export default [
-    { files: ['**/*.{js,mjs,cjs,ts}'] },
-    { languageOptions: { globals: globals.browser } },
-    pluginJs.configs.recommended,
-    ...tseslint.configs.recommended,
     {
+        files: ['vite.config.ts', 'src/*.ts'],
+        languageOptions: { parser: tseslintParser, parserOptions: { project: './tsconfig.json' } },
+        plugins: {
+            '@typescript-eslint': tseslint,
+            import: importPlugin
+        },
         rules: {
             '@typescript-eslint/consistent-type-imports': 'warn',
             '@typescript-eslint/no-import-type-side-effects': 'warn',

@@ -6,23 +6,23 @@
 import Dexie from 'dexie';
 
 // Dependencies - Framework
-import type { CreateSettings } from '@datapos/datapos-share-core';
-import type { DropSettings } from '@datapos/datapos-share-core';
-import type { RemoveSettings } from '@datapos/datapos-share-core';
-import type { UpsertSettings } from '@datapos/datapos-share-core';
-import type { ConnectionConfig, ConnectionNodeConfig, Connector, ConnectorConfig } from '@datapos/datapos-share-core';
-import type { FindResult, FindSettings } from '@datapos/datapos-share-core';
-import type { GetResult, GetSettings } from '@datapos/datapos-share-core';
-import type { ListResult, ListSettings } from '@datapos/datapos-share-core';
-import type { PreviewResult, PreviewSettings } from '@datapos/datapos-share-core';
-import type { RetrieveSettings, RetrieveSummary } from '@datapos/datapos-share-core';
+import type { CreateSettings } from '@datapos/datapos-shared';
+import type { DropSettings } from '@datapos/datapos-shared';
+import type { RemoveSettings } from '@datapos/datapos-shared';
+import type { UpsertSettings } from '@datapos/datapos-shared';
+import type { ConnectionConfig, ConnectionNodeConfig, Connector, ConnectorConfig } from '@datapos/datapos-shared';
+import type { FindResult, FindSettings } from '@datapos/datapos-shared';
+import type { GetResult, GetSettings } from '@datapos/datapos-shared';
+import type { ListResult, ListSettings } from '@datapos/datapos-shared';
+import type { PreviewResult, PreviewSettings } from '@datapos/datapos-shared';
+import type { RetrieveSettings, RetrieveSummary } from '@datapos/datapos-shared';
 
 // Dependencies - Data
-import config from './config.json';
+import config from '../config.json';
 import { version } from '../package.json';
 
 // Interfaces/Types - Connector (Dexie)
-declare module '@datapos/datapos-share-core' {
+declare module '@datapos/datapos-shared' {
     interface Connector {
         containers: Record<string, Dexie>;
     }
