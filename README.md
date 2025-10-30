@@ -1,4 +1,4 @@
-# DataPos - Dexie.js Connector
+# Data Positioning - Dexie.js Connector
 
 A TypeScript library that implements the Dexie.js connector.
 
