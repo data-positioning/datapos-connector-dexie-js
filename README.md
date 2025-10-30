@@ -1,4 +1,4 @@
-# Data Positioning - Dexie.js Connector
+# Data Positioning Dexie.js Connector
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
