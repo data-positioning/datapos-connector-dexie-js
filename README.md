@@ -1,5 +1,7 @@
 # Data Positioning - Dexie.js Connector
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+
 A TypeScript library that implements the Dexie.js connector.
 
 ## Installation
