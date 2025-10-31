@@ -3,7 +3,7 @@
     "license": "MIT",
     "private": true,
     "type": "module",
-    "version": "0.2.189",
+    "version": "0.2.190",
     "dependencies": {
         "dexie": "^4.2.1"
     },
