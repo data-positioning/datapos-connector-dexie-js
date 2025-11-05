@@ -1,3 +1,7 @@
+/*
+ * Dexie.js connector class.
+ */
+
 // https://dexie.org/docs/Tutorial/Hello-World
 // https://dexie.org/docs/Tutorial/Understanding-the-basics
 // https://dexie.org/docs/Dexie/Dexie.open()#dynamic-schema-manipulation
