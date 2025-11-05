@@ -18,8 +18,8 @@ import type { PreviewResult, PreviewSettings } from '@datapos/datapos-shared';
 import type { RetrieveSettings, RetrieveSummary } from '@datapos/datapos-shared';
 
 // Dependencies - Data.
-import config from '../config.json';
-import { version } from '../package.json';
+import config from '~/config.json';
+import { version } from '~/package.json';
 
 // Interfaces - Connector (Dexie).
 declare module '@datapos/datapos-shared' {
