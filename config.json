@@ -21,7 +21,7 @@
     "vendorAccountURL": "https://dexie.org/cloud/",
     "vendorDocumentationURL": "https://dexie.org/docs/",
     "vendorHomeURL": "https://dexie.org/",
-    "version": "0.2.198",
+    "version": "0.2.199",
     "interface": [
         "abortOperation",
         "createObject",
