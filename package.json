@@ -1,9 +1,9 @@
 {
     "name": "datapos-connector-dexie-js",
     "license": "MIT",
-    "private": true,
+    "private": false,
     "type": "module",
-    "version": "0.2.206",
+    "version": "0.2.207",
     "dependencies": {
         "dexie": "^4.2.1"
     },
