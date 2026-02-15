@@ -3089,7 +3089,7 @@ const {
   vendorDocumentationURL: Eo,
   vendorHomeURL: Ko,
   version: So
-}, jo = "0.2.208", Ut = "Encountered invalid folder path", Me = "Encountered invalid object path";
+}, jo = "0.2.209", Ut = "Encountered invalid folder path", Me = "Encountered invalid object path";
 class Lo {
   abortController;
   config;
