@@ -1,6 +1,6 @@
 {
     "name": "datapos-connector-dexie-js",
-    "version": "0.2.233",
+    "version": "0.2.234",
     "license": "MIT",
     "author": "Jonathan Terrell <terrell.jm@gmail.com>",
     "private": false,
@@ -30,7 +30,7 @@
         "dexie": "^4.3.0"
     },
     "devDependencies": {
-        "@datapos/datapos-development": "^0.3.447",
+        "@datapos/datapos-development": "^0.3.448",
         "@datapos/eslint-config-datapos": "^1.0.44",
         "@types/node": "^25.2.3",
         "@typescript-eslint/eslint-plugin": "^8.55.0",
