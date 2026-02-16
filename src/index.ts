@@ -44,7 +44,7 @@ const ERROR_INVALID_FOLDER_PATH = 'Encountered invalid folder path';
 const ERROR_INVALID_OBJECT_PATH = 'Encountered invalid object path';
 
 // Connectors
-export default class DexieJSConnector implements ExtendedConnectorInterface {
+export class Connector implements ExtendedConnectorInterface {
     abortController: AbortController | undefined;
     readonly config: ConnectorConfig;
     engineUtilities: EngineUtilities;

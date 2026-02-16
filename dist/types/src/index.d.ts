@@ -6,7 +6,7 @@ import { ParsingRecord, PreviewConfig } from '@datapos/datapos-shared/component/
 interface ExtendedConnectorInterface extends ConnectorInterface {
     containers: Record<string, Dexie>;
 }
-export default class DexieJSConnector implements ExtendedConnectorInterface {
+export declare class Connector implements ExtendedConnectorInterface {
     abortController: AbortController | undefined;
     readonly config: ConnectorConfig;
     engineUtilities: EngineUtilities;
