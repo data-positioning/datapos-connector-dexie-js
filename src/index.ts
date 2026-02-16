@@ -84,10 +84,14 @@ export class Connector implements ExtendedConnectorInterface {
         console.log('CO 4');
         const currentSchema: Record<string, string> = {};
         for (const { name, schema } of container.tables) {
+            console.log('CO 4.1', name);
             currentSchema[name] = [schema.primKey.src, ...schema.indexes.map((index) => index.src)].join(',');
         }
+        console.log('CO 4.2', container.verno, currentSchema);
         newContainer.version(container.verno).stores(currentSchema);
+        console.log('CO 4.3', options.structure);
         newContainer.version(container.verno + 1).stores({ [nodeId]: options.structure || '' });
+        console.log('CO 4.4');
         this.containers[containerId] = await newContainer.open();
         console.log('CO 5');
     }

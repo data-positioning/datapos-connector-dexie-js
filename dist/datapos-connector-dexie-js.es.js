@@ -24,7 +24,7 @@ function uo() {
         for (var r, o = 0, i = t.length; o < i; o++) !r && o in t || ((r = r || Array.prototype.slice.call(t, 0, o))[o] = t[o]);
         return e.concat(r || Array.prototype.slice.call(t));
       }
-      var A = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : oo, z = Object.keys, F = Array.isArray;
+      var A = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : oo, z = Object.keys, M = Array.isArray;
       function X(e, t) {
         return typeof t == "object" && z(t).forEach(function(n) {
           e[n] = t[n];
@@ -81,7 +81,7 @@ function uo() {
           for (var r = 0, o = t.length; r < o; ++r) ne(e, t[r], n[r]);
         } else {
           var i, a, u = t.indexOf(".");
-          u !== -1 ? (i = t.substr(0, u), (u = t.substr(u + 1)) === "" ? n === void 0 ? F(e) && !isNaN(parseInt(i)) ? e.splice(i, 1) : delete e[i] : e[i] = n : ne(a = (a = e[i]) && te(e, i) ? a : e[i] = {}, u, n)) : n === void 0 ? F(e) && !isNaN(parseInt(t)) ? e.splice(t, 1) : delete e[t] : e[t] = n;
+          u !== -1 ? (i = t.substr(0, u), (u = t.substr(u + 1)) === "" ? n === void 0 ? M(e) && !isNaN(parseInt(i)) ? e.splice(i, 1) : delete e[i] : e[i] = n : ne(a = (a = e[i]) && te(e, i) ? a : e[i] = {}, u, n)) : n === void 0 ? M(e) && !isNaN(parseInt(t)) ? e.splice(t, 1) : delete e[t] : e[t] = n;
         }
       }
       function An(e) {
@@ -107,7 +107,7 @@ function uo() {
           if (!n || typeof n != "object") return n;
           var r = Je.get(n);
           if (r) return r;
-          if (F(n)) {
+          if (M(n)) {
             r = [], Je.set(n, r);
             for (var o = 0, i = n.length; o < i; ++o) r.push(t(n[o]));
           } else if (Rn.has(n.constructor)) r = n;
@@ -135,7 +135,7 @@ function uo() {
       function fe(e) {
         var t, n, r, o;
         if (arguments.length === 1) {
-          if (F(e)) return e.slice();
+          if (M(e)) return e.slice();
           if (this === Me && typeof e == "string") return [e];
           if (o = Pr(e)) for (n = []; !(r = o.next()).done; ) n.push(r.value);
           else {
@@ -590,7 +590,7 @@ function uo() {
         var t = this["@@propmod"];
         if (t.add !== void 0) {
           var n = t.add;
-          if (F(n)) return T(T([], F(e) ? e : [], !0), n).sort();
+          if (M(n)) return T(T([], M(e) ? e : [], !0), n).sort();
           if (typeof n == "number") return (Number(e) || 0) + n;
           if (typeof n == "bigint") try {
             return BigInt(e) + n;
@@ -601,7 +601,7 @@ function uo() {
         }
         if (t.remove !== void 0) {
           var r = t.remove;
-          if (F(r)) return F(e) ? e.filter(function(o) {
+          if (M(r)) return M(e) ? e.filter(function(o) {
             return !r.includes(o);
           }).sort() : [];
           if (typeof r == "number") return Number(e) - r;
@@ -683,7 +683,7 @@ function uo() {
         }).then(t);
       }, V.prototype.where = function(e) {
         if (typeof e == "string") return new this.db.WhereClause(this, e);
-        if (F(e)) return new this.db.WhereClause(this, "[".concat(e.join("+"), "]"));
+        if (M(e)) return new this.db.WhereClause(this, "[".concat(e.join("+"), "]"));
         var t = z(e);
         if (t.length === 1) return this.where(t[0]).equals(e[t[0]]);
         var n = this.schema.indexes.concat(this.schema.primKey).filter(function(u) {
@@ -708,7 +708,7 @@ function uo() {
         var a = t.reduce(function(f, l) {
           var m = f[0], f = f[1], s = r[l], d = e[l];
           return [m || s, m || !s ? De(f, s && s.multi ? function(p) {
-            return p = le(p, l), F(p) && p.some(function(h) {
+            return p = le(p, l), M(p) && p.some(function(h) {
               return o(d, h);
             });
           } : function(p) {
@@ -731,7 +731,7 @@ function uo() {
       }, V.prototype.toCollection = function() {
         return new this.db.Collection(new this.db.WhereClause(this));
       }, V.prototype.orderBy = function(e) {
-        return new this.db.Collection(new this.db.WhereClause(this, F(e) ? "[".concat(e.join("+"), "]") : e));
+        return new this.db.Collection(new this.db.WhereClause(this, M(e) ? "[".concat(e.join("+"), "]") : e));
       }, V.prototype.reverse = function() {
         return this.toCollection().reverse();
       }, V.prototype.mapToClass = function(e) {
@@ -790,7 +790,7 @@ function uo() {
           });
         });
       }, V.prototype.update = function(e, t) {
-        return typeof e != "object" || F(e) ? this.where(":id").equals(e).modify(t) : (e = le(e, this.schema.primKey.keyPath)) === void 0 ? G(new S.InvalidArgument("Given object does not contain its primary key")) : this.where(":id").equals(e).modify(t);
+        return typeof e != "object" || M(e) ? this.where(":id").equals(e).modify(t) : (e = le(e, this.schema.primKey.keyPath)) === void 0 ? G(new S.InvalidArgument("Given object does not contain its primary key")) : this.where(":id").equals(e).modify(t);
       }, V.prototype.put = function(e, t) {
         var n = this, r = this.schema.primKey, o = r.auto, i = r.keyPath, a = e;
         return i && o && (a = Ot(i)(e)), this._trans("readwrite", function(u) {
@@ -926,7 +926,7 @@ function uo() {
           } }, n[a] = t[a] = f;
           z(m = a).forEach(function(s) {
             var d = m[s];
-            if (F(d)) i(s, m[s][0], m[s][1]);
+            if (M(d)) i(s, m[s][0], m[s][1]);
             else {
               if (d !== "asap") throw new S.InvalidArgument("Invalid event config");
               var p = i(s, Ze, function() {
@@ -1168,8 +1168,8 @@ function uo() {
               return (h ? Promise.resolve([]) : a.getMany({ trans: r, keys: w, cache: "immutable" })).then(function(k) {
                 var O = [], _ = [], K = u ? [] : null, C = h ? w : [];
                 if (!h) for (var x = 0; x < g; ++x) {
-                  var j = k[x], M = { value: Pe(j), primKey: c[y + x] };
-                  i.call(M, M.value, M) !== !1 && (M.value == null ? C.push(c[y + x]) : u || B(l(j), l(M.value)) === 0 ? (_.push(M.value), u && K.push(c[y + x])) : (C.push(c[y + x]), O.push(M.value)));
+                  var j = k[x], F = { value: Pe(j), primKey: c[y + x] };
+                  i.call(F, F.value, F) !== !1 && (F.value == null ? C.push(c[y + x]) : u || B(l(j), l(F.value)) === 0 ? (_.push(F.value), u && K.push(c[y + x])) : (C.push(c[y + x]), O.push(F.value)));
                 }
                 return Promise.resolve(0 < O.length && a.mutate({ trans: r, type: "add", values: O }).then(function(U) {
                   for (var D in U.failures) C.splice(parseInt(D), 1);
@@ -1269,13 +1269,13 @@ function uo() {
             var g = i(y);
             if (t(g, l, h)) return !0;
             for (var w = null, k = h; k < s; ++k) {
-              var O = ((_, K, C, x, j, M) => {
+              var O = ((_, K, C, x, j, F) => {
                 for (var U = Math.min(_.length, x.length), D = -1, q = 0; q < U; ++q) {
                   var W = K[q];
                   if (W !== x[q]) return j(_[q], C[q]) < 0 ? _.substr(0, q) + C[q] + C.substr(q + 1) : j(_[q], x[q]) < 0 ? _.substr(0, q) + x[q] + C.substr(q + 1) : 0 <= D ? _.substr(0, D) + K[D] + C.substr(D + 1) : null;
                   j(_[q], W) < 0 && (D = q);
                 }
-                return U < x.length && M === "next" ? _ + C.substr(_.length) : U < _.length && M === "prev" ? _.substr(0, C.length) : D < 0 ? null : _.substr(0, D) + x[D] + C.substr(D + 1);
+                return U < x.length && F === "next" ? _ + C.substr(_.length) : U < _.length && F === "prev" ? _.substr(0, C.length) : D < 0 ? null : _.substr(0, D) + x[D] + C.substr(D + 1);
               })(y, g, u[k], l[k], a, m);
               O === null && w === null ? h = k + 1 : (w === null || 0 < a(w, O)) && (w = O);
             }
@@ -1585,9 +1585,9 @@ function uo() {
               function x(Q) {
                 ++U, ut(Q);
               }
-              var j = [], M = [], U = 0;
+              var j = [], F = [], U = 0;
               if (c === "deleteRange") {
-                if (y.type === 4) return g({ numFailures: U, failures: M, results: [], lastResult: void 0 });
+                if (y.type === 4) return g({ numFailures: U, failures: F, results: [], lastResult: void 0 });
                 y.type === 3 ? j.push(K = k.clear()) : j.push(K = k.delete(r(y)));
               } else {
                 var O = _ ? O ? [b, v] : [b, null] : [v, null], D = O[0], q = O[1];
@@ -1596,8 +1596,8 @@ function uo() {
               }
               function ie(Q) {
                 Q = Q.target.result, j.forEach(function(qe, Cn) {
-                  return qe.error != null && (M[Cn] = qe.error);
-                }), g({ numFailures: U, failures: M, results: c === "delete" ? v : j.map(function(qe) {
+                  return qe.error != null && (F[Cn] = qe.error);
+                }), g({ numFailures: U, failures: F, results: c === "delete" ? v : j.map(function(qe) {
                   return qe.result;
                 }), lastResult: Q });
               }
@@ -1641,8 +1641,8 @@ function uo() {
               g = Y(g);
               var _ = v.index, k = v.range, O = h.objectStore(d), O = _.isPrimaryKey ? O : O.index(_.name), _ = b ? y ? "prevunique" : "prev" : y ? "nextunique" : "next", K = !c && "openKeyCursor" in O ? O.openKeyCursor(r(k), _) : O.openCursor(r(k), _);
               K.onerror = se(w), K.onsuccess = Y(function(C) {
-                var x, j, M, U, D = K.result;
-                D ? (D.___id = ++Ur, D.done = !1, x = D.continue.bind(D), j = (j = D.continuePrimaryKey) && j.bind(D), M = D.advance.bind(D), U = function() {
+                var x, j, F, U, D = K.result;
+                D ? (D.___id = ++Ur, D.done = !1, x = D.continue.bind(D), j = (j = D.continuePrimaryKey) && j.bind(D), F = D.advance.bind(D), U = function() {
                   throw new Error("Cursor not stopped");
                 }, D.trans = h, D.stop = D.continue = D.continuePrimaryKey = D.advance = function() {
                   throw new Error("Cursor not started");
@@ -1671,7 +1671,7 @@ function uo() {
                   });
                   return K.onsuccess = Y(function(Q) {
                     K.onsuccess = W, W();
-                  }), D.continue = x, D.continuePrimaryKey = j, D.advance = M, W(), ie;
+                  }), D.continue = x, D.continuePrimaryKey = j, D.advance = F, W(), ie;
                 }, g(D)) : g(null);
               }, w);
             });
@@ -1689,10 +1689,10 @@ function uo() {
         var i, l = { schema: { name: l.name, tables: a.map(function(f) {
           return i.objectStore(f);
         }).map(function(f) {
-          var s = f.keyPath, d = f.autoIncrement, h = F(s), p = {}, h = { name: f.name, primaryKey: { name: null, isPrimaryKey: !0, outbound: s == null, compound: h, keyPath: s, autoIncrement: d, unique: !0, extractKey: cn(s) }, indexes: rr(f.indexNames).map(function(c) {
+          var s = f.keyPath, d = f.autoIncrement, h = M(s), p = {}, h = { name: f.name, primaryKey: { name: null, isPrimaryKey: !0, outbound: s == null, compound: h, keyPath: s, autoIncrement: d, unique: !0, extractKey: cn(s) }, indexes: rr(f.indexNames).map(function(c) {
             return f.index(c);
           }).map(function(y) {
-            var g = y.name, v = y.unique, b = y.multiEntry, y = y.keyPath, g = { name: g, compound: F(y), keyPath: y, unique: v, multiEntry: b, extractKey: cn(y) };
+            var g = y.name, v = y.unique, b = y.multiEntry, y = y.keyPath, g = { name: g, compound: M(y), keyPath: y, unique: v, multiEntry: b, extractKey: cn(y) };
             return p[lt(y)] = g;
           }), getIndexByKeyPath: function(c) {
             return p[lt(c)];
@@ -1759,12 +1759,12 @@ function uo() {
                 }), K.change.forEach(function(x) {
                   if (x.recreate) throw new S.Upgrade("Not yet support for changing primary key");
                   var j = h.objectStore(x.name);
-                  x.add.forEach(function(M) {
-                    return St(j, M);
-                  }), x.change.forEach(function(M) {
-                    j.deleteIndex(M.name), St(j, M);
-                  }), x.del.forEach(function(M) {
-                    return j.deleteIndex(M);
+                  x.add.forEach(function(F) {
+                    return St(j, F);
+                  }), x.change.forEach(function(F) {
+                    j.deleteIndex(F.name), St(j, F);
+                  }), x.del.forEach(function(F) {
+                    return j.deleteIndex(F);
                   });
                 }), y._cfg.contentUpgrade);
                 if (C && y._cfg.version > d) return jt(s, h), p._memoizedTables = {}, g = An(_), K.del.forEach(function(x) {
@@ -1873,7 +1873,7 @@ function uo() {
       function ir(e) {
         return e.split(",").map(function(t, n) {
           var o = t.split(":"), r = (r = o[1]) == null ? void 0 : r.trim(), o = (t = o[0].trim()).replace(/([&*]|\+\+)/g, ""), i = /^\[/.test(o) ? o.match(/^\[(.*)\]$/)[1].split("+") : o;
-          return un(o, i || null, /\&/.test(t), /\*/.test(t), /\+\+/.test(t), F(i), n === 0, r);
+          return un(o, i || null, /\&/.test(t), /\*/.test(t), /\+\+/.test(t), M(i), n === 0, r);
         });
       }
       Qe.prototype._createTableSchema = sn, Qe.prototype._parseIndexSyntax = ir, Qe.prototype._parseStoresSpec = function(e, t) {
@@ -2131,13 +2131,13 @@ function uo() {
         function o(i) {
           return function(u) {
             var u = i(u), l = u.value;
-            return u.done ? l : l && typeof l.then == "function" ? l.then(n, r) : F(l) ? Promise.all(l).then(n, r) : n(l);
+            return u.done ? l : l && typeof l.then == "function" ? l.then(n, r) : M(l) ? Promise.all(l).then(n, r) : n(l);
           };
         }
         return o(t)();
       }
       function Bt(e, t, n) {
-        for (var r = F(e) ? e.slice() : [e], o = 0; o < n; ++o) r.push(t);
+        for (var r = M(e) ? e.slice() : [e], o = 0; o < n; ++o) r.push(t);
         return r;
       }
       var Hr = { stack: "dbcore", name: "VirtualIndexMiddleware", level: 1, create: function(e) {
@@ -2314,15 +2314,15 @@ function uo() {
             var v, b, y, g = h.trans, w = h.mutatedParts || (h.mutatedParts = {}), k = c(""), O = c(":dels"), _ = h.type, C = h.type === "deleteRange" ? [h.range] : h.type === "delete" ? [h.keys] : h.values.length < 50 ? [kn(u, h).filter(function(j) {
               return j;
             }), h.values] : [], K = C[0], C = C[1], x = h.trans._cache;
-            return F(K) ? (k.addKeys(K), (_ = _ === "delete" || K.length === C.length ? lr(K, x) : null) || O.addKeys(K), (_ || C) && (v = c, b = _, y = C, a.indexes.forEach(function(j) {
-              var M = v(j.name || "");
+            return M(K) ? (k.addKeys(K), (_ = _ === "delete" || K.length === C.length ? lr(K, x) : null) || O.addKeys(K), (_ || C) && (v = c, b = _, y = C, a.indexes.forEach(function(j) {
+              var F = v(j.name || "");
               function U(q) {
                 return q != null ? j.extractKey(q) : null;
               }
               function D(q) {
-                j.multiEntry && F(q) ? q.forEach(function(W) {
-                  return M.addKey(W);
-                }) : M.addKey(q);
+                j.multiEntry && M(q) ? q.forEach(function(W) {
+                  return F.addKey(W);
+                }) : F.addKey(q);
               }
               (b || y).forEach(function(q, Q) {
                 var ie = b && U(b[Q]), Q = y && U(y[Q]);
@@ -2331,13 +2331,13 @@ function uo() {
             }))) : K ? (C = { from: (x = K.lower) != null ? x : e.MIN_KEY, to: (_ = K.upper) != null ? _ : e.MAX_KEY }, O.add(C), k.add(C)) : (k.add(n), O.add(n), a.indexes.forEach(function(j) {
               return c(j.name).add(n);
             })), i.mutate(h).then(function(j) {
-              return !K || h.type !== "add" && h.type !== "put" || (k.addKeys(j.results), s && s.forEach(function(M) {
+              return !K || h.type !== "add" && h.type !== "put" || (k.addKeys(j.results), s && s.forEach(function(F) {
                 for (var U = h.values.map(function(ie) {
-                  return M.extractKey(ie);
-                }), D = M.keyPath.findIndex(function(ie) {
+                  return F.extractKey(ie);
+                }), D = F.keyPath.findIndex(function(ie) {
                   return ie === u.keyPath;
                 }), q = 0, W = j.results.length; q < W; ++q) U[q][D] = j.results[q];
-                c(M.name).addKeys(U);
+                c(F.name).addKeys(U);
               })), g.mutatedParts = Tt(g.mutatedParts || {}, w), j;
             });
           } }), p = { get: function(h) {
@@ -2361,14 +2361,14 @@ function uo() {
                       var x = c.values ? C.result.map(m) : C.result;
                       (c.values ? w : k).addKeys(x);
                     } else {
-                      var j, M;
-                      if (h === "openCursor") return M = c.values, (j = C) && Object.create(j, { key: { get: function() {
+                      var j, F;
+                      if (h === "openCursor") return F = c.values, (j = C) && Object.create(j, { key: { get: function() {
                         return k.addKey(j.primaryKey), j.key;
                       } }, primaryKey: { get: function() {
                         var U = j.primaryKey;
                         return k.addKey(U), U;
                       } }, value: { get: function() {
-                        return M && w.addKey(j.primaryKey), j.value;
+                        return F && w.addKey(j.primaryKey), j.value;
                       } } });
                     }
                     return C;
@@ -2383,9 +2383,9 @@ function uo() {
       } };
       function dr(e, t, n) {
         var r;
-        return n.numFailures === 0 ? t : t.type === "deleteRange" || (r = t.keys ? t.keys.length : "values" in t && t.values ? t.values.length : 1, n.numFailures === r) ? null : (r = P({}, t), F(r.keys) && (r.keys = r.keys.filter(function(o, i) {
+        return n.numFailures === 0 ? t : t.type === "deleteRange" || (r = t.keys ? t.keys.length : "values" in t && t.values ? t.values.length : 1, n.numFailures === r) ? null : (r = P({}, t), M(r.keys) && (r.keys = r.keys.filter(function(o, i) {
           return !(i in n.failures);
-        })), "values" in r && F(r.values) && (r.values = r.values.filter(function(o, i) {
+        })), "values" in r && M(r.values) && (r.values = r.values.filter(function(o, i) {
           return !(i in n.failures);
         })), r);
       }
@@ -2399,7 +2399,7 @@ function uo() {
           var h = d, c = [];
           if (p.type === "add" || p.type === "put") for (var v = new ee(), b = p.values.length - 1; 0 <= b; --b) {
             var y, g = p.values[b], w = m(g);
-            !v.hasKey(w) && (y = f(g), u && F(y) ? y.some(function(C) {
+            !v.hasKey(w) && (y = f(g), u && M(y) ? y.some(function(C) {
               return On(C, l);
             }) : On(y, l)) && (v.addKey(w), c.push(g));
           }
@@ -2977,7 +2977,7 @@ const {
   add: Fo,
   remove: Lo,
   DexieYProvider: Uo
-} = Oe, co = "datapos-connector-dexie-js", lo = { en: "Dexie.js" }, fo = { en: "The Dexie.js..." }, ho = null, po = "database", yo = { default: { authMethodId: "none", maxConnectionCount: null } }, mo = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#000000" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', vo = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#ffffff" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', bo = null, go = ["abortOperation", "createObject", "dropObject", "findObject", "getRecord", "listNodes", "previewObject", "upsertRecords", "removeRecords", "retrieveRecords"], wo = null, _o = "alpha", xo = "connector", ko = "bidirectional", Oo = "https://dexie.org/cloud/", Po = "https://dexie.org/docs/", Eo = "https://dexie.org/", Co = "0.2.239", Ko = {
+} = Oe, co = "datapos-connector-dexie-js", lo = { en: "Dexie.js" }, fo = { en: "The Dexie.js..." }, ho = null, po = "database", yo = { default: { authMethodId: "none", maxConnectionCount: null } }, mo = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#000000" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', vo = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#ffffff" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', bo = null, go = ["abortOperation", "createObject", "dropObject", "findObject", "getRecord", "listNodes", "previewObject", "upsertRecords", "removeRecords", "retrieveRecords"], wo = null, _o = "alpha", xo = "connector", ko = "bidirectional", Oo = "https://dexie.org/cloud/", Po = "https://dexie.org/docs/", Eo = "https://dexie.org/", Co = "0.2.240", Ko = {
   id: co,
   label: lo,
   description: fo,
@@ -2996,7 +2996,7 @@ const {
   vendorDocumentationURL: Po,
   vendorHomeURL: Eo,
   version: Co
-}, jo = "0.2.239", Io = "Encountered invalid container identifier", Ft = "Encountered invalid folder path", So = "Encountered invalid object path";
+}, jo = "0.2.240", Io = "Encountered invalid container identifier", Ft = "Encountered invalid folder path", So = "Encountered invalid object path";
 class zo {
   abortController;
   config;
@@ -3014,19 +3014,19 @@ class zo {
   async createObject(R) {
     console.log("CO 1");
     const { containerId: N, nodeId: P } = this.establishObjectIdentifiers(R.path), T = await this.establishContainer(N);
-    if (console.log("CO 2"), T.tables.some((F) => F.name === P)) throw new Error(`Duplicate table '${P}'.`);
+    if (console.log("CO 2"), T.tables.some((M) => M.name === P)) throw new Error(`Duplicate table '${P}'.`);
     console.log("CO 3"), T.close();
     const A = new Oe(T.name);
     A.on("blocked", () => !1), console.log("CO 4");
     const z = {};
-    for (const { name: F, schema: X } of T.tables)
-      z[F] = [X.primKey.src, ...X.indexes.map((ae) => ae.src)].join(",");
-    A.version(T.verno).stores(z), A.version(T.verno + 1).stores({ [P]: R.structure || "" }), this.containers[N] = await A.open(), console.log("CO 5");
+    for (const { name: M, schema: X } of T.tables)
+      console.log("CO 4.1", M), z[M] = [X.primKey.src, ...X.indexes.map((ae) => ae.src)].join(",");
+    console.log("CO 4.2", T.verno, z), A.version(T.verno).stores(z), console.log("CO 4.3", R.structure), A.version(T.verno + 1).stores({ [P]: R.structure || "" }), console.log("CO 4.4"), this.containers[N] = await A.open(), console.log("CO 5");
   }
   // Drop object
   async dropObject(R) {
     const { containerId: N, nodeId: P } = this.establishObjectIdentifiers(R.path), T = await this.establishContainer(N);
-    if (!T.tables.some((F) => F.name === P)) throw new Error(`Table '${P}' not found.`);
+    if (!T.tables.some((M) => M.name === P)) throw new Error(`Table '${P}' not found.`);
     T.close();
     const A = new Oe(T.name);
     if (A.on("blocked", () => !1), T.tables.length === 1) {
@@ -3034,8 +3034,8 @@ class zo {
       return;
     }
     const z = {};
-    for (const { name: F, schema: X } of T.tables)
-      z[F] = [X.primKey.src, ...X.indexes.map((ae) => ae.src)].join(",");
+    for (const { name: M, schema: X } of T.tables)
+      z[M] = [X.primKey.src, ...X.indexes.map((ae) => ae.src)].join(",");
     A.version(T.verno).stores(z), A.version(T.verno + 1).stores({ [P]: null }), this.containers[N] = await A.open();
   }
   // Find object
@@ -3106,8 +3106,8 @@ class zo {
   }
   // Retrieve records
   async retrieveRecords(R, N, P) {
-    const { containerId: T, nodeId: A } = this.establishObjectIdentifiers(R.path), F = await (await this.establishContainer(T)).table(A).toArray();
-    console.log("retrieveRecords", F);
+    const { containerId: T, nodeId: A } = this.establishObjectIdentifiers(R.path), M = await (await this.establishContainer(T)).table(A).toArray();
+    console.log("retrieveRecords", M);
   }
   // Helpers ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   async establishContainer(R) {
