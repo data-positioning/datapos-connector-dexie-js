@@ -1,26 +1,29 @@
-import { default as Dexie } from 'dexie';
-import { DropSettings, RemoveSettings, UpsertSettings, ConnectionConfig, Connector, ConnectorConfig, ConnectorTools, CreateSettings, FindResult, FindSettings, GetResult, GetSettings, ListResult, ListSettings, PreviewResult, PreviewSettings, RetrieveSettings, RetrieveSummary } from '@datapos/datapos-shared';
-declare module '@datapos/datapos-shared' {
-    interface Connector {
-        containers: Record<string, Dexie>;
-    }
+import { Dexie } from 'dexie';
+import { EngineUtilities } from '@datapos/datapos-shared/engine';
+import { ToolConfig } from '@datapos/datapos-shared/component/tool';
+import { ConnectorConfig, ConnectorInterface, CreateObjectOptions, DropObjectOptions, FindObjectOptions, FindObjectResult, GetRecordOptions, GetRecordResult, ListNodesOptions, ListNodesResult, PreviewObjectOptions, RemoveRecordsOptions, RetrieveRecordsOptions, RetrieveRecordsSummary, UpsertRecordsOptions } from '@datapos/datapos-shared/component/connector';
+import { ParsingRecord, PreviewConfig } from '@datapos/datapos-shared/component/dataView';
+interface ExtendedConnectorInterface extends ConnectorInterface {
+    containers: Record<string, Dexie>;
 }
-export default class DexieJSConnector implements Connector {
+export default class DexieJSConnector implements ExtendedConnectorInterface {
     abortController: AbortController | undefined;
     readonly config: ConnectorConfig;
-    readonly connectionConfig: ConnectionConfig;
-    readonly tools: ConnectorTools;
+    engineUtilities: EngineUtilities;
+    readonly toolConfigs: ToolConfig[];
     containers: Record<string, Dexie>;
-    constructor(connectionConfig: ConnectionConfig, tools: ConnectorTools);
-    abortOperation(connector: DexieJSConnector): void;
-    createObject(connector: DexieJSConnector, settings: CreateSettings): Promise<void>;
-    dropObject(connector: DexieJSConnector, settings: DropSettings): Promise<void>;
-    findObject(connector: DexieJSConnector, settings: FindSettings): Promise<FindResult>;
-    getRecord(connector: DexieJSConnector, settings: GetSettings): Promise<GetResult>;
-    listNodes(connector: DexieJSConnector, settings: ListSettings): Promise<ListResult>;
-    previewObject(connector: DexieJSConnector, settings: PreviewSettings): Promise<PreviewResult>;
-    upsertRecords(connector: DexieJSConnector, settings: UpsertSettings): Promise<void>;
-    removeRecords(connector: DexieJSConnector, settings: RemoveSettings): Promise<void>;
-    retrieveRecords(connector: DexieJSConnector, settings: RetrieveSettings, chunk: (records: Record<string, unknown>[]) => void, complete: (result: RetrieveSummary) => void): Promise<void>;
+    constructor(engineUtilities: EngineUtilities, toolConfigs: ToolConfig[]);
+    abortOperation(): void;
+    createObject(options: CreateObjectOptions): Promise<void>;
+    dropObject(options: DropObjectOptions): Promise<void>;
+    findObject(options: FindObjectOptions): Promise<FindObjectResult>;
+    getRecord(options: GetRecordOptions): Promise<GetRecordResult>;
+    listNodes(settings: ListNodesOptions): Promise<ListNodesResult>;
+    previewObject(options: PreviewObjectOptions): Promise<PreviewConfig>;
+    upsertRecords(options: UpsertRecordsOptions): Promise<void>;
+    removeRecords(options: RemoveRecordsOptions): Promise<void>;
+    retrieveRecords(options: RetrieveRecordsOptions, chunk: (records: ParsingRecord[]) => void, complete: (result: RetrieveRecordsSummary) => void): Promise<void>;
     private establishContainer;
+    private establishObjectIdentifiers;
 }
+export {};
