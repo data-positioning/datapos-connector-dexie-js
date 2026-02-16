@@ -216,7 +216,8 @@ export class Connector implements ExtendedConnectorInterface {
         console.log(55, containerId, nodeId);
         const container = await this.establishContainer(containerId);
         console.log(77, container);
-        // const records = await container.table<ParsingRecord>(nodeId).toArray();
+        const records = await container.table(nodeId).toArray();
+        console.log(88, records);
         // chunk(records);
     }
 
