@@ -1,69 +1,71 @@
-/*
- * Dexie.js connector class.
- */
-
 // https://dexie.org/docs/Tutorial/Hello-World
 // https://dexie.org/docs/Tutorial/Understanding-the-basics
 // https://dexie.org/docs/Dexie/Dexie.open()#dynamic-schema-manipulation
 
-// Dependencies - Vendor.
+// External dependencies
 import Dexie from 'dexie';
 
-// Dependencies - Framework.
-import type { DropSettings } from '@datapos/datapos-shared';
-import type { RemoveSettings } from '@datapos/datapos-shared';
-import type { UpsertSettings } from '@datapos/datapos-shared';
-import type { ConnectionConfig, ConnectionNodeConfig, Connector, ConnectorConfig } from '@datapos/datapos-shared';
-import type { ConnectorTools, CreateSettings } from '@datapos/datapos-shared';
-import type { FindResult, FindSettings } from '@datapos/datapos-shared';
-import type { GetResult, GetSettings } from '@datapos/datapos-shared';
-import type { ListResult, ListSettings } from '@datapos/datapos-shared';
-import type { PreviewResult, PreviewSettings } from '@datapos/datapos-shared';
-import type { RetrieveSettings, RetrieveSummary } from '@datapos/datapos-shared';
+// DPU framework
+import type { EngineUtilities } from '@datapos/datapos-shared/engine';
+import type { ToolConfig } from '@datapos/datapos-shared/component/tool';
+import type {
+    ConnectionNodeConfig,
+    ConnectorConfig,
+    ConnectorInterface,
+    CreateObjectOptions,
+    DropObjectOptions,
+    FindObjectFolderPathOptions,
+    GetReadableStreamOptions,
+    ListNodesOptions,
+    PreviewObjectOptions,
+    RemoveRecordsOptions,
+    RetrieveRecordsOptions,
+    RetrieveRecordsSummary,
+    UpsertRecordsOptions
+} from '@datapos/datapos-shared/component/connector';
 
-// Dependencies - Data.
+// Data
 import config from '~/config.json';
 import { version } from '~/package.json';
 
-// Interfaces - Connector (Dexie).
-declare module '@datapos/datapos-shared' {
-    interface Connector {
-        containers: Record<string, Dexie>;
-    }
-}
+// // Interfaces - Connector (Dexie).
+// declare module '@datapos/datapos-shared' {
+//     interface Connector {
+//         containers: Record<string, Dexie>;
+//     }
+// }
 
 // Constants
 const CALLBACK_RETRIEVE_ABORTED = 'Connector failed to abort retrieve all records operation.';
 const ERROR_INVALID_FOLDER_PATH = 'Encountered invalid folder path';
 const ERROR_INVALID_OBJECT_PATH = 'Encountered invalid object path';
 
-// Classes - Dexie.js connector.
-export default class DexieJSConnector implements Connector {
+// Connectors
+export default class DexieJSConnector implements ConnectorInterface {
     abortController: AbortController | undefined;
     readonly config: ConnectorConfig;
-    readonly connectionConfig: ConnectionConfig;
-    readonly tools: ConnectorTools;
+    engineUtilities: EngineUtilities;
+    readonly toolConfigs;
     containers: Record<string, Dexie>;
 
-    constructor(connectionConfig: ConnectionConfig, tools: ConnectorTools) {
-        this.abortController = null;
+    constructor(engineUtilities: EngineUtilities, toolConfigs: ToolConfig[]) {
+        this.abortController = undefined;
         this.config = config as ConnectorConfig;
         this.config.version = version;
-        this.connectionConfig = connectionConfig;
-        this.tools = tools;
+        this.engineUtilities = engineUtilities;
+        this.toolConfigs = toolConfigs;
         this.containers = {};
     }
 
-    // Operations - Abort operation.
-    abortOperation(connector: DexieJSConnector): void {
-        if (!connector.abortController) return;
-        connector.abortController.abort();
-        connector.abortController = null;
-        return;
+    // Abort operation
+    abortOperation(): void {
+        if (!this.abortController) return;
+        this.abortController.abort();
+        this.abortController = undefined;
     }
 
-    // Operations - Create object.
-    async createObject(connector: DexieJSConnector, settings: CreateSettings): Promise<void> {
+    // Create object
+    async createObject(connector: DexieJSConnector, settings: CreateObjectOptions): Promise<void> {
         const pathSegments = settings.path?.split('/');
         if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);
         const container = await this.establishContainer(connector, pathSegments[1]);
@@ -93,7 +95,7 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Drop object.
-    async dropObject(connector: DexieJSConnector, settings: DropSettings): Promise<void> {
+    async dropObject(connector: DexieJSConnector, settings: DropObjectOptions): Promise<void> {
         const pathSegments = settings.path?.split('/');
         if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);
         const container = await this.establishContainer(connector, pathSegments[1]);
@@ -123,13 +125,13 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Find object.
-    async findObject(connector: DexieJSConnector, settings: FindSettings): Promise<FindResult> {
+    async findObject(connector: DexieJSConnector, settings: FindObjectFolderPathOptions): Promise<FindResult> {
         const container = await this.establishContainer(connector, settings.containerName);
         return container.tables.find((table) => table.name === settings.objectName) ? { folderPath: '/' } : {};
     }
 
     // Operations - Get record.
-    async getRecord(connector: DexieJSConnector, settings: GetSettings): Promise<GetResult> {
+    async getRecord(connector: DexieJSConnector, settings: GetReadableStreamOptions): Promise<GetResult> {
         const pathSegments = settings.path.split('/');
         if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);
         const container = await this.establishContainer(connector, pathSegments[1]);
@@ -138,7 +140,7 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - List nodes.
-    async listNodes(connector: DexieJSConnector, settings: ListSettings): Promise<ListResult> {
+    async listNodes(connector: DexieJSConnector, settings: ListNodesOptions): Promise<ListResult> {
         const folderPathSegments = settings.folderPath.split('/');
         switch (folderPathSegments.length) {
             case 1: {
@@ -167,7 +169,7 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Preview object.
-    async previewObject(connector: DexieJSConnector, settings: PreviewSettings): Promise<PreviewResult> {
+    async previewObject(connector: DexieJSConnector, settings: PreviewObjectOptions): Promise<PreviewResult> {
         const pathSegments = settings.path.split('/');
         if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);
         const container = await this.establishContainer(connector, pathSegments[1]);
@@ -176,7 +178,7 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Upsert records.
-    async upsertRecords(connector: DexieJSConnector, settings: UpsertSettings): Promise<void> {
+    async upsertRecords(connector: DexieJSConnector, settings: UpsertRecordsOptions): Promise<void> {
         const pathSegments = settings.path.split('/');
         if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);
         const container = await this.establishContainer(connector, pathSegments[1]);
@@ -190,7 +192,7 @@ export default class DexieJSConnector implements Connector {
     }
 
     // Operations - Remove records.
-    async removeRecords(connector: DexieJSConnector, settings: RemoveSettings): Promise<void> {
+    async removeRecords(connector: DexieJSConnector, settings: RemoveRecordsOptions): Promise<void> {
         const pathSegments = settings.path.split('/');
         if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);
         const container = await this.establishContainer(connector, pathSegments[1]);
@@ -208,9 +210,9 @@ export default class DexieJSConnector implements Connector {
     // Operations - Retrieve records.
     async retrieveRecords(
         connector: DexieJSConnector,
-        settings: RetrieveSettings,
+        settings: RetrieveRecordsOptions,
         chunk: (records: Record<string, unknown>[]) => void,
-        complete: (result: RetrieveSummary) => void
+        complete: (result: RetrieveRecordsSummary) => void
     ): Promise<void> {
         const pathSegments = settings.path.split('/');
         if (pathSegments.length !== 3) throw new Error(`${ERROR_INVALID_OBJECT_PATH} '${settings.path}'.`);

@@ -1,5 +1,10 @@
 # Data Positioning Dexie.js Connector
 
+<span><!-- OWASP_BADGES_START -->
+[![OWASP](https://img.shields.io/badge/OWASP-passed-4CAF50)](https://data-positioning.github.io/datapos-connector-file-store-emulator/dependency-check-reports/dependency-check-report.html)
+
+<!-- OWASP_BADGES_END --></span>
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
 A TypeScript library that implements the Dexie.js connector.

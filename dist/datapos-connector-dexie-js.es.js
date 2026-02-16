@@ -24,9 +24,9 @@ function lo() {
         for (var r, o = 0, i = t.length; o < i; o++) !r && o in t || ((r = r || Array.prototype.slice.call(t, 0, o))[o] = t[o]);
         return e.concat(r || Array.prototype.slice.call(t));
       }
-      var D = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : uo, z = Object.keys, N = Array.isArray;
+      var D = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : uo, U = Object.keys, N = Array.isArray;
       function X(e, t) {
-        return typeof t != "object" || z(t).forEach(function(n) {
+        return typeof t != "object" || U(t).forEach(function(n) {
           e[n] = t[n];
         }), e;
       }
@@ -36,7 +36,7 @@ function lo() {
         return Je.call(e, t);
       }
       function Ne(e, t) {
-        typeof t == "function" && (t = t(ae(e))), (typeof Reflect > "u" ? z : Reflect.ownKeys)(t).forEach(function(n) {
+        typeof t == "function" && (t = t(ae(e))), (typeof Reflect > "u" ? U : Reflect.ownKeys)(t).forEach(function(n) {
           ve(e, n, t[n]);
         });
       }
@@ -53,13 +53,13 @@ function lo() {
       function yt(e, t, n) {
         return Pr.call(e, t, n);
       }
-      function Rn(e, t) {
+      function Tn(e, t) {
         return t(e);
       }
       function Ze(e) {
         if (!e) throw new Error("Assertion Failed");
       }
-      function Tn(e) {
+      function Rn(e) {
         D.setImmediate ? setImmediate(e) : setTimeout(e, 0);
       }
       function fe(e, t) {
@@ -171,14 +171,14 @@ function lo() {
       function vt(e, t, n, r) {
         this.failures = t, this.failedKeys = r, this.successCount = n, this.message = Nn(e, t);
       }
-      function ze(e, t) {
+      function Ue(e, t) {
         this.name = "BulkError", this.failures = Object.keys(t).map(function(n) {
           return t[n];
         }), this.failuresByPos = t, this.message = Nn(e, this.failures);
       }
       Fe(Le).from(Error).extend({ toString: function() {
         return this.name + ": " + this.message;
-      } }), Fe(vt).from(Le), Fe(ze).from(Le);
+      } }), Fe(vt).from(Le), Fe(Ue).from(Le);
       var Gt = ue.reduce(function(e, t) {
         return e[t] = t + "Error", e;
       }, {}), jr = Le, A = ue.reduce(function(e, t) {
@@ -195,7 +195,7 @@ function lo() {
       }, {}), mt = ue.reduce(function(e, t) {
         return ["Syntax", "Type", "Range"].indexOf(t) === -1 && (e[t + "Error"] = A[t]), e;
       }, {});
-      function U() {
+      function z() {
       }
       function tt(e) {
         return e;
@@ -211,7 +211,7 @@ function lo() {
         };
       }
       function Dr(e, t) {
-        return e === U ? t : function() {
+        return e === z ? t : function() {
           var n = e.apply(this, arguments);
           n !== void 0 && (arguments[0] = n);
           var r = this.onsuccess, o = this.onerror;
@@ -221,27 +221,27 @@ function lo() {
         };
       }
       function Ir(e, t) {
-        return e === U ? t : function() {
+        return e === z ? t : function() {
           e.apply(this, arguments);
           var n = this.onsuccess, r = this.onerror;
           this.onsuccess = this.onerror = null, t.apply(this, arguments), n && (this.onsuccess = this.onsuccess ? Ke(n, this.onsuccess) : n), r && (this.onerror = this.onerror ? Ke(r, this.onerror) : r);
         };
       }
-      function Rr(e, t) {
-        return e === U ? t : function(n) {
+      function Tr(e, t) {
+        return e === z ? t : function(n) {
           var r = e.apply(this, arguments);
           X(n, r);
           var o = this.onsuccess, i = this.onerror;
           return this.onsuccess = null, this.onerror = null, n = t.apply(this, arguments), o && (this.onsuccess = this.onsuccess ? Ke(o, this.onsuccess) : o), i && (this.onerror = this.onerror ? Ke(i, this.onerror) : i), r === void 0 ? n === void 0 ? void 0 : n : X(r, n);
         };
       }
-      function Tr(e, t) {
-        return e === U ? t : function() {
+      function Rr(e, t) {
+        return e === z ? t : function() {
           return t.apply(this, arguments) !== !1 && e.apply(this, arguments);
         };
       }
       function Ht(e, t) {
-        return e === U ? t : function() {
+        return e === z ? t : function() {
           var n = e.apply(this, arguments);
           if (n && typeof n.then == "function") {
             for (var r = this, o = arguments.length, i = new Array(o); o--; ) i[o] = arguments[o];
@@ -252,7 +252,7 @@ function lo() {
           return t.apply(this, arguments);
         };
       }
-      mt.ModifyError = vt, mt.DexieError = Le, mt.BulkError = ze;
+      mt.ModifyError = vt, mt.DexieError = Le, mt.BulkError = Ue;
       var se = typeof location < "u" && /^(http|https):\/\/(localhost|127\.0\.0\.1)/.test(location.href);
       function $n(e) {
         se = e;
@@ -264,7 +264,7 @@ function lo() {
         return [t, ae(t), e];
       }(), rt = Se[0], ue = Se[1], Se = Se[2], ue = ue && ue.then, Ce = rt && rt.constructor, Xt = !!Se, ot = function(e, t) {
         it.push([e, t]), bt && (queueMicrotask(Br), bt = !1);
-      }, Jt = !0, bt = !0, je = [], gt = [], Zt = tt, me = { id: "global", global: !0, ref: 0, unhandleds: [], onunhandled: U, pgp: !1, env: {}, finalize: U }, j = me, it = [], Ae = 0, wt = [];
+      }, Jt = !0, bt = !0, je = [], gt = [], Zt = tt, me = { id: "global", global: !0, ref: 0, unhandleds: [], onunhandled: z, pgp: !1, env: {}, finalize: z }, j = me, it = [], Ae = 0, wt = [];
       function S(e) {
         if (typeof this != "object") throw new TypeError("Promises must be constructed via new");
         this._listeners = [], this._lib = !1;
@@ -278,10 +278,10 @@ function lo() {
             o(function(i) {
               if (r._state === null) {
                 if (i === r) throw new TypeError("A promise cannot be resolved with itself.");
-                var a = r._lib && Ue();
+                var a = r._lib && ze();
                 i && typeof i.then == "function" ? n(r, function(u, c) {
                   i instanceof S ? i._then(u, c) : i.then(u, c);
-                }) : (r._state = !0, r._value = i, Un(r)), a && Ve();
+                }) : (r._state = !0, r._value = i, zn(r)), a && Ve();
               }
             }, tn.bind(null, r));
           } catch (i) {
@@ -293,7 +293,7 @@ function lo() {
         var e = j, t = Ot;
         function n(r, o) {
           var i = this, a = !e.global && (e !== j || t !== Ot), u = a && !ge(), c = new S(function(l, p) {
-            nn(i, new zn(Yn(r, e, a, u), Yn(o, e, a, u), l, p, e));
+            nn(i, new Un(Yn(r, e, a, u), Yn(o, e, a, u), l, p, e));
           });
           return this._consoleTask && (c._consoleTask = this._consoleTask), c;
         }
@@ -303,16 +303,16 @@ function lo() {
           return e;
         }, set: en.set });
       } };
-      function zn(e, t, n, r, o) {
+      function Un(e, t, n, r, o) {
         this.onFulfilled = typeof e == "function" ? e : null, this.onRejected = typeof t == "function" ? t : null, this.resolve = n, this.reject = r, this.psd = o;
       }
       function tn(e, t) {
         var n, r;
-        gt.push(t), e._state === null && (n = e._lib && Ue(), t = Zt(t), e._state = !1, e._value = t, r = e, je.some(function(o) {
+        gt.push(t), e._state === null && (n = e._lib && ze(), t = Zt(t), e._state = !1, e._value = t, r = e, je.some(function(o) {
           return o._value === r._value;
-        }) || je.push(r), Un(e), n && Ve());
+        }) || je.push(r), zn(e), n && Ve());
       }
-      function Un(e) {
+      function zn(e) {
         var t = e._listeners;
         e._listeners = [];
         for (var n = 0, r = t.length; n < r; ++n) nn(e, t[n]);
@@ -344,10 +344,10 @@ function lo() {
       }
       function Br() {
         De(me, function() {
-          Ue() && Ve();
+          ze() && Ve();
         });
       }
-      function Ue() {
+      function ze() {
         var e = Jt;
         return bt = Jt = !1, e;
       }
@@ -374,7 +374,7 @@ function lo() {
       function Y(e, t) {
         var n = j;
         return function() {
-          var r = Ue(), o = j;
+          var r = ze(), o = j;
           try {
             return we(n, !0), e.apply(this, arguments);
           } catch (i) {
@@ -385,7 +385,7 @@ function lo() {
         };
       }
       Ne(S.prototype, { then: en, _then: function(e, t) {
-        nn(this, new zn(null, null, e, t, j));
+        nn(this, new Un(null, null, e, t, j));
       }, catch: function(e) {
         if (arguments.length === 1) return this.then(null, e);
         var t = e, n = arguments[1];
@@ -549,9 +549,9 @@ function lo() {
       function on(e) {
         Promise === Ce && G.echoes === 0 ? kt === 0 ? e() : enqueueNativeMicroTask(e) : setTimeout(e, 0);
       }
-      ("" + ue).indexOf("[native code]") === -1 && (Ye = ge = U);
+      ("" + ue).indexOf("[native code]") === -1 && (Ye = ge = z);
       var W = S.reject, Ie = "￿", de = "Invalid key provided. Keys must be of type string, number, Date or Array<string | number | Date>.", Wn = "String expected.", We = [], Et = "__dbnames", an = "readonly", un = "readwrite";
-      function Re(e, t) {
+      function Te(e, t) {
         return e ? t ? function() {
           return e.apply(this, arguments) && t.apply(this, arguments);
         } : e : t;
@@ -643,7 +643,7 @@ function lo() {
         this["@@propmod"] = e;
       }
       function Zn(e, t) {
-        for (var n = z(t), r = n.length, o = !1, i = 0; i < r; ++i) {
+        for (var n = U(t), r = n.length, o = !1, i = 0; i < r; ++i) {
           var a = n[i], u = t[a], c = fe(e, a);
           u instanceof at ? (re(e, a, u.execute(c)), o = !0) : c !== u && (re(e, a, u), o = !0);
         }
@@ -655,7 +655,7 @@ function lo() {
           if (!s.schema[o]) throw new A.NotFound("Table " + o + " not part of transaction");
           return t(s.idbtrans, s);
         }
-        var u = Ue();
+        var u = ze();
         try {
           var c = r && r.db._novip === this.db._novip ? r === j.trans ? r._promise(e, a, n) : be(function() {
             return r._promise(e, a, n);
@@ -686,7 +686,7 @@ function lo() {
             if (p._state.openComplete) return W(new A.DatabaseClosed(p._state.dbOpenError));
             if (!p._state.isBeingOpened) {
               if (!p._state.autoOpen) return W(new A.DatabaseClosed());
-              p.open().catch(U);
+              p.open().catch(z);
             }
             return p._state.dbReadyPromise.then(function() {
               return l(p, s, v, f);
@@ -708,7 +708,7 @@ function lo() {
       }, V.prototype.where = function(e) {
         if (typeof e == "string") return new this.db.WhereClause(this, e);
         if (N(e)) return new this.db.WhereClause(this, "[".concat(e.join("+"), "]"));
-        var t = z(e);
+        var t = U(e);
         if (t.length === 1) return this.where(t[0]).equals(e[t[0]]);
         var n = this.schema.indexes.concat(this.schema.primKey).filter(function(u) {
           if (u.compound && t.every(function(l) {
@@ -734,7 +734,7 @@ function lo() {
         }
         var a = t.reduce(function(s, c) {
           var l = s[0], p = s[1], s = r[c], v = e[c];
-          return [l || s, l || !s ? Re(p, s && s.multi ? function(f) {
+          return [l || s, l || !s ? Te(p, s && s.multi ? function(f) {
             return f = fe(f, c), N(f) && f.some(function(h) {
               return o(v, h);
             });
@@ -869,7 +869,7 @@ function lo() {
           return r.core.mutate({ trans: a, type: "add", keys: o, values: l, wantResults: i }).then(function(h) {
             var s = h.numFailures, v = h.results, f = h.lastResult, h = h.failures;
             if (s === 0) return i ? v : f;
-            throw new ze("".concat(r.name, ".bulkAdd(): ").concat(s, " of ").concat(c, " operations failed"), h);
+            throw new Ue("".concat(r.name, ".bulkAdd(): ").concat(s, " of ").concat(c, " operations failed"), h);
           });
         });
       }, V.prototype.bulkPut = function(e, t, n) {
@@ -882,7 +882,7 @@ function lo() {
           return r.core.mutate({ trans: a, type: "put", keys: o, values: l, wantResults: i }).then(function(h) {
             var s = h.numFailures, v = h.results, f = h.lastResult, h = h.failures;
             if (s === 0) return i ? v : f;
-            throw new ze("".concat(r.name, ".bulkPut(): ").concat(s, " of ").concat(c, " operations failed"), h);
+            throw new Ue("".concat(r.name, ".bulkPut(): ").concat(s, " of ").concat(c, " operations failed"), h);
           });
         });
       }, V.prototype.bulkUpdate = function(e) {
@@ -914,7 +914,7 @@ function lo() {
                 var y, m = d[h], b = i[Number(m)];
                 b != null && (y = f[m], delete f[m], f[b] = y);
               }
-              throw new ze("".concat(t.name, ".bulkUpdate(): ").concat(v, " of ").concat(p, " operations failed"), f);
+              throw new Ue("".concat(t.name, ".bulkUpdate(): ").concat(v, " of ").concat(p, " operations failed"), f);
             });
           });
         });
@@ -927,7 +927,7 @@ function lo() {
         }).then(function(a) {
           var o = a.numFailures, i = a.lastResult, a = a.failures;
           if (o === 0) return i;
-          throw new ze("".concat(t.name, ".bulkDelete(): ").concat(o, " of ").concat(n, " operations failed"), a);
+          throw new Ue("".concat(t.name, ".bulkDelete(): ").concat(o, " of ").concat(n, " operations failed"), a);
         });
       }, V);
       function V() {
@@ -947,8 +947,8 @@ function lo() {
         function i(a, u, c) {
           if (typeof a != "object") {
             var l;
-            u = u || Tr;
-            var p = { subscribers: [], fire: c = c || U, subscribe: function(s) {
+            u = u || Rr;
+            var p = { subscribers: [], fire: c = c || z, subscribe: function(s) {
               p.subscribers.indexOf(s) === -1 && (p.subscribers.push(s), p.fire = u(p.fire, s));
             }, unsubscribe: function(s) {
               p.subscribers = p.subscribers.filter(function(v) {
@@ -957,7 +957,7 @@ function lo() {
             } };
             return n[a] = t[a] = p;
           }
-          z(l = a).forEach(function(s) {
+          U(l = a).forEach(function(s) {
             var v = l[s];
             if (N(v)) i(s, l[s][0], l[s][1]);
             else {
@@ -965,7 +965,7 @@ function lo() {
               var f = i(s, tt, function() {
                 for (var h = arguments.length, d = new Array(h); h--; ) d[h] = arguments[h];
                 f.subscribers.forEach(function(y) {
-                  Tn(function() {
+                  Rn(function() {
                     y.apply(null, d);
                   });
                 });
@@ -981,12 +981,12 @@ function lo() {
         return !(e.filter || e.algorithm || e.or) && (t ? e.justLimit : !e.replayFilter);
       }
       function sn(e, t) {
-        e.filter = Re(e.filter, t);
+        e.filter = Te(e.filter, t);
       }
       function cn(e, t, n) {
         var r = e.replayFilter;
         e.replayFilter = r ? function() {
-          return Re(r(), t());
+          return Te(r(), t());
         } : t, e.justLimit = n && !r;
       }
       function Ct(e, t) {
@@ -1000,7 +1000,7 @@ function lo() {
         return t.openCursor({ trans: n, values: !e.keysOnly, reverse: e.dir === "prev", unique: !!e.unique, query: { index: r, range: e.range } });
       }
       function jt(e, t, n, r) {
-        var o = e.replayFilter ? Re(e.filter, e.replayFilter()) : e.filter;
+        var o = e.replayFilter ? Te(e.filter, e.replayFilter()) : e.filter;
         if (e.or) {
           var i = {}, a = function(u, c, l) {
             var p, s;
@@ -1012,7 +1012,7 @@ function lo() {
           };
           return Promise.all([e.or._iterate(a, n), nr(tr(e, r, n), e.algorithm, a, !e.keysOnly && e.valueMapper)]);
         }
-        return nr(tr(e, r, n), Re(e.algorithm, o), t, !e.keysOnly && e.valueMapper);
+        return nr(tr(e, r, n), Te(e.algorithm, o), t, !e.keysOnly && e.valueMapper);
       }
       function nr(e, t, n, r) {
         var o = Y(r ? function(i, a, u) {
@@ -1026,9 +1026,9 @@ function lo() {
             t && !t(i, function(u) {
               return a = u;
             }, function(u) {
-              i.stop(u), a = U;
+              i.stop(u), a = z;
             }, function(u) {
-              i.fail(u), a = U;
+              i.fail(u), a = z;
             }) || o(i.value, i, function(u) {
               return a = u;
             }), a();
@@ -1043,7 +1043,7 @@ function lo() {
         return t.error ? t.table._trans(null, W.bind(null, t.error)) : t.table._trans("readwrite", e, "locked");
       }, L.prototype._addAlgorithm = function(e) {
         var t = this._ctx;
-        t.algorithm = Re(t.algorithm, e);
+        t.algorithm = Te(t.algorithm, e);
       }, L.prototype._iterate = function(e, t) {
         return jt(this._ctx, e, t, this._ctx.table.core);
       }, L.prototype.clone = function(e) {
@@ -1135,7 +1135,7 @@ function lo() {
         var t;
         return sn(this._ctx, function(n) {
           return e(n.value);
-        }), (t = this._ctx).isMatch = Re(t.isMatch, e), this;
+        }), (t = this._ctx).isMatch = Te(t.isMatch, e), this;
       }, L.prototype.and = function(e) {
         return this.filter(e);
       }, L.prototype.or = function(e) {
@@ -1206,7 +1206,7 @@ function lo() {
           function p(d, b) {
             var m = b.failures, b = b.numFailures;
             v += d - b;
-            for (var g = 0, w = z(m); g < w.length; g++) {
+            for (var g = 0, w = U(m); g < w.length; g++) {
               var k = w[g];
               s.push(m[k]);
             }
@@ -1218,8 +1218,8 @@ function lo() {
               return (h ? Promise.resolve([]) : i.getMany({ trans: r, keys: w, cache: "immutable" })).then(function(k) {
                 var E = [], _ = [], O = a ? [] : null, K = h ? w : [];
                 if (!h) for (var P = 0; P < g; ++P) {
-                  var C = k[P], T = { value: Pe(C), primKey: d[b + P] };
-                  o.call(T, T.value, T) !== !1 && (T.value == null ? K.push(d[b + P]) : a || F(u(C), u(T.value)) === 0 ? (_.push(T.value), a && O.push(d[b + P])) : (K.push(d[b + P]), E.push(T.value)));
+                  var C = k[P], R = { value: Pe(C), primKey: d[b + P] };
+                  o.call(R, R.value, R) !== !1 && (R.value == null ? K.push(d[b + P]) : a || F(u(C), u(R.value)) === 0 ? (_.push(R.value), a && O.push(d[b + P])) : (K.push(d[b + P]), E.push(R.value)));
                 }
                 return Promise.resolve(0 < E.length && i.mutate({ trans: r, type: "add", values: E }).then(function(q) {
                   for (var B in q.failures) K.splice(parseInt(B), 1);
@@ -1269,7 +1269,7 @@ function lo() {
       function Lr(e, t) {
         return e < t ? -1 : e === t ? 0 : 1;
       }
-      function zr(e, t) {
+      function Ur(e, t) {
         return t < e ? -1 : e === t ? 0 : 1;
       }
       function oe(e, t, n) {
@@ -1294,7 +1294,7 @@ function lo() {
             return y.toLowerCase();
           } : function(y) {
             return y.toUpperCase();
-          }, a = h === "next" ? Lr : zr;
+          }, a = h === "next" ? Lr : Ur;
           var d = n.map(function(y) {
             return { lower: i(y), upper: o(y) };
           }).sort(function(y, m) {
@@ -1319,12 +1319,12 @@ function lo() {
           if (t(b, c, f)) return !0;
           for (var g = null, w = f; w < s; ++w) {
             var k = function(E, _, O, K, P, C) {
-              for (var T = Math.min(E.length, K.length), q = -1, B = 0; B < T; ++B) {
+              for (var R = Math.min(E.length, K.length), q = -1, B = 0; B < R; ++B) {
                 var ie = _[B];
                 if (ie !== K[B]) return P(E[B], O[B]) < 0 ? E.substr(0, B) + O[B] + O.substr(B + 1) : P(E[B], K[B]) < 0 ? E.substr(0, B) + K[B] + O.substr(B + 1) : 0 <= q ? E.substr(0, q) + _[q] + O.substr(q + 1) : null;
                 P(E[B], ie) < 0 && (q = B);
               }
-              return T < K.length && C === "next" ? E + O.substr(E.length) : T < E.length && C === "prev" ? E.substr(0, O.length) : q < 0 ? null : E.substr(0, q) + K[q] + O.substr(q + 1);
+              return R < K.length && C === "next" ? E + O.substr(E.length) : R < E.length && C === "prev" ? E.substr(0, O.length) : q < 0 ? null : E.substr(0, q) + K[q] + O.substr(q + 1);
             }(m, b, u[w], c[w], a, l);
             k === null && g === null ? f = w + 1 : (g === null || 0 < a(g, k)) && (g = k);
           }
@@ -1488,7 +1488,7 @@ function lo() {
       function ct(e) {
         e.stopPropagation && e.stopPropagation(), e.preventDefault && e.preventDefault();
       }
-      var lt = "storagemutated", ln = "x-storagemutated-1", xe = ut(null, lt), Ur = (le.prototype._lock = function() {
+      var lt = "storagemutated", ln = "x-storagemutated-1", xe = ut(null, lt), zr = (le.prototype._lock = function() {
         return Ze(!j.global), ++this._reculock, this._reculock !== 1 || j.global || (j.lockOwnerFor = this), this;
       }, le.prototype._unlock = function() {
         if (Ze(!j.global), --this._reculock == 0) for (j.global || (j.lockOwnerFor = null); 0 < this._blockedFuncs.length && !this._locked(); ) {
@@ -1637,7 +1637,7 @@ function lo() {
               var P, C = (b || g || { length: 1 }).length;
               if (b && g && b.length !== g.length) throw new Error("Given keys array must have same length as given values array.");
               if (C === 0) return k({ numFailures: 0, failures: {}, results: [], lastResult: void 0 });
-              function T(te) {
+              function R(te) {
                 ++ie, ct(te);
               }
               var q = [], B = [], ie = 0;
@@ -1645,11 +1645,11 @@ function lo() {
                 if (w.type === 4) return k({ numFailures: ie, failures: B, results: [], lastResult: void 0 });
                 w.type === 3 ? q.push(P = _.clear()) : q.push(P = _.delete(r(w)));
               } else {
-                var O = K ? O ? [g, b] : [g, null] : [b, null], R = O[0], Z = O[1];
-                if (K) for (var ee = 0; ee < C; ++ee) q.push(P = Z && Z[ee] !== void 0 ? _[m](R[ee], Z[ee]) : _[m](R[ee])), P.onerror = T;
-                else for (ee = 0; ee < C; ++ee) q.push(P = _[m](R[ee])), P.onerror = T;
+                var O = K ? O ? [g, b] : [g, null] : [b, null], T = O[0], Z = O[1];
+                if (K) for (var ee = 0; ee < C; ++ee) q.push(P = Z && Z[ee] !== void 0 ? _[m](T[ee], Z[ee]) : _[m](T[ee])), P.onerror = R;
+                else for (ee = 0; ee < C; ++ee) q.push(P = _[m](T[ee])), P.onerror = R;
               }
-              function zt(te) {
+              function Ut(te) {
                 te = te.target.result, q.forEach(function(Be, An) {
                   return Be.error != null && (B[An] = Be.error);
                 }), k({ numFailures: ie, failures: B, results: m === "delete" ? b : q.map(function(Be) {
@@ -1657,8 +1657,8 @@ function lo() {
                 }), lastResult: te });
               }
               P.onerror = function(te) {
-                T(te), zt(te);
-              }, P.onsuccess = zt;
+                R(te), Ut(te);
+              }, P.onsuccess = Ut;
             });
           }, getMany: function(d) {
             var y = d.trans, m = d.keys;
@@ -1666,7 +1666,7 @@ function lo() {
               b = Y(b);
               for (var w, k = y.objectStore(h), E = m.length, _ = new Array(E), O = 0, K = 0, P = function(q) {
                 q = q.target, _[q._pos] = q.result, ++K === O && b(_);
-              }, C = ce(g), T = 0; T < E; ++T) m[T] != null && ((w = k.get(m[T]))._pos = T, w.onsuccess = P, w.onerror = C, ++O);
+              }, C = ce(g), R = 0; R < E; ++R) m[R] != null && ((w = k.get(m[R]))._pos = R, w.onsuccess = P, w.onerror = C, ++O);
               O === 0 && b(_);
             });
           }, get: function(d) {
@@ -1686,8 +1686,8 @@ function lo() {
               f ? ((_ = k ? K.getAll(P, _) : K.getAllKeys(P, _)).onsuccess = function(C) {
                 return y({ result: C.target.result });
               }, _.onerror = ce(m)) : (b = 0, g = !k && "openKeyCursor" in K ? K.openKeyCursor(P) : K.openCursor(P), w = [], g.onsuccess = function(C) {
-                var T = g.result;
-                return T ? (w.push(k ? T.value : T.primaryKey), ++b === E ? y({ result: w }) : void T.continue()) : y({ result: w });
+                var R = g.result;
+                return R ? (w.push(k ? R.value : R.primaryKey), ++b === E ? y({ result: w }) : void R.continue()) : y({ result: w });
               }, g.onerror = ce(m));
             });
           }), openCursor: function(d) {
@@ -1696,38 +1696,38 @@ function lo() {
               k = Y(k);
               var K = b.index, _ = b.range, O = y.objectStore(h), O = K.isPrimaryKey ? O : O.index(K.name), K = g ? w ? "prevunique" : "prev" : w ? "nextunique" : "next", P = !m && "openKeyCursor" in O ? O.openKeyCursor(r(_), K) : O.openCursor(r(_), K);
               P.onerror = ce(E), P.onsuccess = Y(function(C) {
-                var T, q, B, ie, R = P.result;
-                R ? (R.___id = ++Vr, R.done = !1, T = R.continue.bind(R), q = (q = R.continuePrimaryKey) && q.bind(R), B = R.advance.bind(R), ie = function() {
+                var R, q, B, ie, T = P.result;
+                T ? (T.___id = ++Vr, T.done = !1, R = T.continue.bind(T), q = (q = T.continuePrimaryKey) && q.bind(T), B = T.advance.bind(T), ie = function() {
                   throw new Error("Cursor not stopped");
-                }, R.trans = y, R.stop = R.continue = R.continuePrimaryKey = R.advance = function() {
+                }, T.trans = y, T.stop = T.continue = T.continuePrimaryKey = T.advance = function() {
                   throw new Error("Cursor not started");
-                }, R.fail = Y(E), R.next = function() {
+                }, T.fail = Y(E), T.next = function() {
                   var Z = this, ee = 1;
                   return this.start(function() {
                     return ee-- ? Z.continue() : Z.stop();
                   }).then(function() {
                     return Z;
                   });
-                }, R.start = function(Z) {
+                }, T.start = function(Z) {
                   function ee() {
                     if (P.result) try {
                       Z();
                     } catch (te) {
-                      R.fail(te);
+                      T.fail(te);
                     }
-                    else R.done = !0, R.start = function() {
+                    else T.done = !0, T.start = function() {
                       throw new Error("Cursor behind last entry");
-                    }, R.stop();
+                    }, T.stop();
                   }
-                  var zt = new Promise(function(te, Be) {
-                    te = Y(te), P.onerror = ce(Be), R.fail = Be, R.stop = function(An) {
-                      R.stop = R.continue = R.continuePrimaryKey = R.advance = ie, te(An);
+                  var Ut = new Promise(function(te, Be) {
+                    te = Y(te), P.onerror = ce(Be), T.fail = Be, T.stop = function(An) {
+                      T.stop = T.continue = T.continuePrimaryKey = T.advance = ie, te(An);
                     };
                   });
                   return P.onsuccess = Y(function(te) {
                     P.onsuccess = ee, ee();
-                  }), R.continue = T, R.continuePrimaryKey = q, R.advance = B, ee(), zt;
-                }, k(R)) : k(null);
+                  }), T.continue = R, T.continuePrimaryKey = q, T.advance = B, ee(), Ut;
+                }, k(T)) : k(null);
               }, E);
             });
           }, count: function(d) {
@@ -1808,7 +1808,7 @@ function lo() {
           return j.trans = i, j.transless = u, t !== 0 ? (Dt(e, n), l = t, ((c = i).storeNames.includes("$meta") ? c.table("$meta").get("version").then(function(p) {
             return p ?? l;
           }) : S.resolve(l)).then(function(p) {
-            return v = p, f = i, h = n, d = [], p = (s = e)._versions, y = s._dbSchema = Tt(0, s.idbdb, h), (p = p.filter(function(m) {
+            return v = p, f = i, h = n, d = [], p = (s = e)._versions, y = s._dbSchema = Rt(0, s.idbdb, h), (p = p.filter(function(m) {
               return m._cfg.version >= v;
             })).length !== 0 ? (p.forEach(function(m) {
               d.push(function() {
@@ -1821,9 +1821,9 @@ function lo() {
                   if (K.recreate) throw new A.Upgrade("Not yet support for changing primary key");
                   var P = h.objectStore(K.name);
                   K.add.forEach(function(C) {
-                    return Rt(P, C);
+                    return Tt(P, C);
                   }), K.change.forEach(function(C) {
-                    P.deleteIndex(C.name), Rt(P, C);
+                    P.deleteIndex(C.name), Tt(P, C);
                   }), K.del.forEach(function(C) {
                     return P.deleteIndex(C);
                   });
@@ -1834,7 +1834,7 @@ function lo() {
                   var E = qn(g);
                   w.del.forEach(function(K) {
                     E[K] = b[K];
-                  }), pn(s, [s.Transaction.prototype]), It(s, [s.Transaction.prototype], z(E), E), f.schema = E;
+                  }), pn(s, [s.Transaction.prototype]), It(s, [s.Transaction.prototype], U(E), E), f.schema = E;
                   var _, O = Qt(k);
                   return O && Ye(), w = S.follow(function() {
                     var K;
@@ -1859,7 +1859,7 @@ function lo() {
               sr(y, h);
             })) : S.resolve();
             var s, v, f, h, d, y;
-          }).catch(a)) : (z(o).forEach(function(p) {
+          }).catch(a)) : (U(o).forEach(function(p) {
             vn(n, p, o[p].primKey, o[p].indexes);
           }), Dt(e, n), void S.follow(function() {
             return e.on.populate.fire(i);
@@ -1869,14 +1869,14 @@ function lo() {
       }
       function Hr(e, t) {
         sr(e._dbSchema, t), t.db.version % 10 != 0 || t.objectStoreNames.contains("$meta") || t.db.createObjectStore("$meta").add(Math.ceil(t.db.version / 10 - 1), "version");
-        var n = Tt(0, e.idbdb, t);
+        var n = Rt(0, e.idbdb, t);
         qt(e, e._dbSchema, t);
         for (var r = 0, o = yn(n, e._dbSchema).change; r < o.length; r++) {
           var i = function(a) {
             if (a.change.length || a.recreate) return console.warn("Unable to patch indexes of table ".concat(a.name, " because it has changes on the type of index or primary key.")), { value: void 0 };
             var u = t.objectStore(a.name);
             a.add.forEach(function(c) {
-              se && console.debug("Dexie upgrade patch: Creating missing index ".concat(a.name, ".").concat(c.src)), Rt(u, c);
+              se && console.debug("Dexie upgrade patch: Creating missing index ".concat(a.name, ".").concat(c.src)), Tt(u, c);
             });
           }(o[r]);
           if (typeof i == "object") return i.value;
@@ -1906,18 +1906,18 @@ function lo() {
       function vn(e, t, n, r) {
         var o = e.db.createObjectStore(t, n.keyPath ? { keyPath: n.keyPath, autoIncrement: n.auto } : { autoIncrement: n.auto });
         return r.forEach(function(i) {
-          return Rt(o, i);
+          return Tt(o, i);
         }), o;
       }
       function sr(e, t) {
-        z(e).forEach(function(n) {
+        U(e).forEach(function(n) {
           t.db.objectStoreNames.contains(n) || (se && console.debug("Dexie: Creating missing table", n), vn(t, n, e[n].primKey, e[n].indexes));
         });
       }
-      function Rt(e, t) {
+      function Tt(e, t) {
         e.createIndex(t.name, t.keyPath, { unique: t.unique, multiEntry: t.multi });
       }
-      function Tt(e, t, n) {
+      function Rt(e, t, n) {
         var r = {};
         return yt(t.objectStoreNames, 0).forEach(function(o) {
           for (var i = n.objectStore(o), a = fn(ar(l = i.keyPath), l || "", !0, !1, !!i.autoIncrement, l && typeof l != "string", !0), u = [], c = 0; c < i.indexNames.length; ++c) {
@@ -1946,7 +1946,7 @@ function lo() {
       }
       var Xr = (He.prototype._createTableSchema = hn, He.prototype._parseIndexSyntax = cr, He.prototype._parseStoresSpec = function(e, t) {
         var n = this;
-        z(e).forEach(function(r) {
+        U(e).forEach(function(r) {
           if (e[r] !== null) {
             var o = n._parseIndexSyntax(e[r]), i = o.shift();
             if (!i) throw new A.Schema("Invalid schema for table " + r + ": " + e[r]);
@@ -1963,9 +1963,9 @@ function lo() {
         var n = t._versions, r = {}, o = {};
         return n.forEach(function(i) {
           X(r, i._cfg.storesSource), o = i._cfg.dbschema = {}, i._parseStoresSpec(r, o);
-        }), t._dbSchema = o, pn(t, [t._allTables, t, t.Transaction.prototype]), It(t, [t._allTables, t, t.Transaction.prototype, this._cfg.tables], z(o), o), t._storeNames = z(o), this;
+        }), t._dbSchema = o, pn(t, [t._allTables, t, t.Transaction.prototype]), It(t, [t._allTables, t, t.Transaction.prototype, this._cfg.tables], U(o), o), t._storeNames = U(o), this;
       }, He.prototype.upgrade = function(e) {
-        return this._cfg.contentUpgrade = Ht(this._cfg.contentUpgrade || U, e), this;
+        return this._cfg.contentUpgrade = Ht(this._cfg.contentUpgrade || z, e), this;
       }, He);
       function He() {
       }
@@ -2046,7 +2046,7 @@ function lo() {
         return (t ? n ? Math.max(t.d, n.d) : t.d : n ? n.d : 0) + 1;
       }
       function Mt(e, t) {
-        return z(t).forEach(function(n) {
+        return U(t).forEach(function(n) {
           e[n] ? pt(e[n], t[n]) : e[n] = function r(o) {
             var i, a, u = {};
             for (i in o) ne(o, i) && (a = o[i], u[i] = !a || typeof a != "object" || Mn.has(a.constructor) ? a : r(a));
@@ -2074,7 +2074,7 @@ function lo() {
       } })[Wt] = function() {
         return Bt(this);
       }, ue));
-      var Te = {}, xn = {}, kn = !1;
+      var Re = {}, xn = {}, kn = !1;
       function Nt(e) {
         Mt(xn, e), kn || (kn = !0, setTimeout(function() {
           kn = !1, On(xn, !(xn = {}));
@@ -2083,10 +2083,10 @@ function lo() {
       function On(e, t) {
         t === void 0 && (t = !1);
         var n = /* @__PURE__ */ new Set();
-        if (e.all) for (var r = 0, o = Object.values(Te); r < o.length; r++) dr(a = o[r], e, n, t);
+        if (e.all) for (var r = 0, o = Object.values(Re); r < o.length; r++) dr(a = o[r], e, n, t);
         else for (var i in e) {
           var a, u = /^idb\:\/\/(.*)\/(.*)\//.exec(i);
-          u && (i = u[1], u = u[2], (a = Te["idb://".concat(i, "/").concat(u)]) && dr(a, e, n, t));
+          u && (i = u[1], u = u[2], (a = Re["idb://".concat(i, "/").concat(u)]) && dr(a, e, n, t));
         }
         n.forEach(function(c) {
           return c();
@@ -2132,8 +2132,8 @@ function lo() {
               var y, m, b, g, w, k = e.idbdb = d.result, E = yt(k.objectStoreNames);
               if (0 < E.length) try {
                 var _ = k.transaction((g = E).length === 1 ? g[0] : g, "readonly");
-                if (t.autoSchema) m = k, b = _, (y = e).verno = m.version / 10, b = y._dbSchema = Tt(0, m, b), y._storeNames = yt(m.objectStoreNames, 0), It(y, [y._allTables], z(b), b);
-                else if (qt(e, e._dbSchema, _), ((w = yn(Tt(0, (w = e).idbdb, _), w._dbSchema)).add.length || w.change.some(function(O) {
+                if (t.autoSchema) m = k, b = _, (y = e).verno = m.version / 10, b = y._dbSchema = Rt(0, m, b), y._storeNames = yt(m.objectStoreNames, 0), It(y, [y._allTables], U(b), b);
+                else if (qt(e, e._dbSchema, _), ((w = yn(Rt(0, (w = e).idbdb, _), w._dbSchema)).add.length || w.change.some(function(O) {
                   return O.add.length || O.change.length;
                 })) && !i) return console.warn("Dexie SchemaDiff: Schema was extended without increasing the number passed to db.version(). Dexie will add missing parts and increment native version number to workaround this."), k.close(), o = k.version + 1, i = !0, v(u());
                 Dt(e, _);
@@ -2143,7 +2143,7 @@ function lo() {
                 t.vcFired = !0, e.on("versionchange").fire(O);
               }), k.onclose = Y(function() {
                 e.close({ disableAutoOpen: !1 });
-              }), s && (w = e._deps, _ = h, k = w.indexedDB, w = w.IDBKeyRange, bn(k) || _ === Et || mn(k, w).put({ name: _ }).catch(U)), v();
+              }), s && (w = e._deps, _ = h, k = w.indexedDB, w = w.IDBKeyRange, bn(k) || _ === Et || mn(k, w).put({ name: _ }).catch(z)), v();
             }, f);
           }).catch(function(v) {
             switch (v?.name) {
@@ -2169,7 +2169,7 @@ function lo() {
             return e.on.ready.fire(e.vip);
           })).then(function v() {
             if (0 < t.onReadyBeingFired.length) {
-              var f = t.onReadyBeingFired.reduce(Ht, U);
+              var f = t.onReadyBeingFired.reduce(Ht, z);
               return t.onReadyBeingFired = [], S.resolve(gn(function() {
                 return f(e.vip);
               })).then(v);
@@ -2261,10 +2261,10 @@ function lo() {
         } });
       } };
       function En(e, t, n, r) {
-        return n = n || {}, r = r || "", z(e).forEach(function(o) {
+        return n = n || {}, r = r || "", U(e).forEach(function(o) {
           var i, a, u;
           ne(t, o) ? (i = e[o], a = t[o], typeof i == "object" && typeof a == "object" && i && a ? (u = Yt(i)) !== Yt(a) ? n[r + o] = t[o] : u === "Object" ? En(i, a, n, r + o + ".") : i !== a && (n[r + o] = t[o]) : i !== a && (n[r + o] = t[o])) : n[r + o] = void 0;
-        }), z(t).forEach(function(o) {
+        }), U(t).forEach(function(o) {
           ne(e, o) || (n[r + o] = t[o]);
         }), n;
       }
@@ -2278,22 +2278,22 @@ function lo() {
             var i = j.trans, a = i.table(t).hook, u = a.deleting, c = a.creating, l = a.updating;
             switch (o.type) {
               case "add":
-                if (c.fire === U) break;
+                if (c.fire === z) break;
                 return i._promise("readwrite", function() {
                   return p(o);
                 }, !0);
               case "put":
-                if (c.fire === U && l.fire === U) break;
+                if (c.fire === z && l.fire === z) break;
                 return i._promise("readwrite", function() {
                   return p(o);
                 }, !0);
               case "delete":
-                if (u.fire === U) break;
+                if (u.fire === z) break;
                 return i._promise("readwrite", function() {
                   return p(o);
                 }, !0);
               case "deleteRange":
-                if (u.fire === U) break;
+                if (u.fire === z) break;
                 return i._promise("readwrite", function() {
                   return function s(v, f, h) {
                     return n.query({ trans: v, values: !1, query: { index: r, range: f }, limit: h }).then(function(d) {
@@ -2386,7 +2386,7 @@ function lo() {
             }), f.values] : [], _ = K[0], O = K[1], K = f.trans._cache;
             return N(_) ? (w.addKeys(_), (K = E === "delete" || _.length === O.length ? pr(_, K) : null) || k.addKeys(_), (K || O) && (d = h, y = K, m = O, i.indexes.forEach(function(P) {
               var C = d(P.name || "");
-              function T(B) {
+              function R(B) {
                 return B != null ? P.extractKey(B) : null;
               }
               function q(B) {
@@ -2395,19 +2395,19 @@ function lo() {
                 }) : C.addKey(B);
               }
               (y || m).forEach(function(B, Z) {
-                var R = y && T(y[Z]), Z = m && T(m[Z]);
-                F(R, Z) !== 0 && (R != null && q(R), Z != null && q(Z));
+                var T = y && R(y[Z]), Z = m && R(m[Z]);
+                F(T, Z) !== 0 && (T != null && q(T), Z != null && q(Z));
               });
             }))) : _ ? (O = { from: (O = _.lower) !== null && O !== void 0 ? O : e.MIN_KEY, to: (O = _.upper) !== null && O !== void 0 ? O : e.MAX_KEY }, k.add(O), w.add(O)) : (w.add(n), k.add(n), i.indexes.forEach(function(P) {
               return h(P.name).add(n);
             })), o.mutate(f).then(function(P) {
               return !_ || f.type !== "add" && f.type !== "put" || (w.addKeys(P.results), l && l.forEach(function(C) {
-                for (var T = f.values.map(function(R) {
-                  return C.extractKey(R);
-                }), q = C.keyPath.findIndex(function(R) {
-                  return R === a.keyPath;
-                }), B = 0, ie = P.results.length; B < ie; ++B) T[B][q] = P.results[B];
-                h(C.name).addKeys(T);
+                for (var R = f.values.map(function(T) {
+                  return C.extractKey(T);
+                }), q = C.keyPath.findIndex(function(T) {
+                  return T === a.keyPath;
+                }), B = 0, ie = P.results.length; B < ie; ++B) R[B][q] = P.results[B];
+                h(C.name).addKeys(R);
               })), b.mutatedParts = Mt(b.mutatedParts || {}, g), P;
             });
           } }), s = function(h) {
@@ -2418,7 +2418,7 @@ function lo() {
           }, getMany: function(f) {
             return [a, new J().addKeys(f.keys)];
           }, count: s, query: s, openCursor: s };
-          return z(v).forEach(function(f) {
+          return U(v).forEach(function(f) {
             p[f] = function(h) {
               var d = j.subscr, y = !!d, m = yr(j, o) && vr(f, h) ? h.obsSet = {} : d;
               if (y) {
@@ -2430,8 +2430,8 @@ function lo() {
                     var k = f === "query" && c && h.values && o.query(x(x({}, h), { values: !1 }));
                     return o[f].apply(this, arguments).then(function(O) {
                       if (f === "query") {
-                        if (c && h.values) return k.then(function(T) {
-                          return T = T.result, g.addKeys(T), O;
+                        if (c && h.values) return k.then(function(R) {
+                          return R = R.result, g.addKeys(R), O;
                         });
                         var K = h.values ? O.result.map(u) : O.result;
                         (h.values ? g : w).addKeys(K);
@@ -2440,8 +2440,8 @@ function lo() {
                         return P && Object.create(P, { key: { get: function() {
                           return w.addKey(P.primaryKey), P.key;
                         } }, primaryKey: { get: function() {
-                          var T = P.primaryKey;
-                          return w.addKey(T), T;
+                          var R = P.primaryKey;
+                          return w.addKey(R), R;
                         } }, value: { get: function() {
                           return C && g.addKey(P.primaryKey), P.value;
                         } } });
@@ -2561,7 +2561,7 @@ function lo() {
             return function() {
               if (i.abort(), r === "readwrite") {
                 for (var l = /* @__PURE__ */ new Set(), p = 0, s = n; p < s.length; p++) {
-                  var v = s[p], f = Te["idb://".concat(t, "/").concat(v)];
+                  var v = s[p], f = Re["idb://".concat(t, "/").concat(v)];
                   if (f) {
                     var h = e.table(v), d = f.optimisticOps.filter(function(C) {
                       return C.trans === u;
@@ -2592,7 +2592,7 @@ function lo() {
           return x(x({}, r), { mutate: function(i) {
             var a = j.trans;
             if (o.outbound || a.db._options.cache === "disabled" || a.explicit || a.idbtrans.mode !== "readwrite") return r.mutate(i);
-            var u = Te["idb://".concat(t, "/").concat(n)];
+            var u = Re["idb://".concat(t, "/").concat(n)];
             return u ? (a = r.mutate(i), i.type !== "add" && i.type !== "put" || !(50 <= i.values.length || Kn(o, i).some(function(c) {
               return c == null;
             })) ? (u.optimisticOps.push(i), i.mutatedParts && Nt(i.mutatedParts), a.then(function(c) {
@@ -2611,7 +2611,7 @@ function lo() {
           }, query: function(i) {
             if (!yr(j, r) || !vr("query", i)) return r.query(i);
             var a = ((l = j.trans) === null || l === void 0 ? void 0 : l.db._options.cache) === "immutable", s = j, u = s.requery, c = s.signal, l = function(h, d, y, m) {
-              var b = Te["idb://".concat(h, "/").concat(d)];
+              var b = Re["idb://".concat(h, "/").concat(d)];
               if (!b) return [];
               if (!(d = b.queries[y])) return [null, !1, b, null];
               var g = d[(m.query ? m.query.index.name : null) || ""];
@@ -2639,7 +2639,7 @@ function lo() {
               return h;
             }).catch(function(h) {
               return f && p && Ee(f, p), Promise.reject(h);
-            }), p = { obsSet: i.obsSet, promise: s, subscribers: /* @__PURE__ */ new Set(), type: "query", req: i, dirty: !1 }, f ? f.push(p) : (f = [p], (v = v || (Te["idb://".concat(t, "/").concat(n)] = { queries: { query: {}, count: {} }, objs: /* @__PURE__ */ new Map(), optimisticOps: [], unsignaledParts: {} })).queries.query[i.query.index.name || ""] = f)), oo(p, f, u, c), p.promise.then(function(h) {
+            }), p = { obsSet: i.obsSet, promise: s, subscribers: /* @__PURE__ */ new Set(), type: "query", req: i, dirty: !1 }, f ? f.push(p) : (f = [p], (v = v || (Re["idb://".concat(t, "/").concat(n)] = { queries: { query: {}, count: {} }, objs: /* @__PURE__ */ new Map(), optimisticOps: [], unsignaledParts: {} })).queries.query[i.query.index.name || ""] = f)), oo(p, f, u, c), p.promise.then(function(h) {
               return { result: br(h.result, i, v?.optimisticOps, r, p, a) };
             });
           } });
@@ -2664,7 +2664,7 @@ function lo() {
           if (t._state.openComplete) return r(new A.DatabaseClosed(t._state.dbOpenError));
           if (!t._state.isBeingOpened) {
             if (!t._state.autoOpen) return void r(new A.DatabaseClosed());
-            t.open().catch(U);
+            t.open().catch(z);
           }
           t._state.dbReadyPromise.then(n, r);
         }).then(e);
@@ -2711,7 +2711,7 @@ function lo() {
             var u = t._deps.indexedDB.deleteDatabase(t.name);
             u.onsuccess = Y(function() {
               var c, l, p;
-              c = t._deps, l = t.name, p = c.indexedDB, c = c.IDBKeyRange, bn(p) || l === Et || mn(p, c).delete(l).catch(U), o();
+              c = t._deps, l = t.name, p = c.indexedDB, c = c.IDBKeyRange, bn(p) || l === Et || mn(p, c).delete(l).catch(z), o();
             }), u.onerror = ce(i), u.onblocked = t._fireOnBlocked;
           }
           if (n) throw new A.InvalidArgument("Invalid closeOptions argument to db.delete()");
@@ -2730,7 +2730,7 @@ function lo() {
         return this._state.autoSchema;
       }, Object.defineProperty(Q.prototype, "tables", { get: function() {
         var e = this;
-        return z(this._allTables).map(function(t) {
+        return U(this._allTables).map(function(t) {
           return e._allTables[t];
         });
       }, enumerable: !1, configurable: !0 }), Q.prototype.transaction = function() {
@@ -2812,18 +2812,18 @@ function lo() {
         this._middlewares = {}, this.verno = 0;
         var r = Q.dependencies;
         this._options = t = x({ addons: Q.addons, autoOpen: !0, indexedDB: r.indexedDB, IDBKeyRange: r.IDBKeyRange, cache: "cloned" }, t), this._deps = { indexedDB: t.indexedDB, IDBKeyRange: t.IDBKeyRange }, r = t.addons, this._dbSchema = {}, this._versions = [], this._storeNames = [], this._allTables = {}, this.idbdb = null, this._novip = this;
-        var o, i, a, u, c, l = { dbOpenError: null, isBeingOpened: !1, onReadyBeingFired: null, openComplete: !1, dbReadyResolve: U, dbReadyPromise: null, cancelOpen: U, openCanceller: null, autoSchema: !0, PR1398_maxLoop: 3, autoOpen: t.autoOpen };
+        var o, i, a, u, c, l = { dbOpenError: null, isBeingOpened: !1, onReadyBeingFired: null, openComplete: !1, dbReadyResolve: z, dbReadyPromise: null, cancelOpen: z, openCanceller: null, autoSchema: !0, PR1398_maxLoop: 3, autoOpen: t.autoOpen };
         l.dbReadyPromise = new S(function(s) {
           l.dbReadyResolve = s;
         }), l.openCanceller = new S(function(s, v) {
           l.cancelOpen = v;
-        }), this._state = l, this.name = e, this.on = ut(this, "populate", "blocked", "versionchange", "close", { ready: [Ht, U] }), this.once = function(s, v) {
+        }), this._state = l, this.name = e, this.on = ut(this, "populate", "blocked", "versionchange", "close", { ready: [Ht, z] }), this.once = function(s, v) {
           var f = function() {
             for (var h = [], d = 0; d < arguments.length; d++) h[d] = arguments[d];
             n.on(s).unsubscribe(f), v.apply(n, h);
           };
           return n.on(s, f);
-        }, this.on.ready.subscribe = Rn(this.on.ready.subscribe, function(s) {
+        }, this.on.ready.subscribe = Tn(this.on.ready.subscribe, function(s) {
           return function(v, f) {
             Q.vip(function() {
               var h, d = n._state;
@@ -2843,8 +2843,8 @@ function lo() {
           var d = m._ctx, y = d.table, m = y.hook.reading.fire;
           this._ctx = { table: y, index: d.index, isPrimKey: !d.index || y.schema.primKey.keyPath && d.index === y.schema.primKey.name, range: f, keysOnly: !1, dir: "next", unique: "", algorithm: null, filter: null, replayFilter: null, justLimit: !0, isMatch: null, offset: 0, limit: 1 / 0, error: h, or: d.or, valueMapper: m !== tt ? m : null };
         })), this.Table = (i = this, st(er.prototype, function(s, v, f) {
-          this.db = i, this._tx = f, this.name = s, this.schema = v, this.hook = i._allTables[s] ? i._allTables[s].hook : ut(null, { creating: [Dr, U], reading: [Ar, tt], updating: [Rr, U], deleting: [Ir, U] });
-        })), this.Transaction = (a = this, st(Ur.prototype, function(s, v, f, h, d) {
+          this.db = i, this._tx = f, this.name = s, this.schema = v, this.hook = i._allTables[s] ? i._allTables[s].hook : ut(null, { creating: [Dr, z], reading: [Ar, tt], updating: [Tr, z], deleting: [Ir, z] });
+        })), this.Transaction = (a = this, st(zr.prototype, function(s, v, f, h, d) {
           var y = this;
           s !== "readonly" && v.forEach(function(m) {
             m = (m = f[m]) === null || m === void 0 ? void 0 : m.yProps, m && (v = v.concat(m.map(function(b) {
@@ -2925,7 +2925,7 @@ function lo() {
           }, h = function() {
             var d, y, m;
             !u && Lt.indexedDB && (c = {}, d = {}, a && a.abort(), a = new AbortController(), m = function(b) {
-              var g = Ue();
+              var g = ze();
               try {
                 i && Ye();
                 var w = be(e, b);
@@ -3014,11 +3014,11 @@ function lo() {
         return se;
       }, set: function(e) {
         $n(e);
-      } }, derive: Fe, extend: X, props: Ne, override: Rn, Events: ut, on: xe, liveQuery: wr, extendObservabilitySet: Mt, getByKeyPath: fe, setByKeyPath: re, delByKeyPath: function(e, t) {
+      } }, derive: Fe, extend: X, props: Ne, override: Tn, Events: ut, on: xe, liveQuery: wr, extendObservabilitySet: Mt, getByKeyPath: fe, setByKeyPath: re, delByKeyPath: function(e, t) {
         typeof t == "string" ? re(e, t, void 0) : "length" in t && [].map.call(t, function(n) {
           re(e, n, void 0);
         });
-      }, shallowClone: qn, deepClone: Pe, getObjectDiff: En, cmp: F, asap: Tn, minKey: -1 / 0, addons: [], connections: We, errnames: Gt, dependencies: Lt, cache: Te, semVer: "4.2.1", version: "4.2.1".split(".").map(function(e) {
+      }, shallowClone: qn, deepClone: Pe, getObjectDiff: En, cmp: F, asap: Rn, minKey: -1 / 0, addons: [], connections: We, errnames: Gt, dependencies: Lt, cache: Re, semVer: "4.2.1", version: "4.2.1".split(".").map(function(e) {
         return parseInt(e);
       }).reduce(function(e, t, n) {
         return e + t / Math.pow(10, 2 * n);
@@ -3061,43 +3061,45 @@ const Dn = /* @__PURE__ */ so(fo), kr = Symbol.for("Dexie"), Oe = globalThis[kr]
 if (Dn.semVer !== Oe.semVer)
   throw new Error(`Two different versions of Dexie loaded in the same app: ${Dn.semVer} and ${Oe.semVer}`);
 const {
-  liveQuery: Ao,
-  mergeRanges: Do,
-  rangesOverlap: Io,
-  RangeSet: Ro,
-  cmp: To,
-  Entity: qo,
-  PropModification: Bo,
-  replacePrefix: Mo,
-  add: No,
-  remove: Fo,
-  DexieYProvider: $o
-} = Oe, ho = "datapos-connector-dexie-js", po = { en: "Dexie.js" }, yo = { en: "The Dexie.js..." }, vo = "database", mo = { default: { authMethodId: "none", maxConnectionCount: null } }, bo = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#000000" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', go = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#ffffff" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', wo = ["abortOperation", "createObject", "dropObject", "findObject", "getRecord", "listNodes", "previewObject", "upsertRecords", "removeRecords", "retrieveRecords"], _o = null, xo = "alpha", ko = "connector", Oo = "bidirectional", Po = "https://dexie.org/cloud/", Eo = "https://dexie.org/docs/", Ko = "https://dexie.org/", So = "0.2.203", Co = {
+  liveQuery: Io,
+  mergeRanges: To,
+  rangesOverlap: Ro,
+  RangeSet: qo,
+  cmp: Bo,
+  Entity: Mo,
+  PropModification: No,
+  replacePrefix: Fo,
+  add: $o,
+  remove: Lo,
+  DexieYProvider: Uo
+} = Oe, ho = "datapos-connector-dexie-js", po = { en: "Dexie.js" }, yo = { en: "The Dexie.js..." }, vo = null, mo = "database", bo = { default: { authMethodId: "none", maxConnectionCount: null } }, go = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#000000" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', wo = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#ffffff" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', _o = null, xo = [], ko = null, Oo = "alpha", Po = "connector", Eo = "bidirectional", Ko = "https://dexie.org/cloud/", So = "https://dexie.org/docs/", Co = "https://dexie.org/", jo = "0.2.203", Ao = {
   id: ho,
   label: po,
   description: yo,
-  categoryId: vo,
-  implementations: mo,
-  icon: bo,
-  iconDark: go,
-  operations: wo,
-  status: _o,
-  statusId: xo,
-  typeId: ko,
-  usageId: Oo,
-  vendorAccountURL: Po,
-  vendorDocumentationURL: Eo,
-  vendorHomeURL: Ko,
-  version: So
-}, jo = "0.2.211", Ut = "Encountered invalid folder path", Me = "Encountered invalid object path";
-class Lo {
+  category: vo,
+  categoryId: mo,
+  implementations: bo,
+  icon: go,
+  iconDark: wo,
+  lastUpdatedAt: _o,
+  operations: xo,
+  status: ko,
+  statusId: Oo,
+  typeId: Po,
+  usageId: Eo,
+  vendorAccountURL: Ko,
+  vendorDocumentationURL: So,
+  vendorHomeURL: Co,
+  version: jo
+}, Do = "0.2.216", zt = "Encountered invalid folder path", Me = "Encountered invalid object path";
+class zo {
   abortController;
   config;
   connectionConfig;
   tools;
   containers;
   constructor($, I) {
-    this.abortController = null, this.config = Co, this.config.version = jo, this.connectionConfig = $, this.tools = I, this.containers = {};
+    this.abortController = null, this.config = Ao, this.config.version = Do, this.connectionConfig = $, this.tools = I, this.containers = {};
   }
   // Operations - Abort operation.
   abortOperation($) {
@@ -3114,11 +3116,11 @@ class Lo {
       await M.delete(), D.version(1).stores({ [x[2]]: I.structure || "" }), $.containers[x[1]] = await D.open();
       return;
     }
-    const z = M.tables.reduce(
+    const U = M.tables.reduce(
       (N, { name: X, schema: ae }) => (N[X] = [ae.primKey.src, ...ae.indexes.map((Je) => Je.src)].join(","), N),
       {}
     );
-    D.version(M.verno).stores(z), D.version(M.verno + 1).stores({ [x[2]]: I.structure || "" }), $.containers[x[1]] = await D.open();
+    D.version(M.verno).stores(U), D.version(M.verno + 1).stores({ [x[2]]: I.structure || "" }), $.containers[x[1]] = await D.open();
   }
   // Operations - Drop object.
   async dropObject($, I) {
@@ -3131,11 +3133,11 @@ class Lo {
       await M.delete(), D.version(1).stores({}), $.containers[x[1]] = await D.open();
       return;
     }
-    const z = M.tables.reduce(
+    const U = M.tables.reduce(
       (N, { name: X, schema: ae }) => (N[X] = [ae.primKey.src, ...ae.indexes.map((Je) => Je.src)].join(","), N),
       {}
     );
-    D.version(M.verno).stores(z), D.version(M.verno + 1).stores({ [x[2]]: null }), $.containers[x[1]] = await D.open();
+    D.version(M.verno).stores(U), D.version(M.verno + 1).stores({ [x[2]]: null }), $.containers[x[1]] = await D.open();
   }
   // Operations - Find object.
   async findObject($, I) {
@@ -3152,23 +3154,23 @@ class Lo {
     const x = I.folderPath.split("/");
     switch (x.length) {
       case 1: {
-        if (x[0]) throw new Error(`${Ut} '${I.folderPath}'.`);
+        if (x[0]) throw new Error(`${zt} '${I.folderPath}'.`);
         const D = (await Oe.getDatabaseNames()).map(
-          (z) => ({ folderPath: I.folderPath, id: z, label: z, name: z, typeId: "folder" })
+          (U) => ({ folderPath: I.folderPath, id: U, label: U, name: U, typeId: "folder" })
         );
         return { cursor: void 0, isMore: !1, connectionNodeConfigs: D, totalCount: D.length };
       }
       case 2: {
-        if (x[0]) throw new Error(`${Ut} '${I.folderPath}'.`);
+        if (x[0]) throw new Error(`${zt} '${I.folderPath}'.`);
         const M = x[1];
-        if (!M) throw new Error(`${Ut} '${I.folderPath}'.`);
-        const z = (await this.establishContainer($, M)).tables.map(
+        if (!M) throw new Error(`${zt} '${I.folderPath}'.`);
+        const U = (await this.establishContainer($, M)).tables.map(
           (N) => ({ folderPath: I.folderPath, id: N.name, label: N.name, name: N.name, typeId: "object" })
         );
-        return { cursor: void 0, isMore: !1, connectionNodeConfigs: z, totalCount: z.length };
+        return { cursor: void 0, isMore: !1, connectionNodeConfigs: U, totalCount: U.length };
       }
       default:
-        throw new Error(`${Ut} '${I.folderPath}'.`);
+        throw new Error(`${zt} '${I.folderPath}'.`);
     }
   }
   // Operations - Preview object.
@@ -3208,5 +3210,5 @@ class Lo {
   }
 }
 export {
-  Lo as default
+  zo as default
 };
