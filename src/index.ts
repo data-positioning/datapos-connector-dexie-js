@@ -71,16 +71,12 @@ export class Connector implements ExtendedConnectorInterface {
     async createObject(options: CreateObjectOptions): Promise<void> {
         const { containerId, nodeId } = this.establishObjectIdentifiers(options.path);
         const container = await this.establishContainer(containerId);
+
+        if (container.tables.some((table) => table.name === nodeId)) throw new Error(`Duplicate table '${nodeId}'.`);
+
         container.close();
         const newContainer = new Dexie(container.name);
         newContainer.on('blocked', () => false); // Silence console warning of blocked event
-
-        if (container.tables.length === 0) {
-            await container.delete();
-            newContainer.version(1).stores({ [nodeId]: options.structure || '' });
-            this.containers[containerId] = await newContainer.open();
-            return;
-        }
 
         const currentSchema: Record<string, string> = {};
         for (const { name, schema } of container.tables) {
@@ -95,11 +91,14 @@ export class Connector implements ExtendedConnectorInterface {
     async dropObject(options: DropObjectOptions): Promise<void> {
         const { containerId, nodeId } = this.establishObjectIdentifiers(options.path);
         const container = await this.establishContainer(containerId);
+
+        if (!container.tables.some((table) => table.name === nodeId)) throw new Error(`Table '${nodeId}' not found.`);
+
         container.close();
         const newContainer = new Dexie(container.name);
         newContainer.on('blocked', () => false); // Silence console warning of blocked event
 
-        if (container.tables.length === 0) {
+        if (container.tables.length === 1) {
             await container.delete();
             newContainer.version(1).stores({});
             this.containers[containerId] = await newContainer.open();
@@ -117,14 +116,11 @@ export class Connector implements ExtendedConnectorInterface {
 
     // Find object
     async findObject(options: FindObjectOptions): Promise<FindObjectResult> {
-        console.log('fo', 1, options, options.containerId, options.nodeId);
         if (options.containerId == null) throw new Error(`${ERROR_INVALID_CONTAINER_ID} '${options.containerId}'.`);
-        console.log('fo', 2);
         const container = await this.establishContainer(options.containerId);
-        console.log('fo', 3, container);
         const table = container.tables.find((table) => table.name === options.nodeId);
-        console.log('fo', 3, table);
-        return { folderPath: '/', object: table };
+        console.log('findObject', table);
+        return { folderPath: options.containerId, object: table };
     }
 
     // Get record
@@ -217,11 +213,9 @@ export class Connector implements ExtendedConnectorInterface {
     // Retrieve records
     async retrieveRecords(options: RetrieveRecordsOptions, chunk: (records: ParsingRecord[]) => void, complete: (result: RetrieveRecordsSummary) => void): Promise<void> {
         const { containerId, nodeId } = this.establishObjectIdentifiers(options.path);
-        console.log(55, containerId, nodeId);
         const container = await this.establishContainer(containerId);
-        console.log(77, container);
         const records = await container.table(nodeId).toArray();
-        console.log(88, records);
+        console.log('retrieveRecords', records);
         // chunk(records);
     }
 
