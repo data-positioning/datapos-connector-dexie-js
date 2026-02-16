@@ -116,10 +116,11 @@ export class Connector implements ExtendedConnectorInterface {
 
     // Find object
     async findObject(options: FindObjectOptions): Promise<FindObjectResult> {
+        console.log('findObject 1', options);
         if (options.containerId == null) throw new Error(`${ERROR_INVALID_CONTAINER_ID} '${options.containerId}'.`);
         const container = await this.establishContainer(options.containerId);
         const table = container.tables.find((table) => table.name === options.nodeId);
-        console.log('findObject', table);
+        console.log('findObject 2', table);
         return { folderPath: options.containerId, object: table };
     }
 
