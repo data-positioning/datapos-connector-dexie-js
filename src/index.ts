@@ -81,6 +81,13 @@ export class Connector implements ExtendedConnectorInterface {
         const newContainer = new Dexie(container.name);
         newContainer.on('blocked', () => false); // Silence console warning of blocked event
 
+        if (container.tables.length === 0) {
+            await container.delete();
+            newContainer.version(1).stores({});
+            this.containers[containerId] = await newContainer.open();
+            return;
+        }
+
         console.log('CO 4');
         const currentSchema: Record<string, string> = {};
         for (const { name, schema } of container.tables) {

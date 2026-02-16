@@ -5,11 +5,11 @@ function io(ye) {
 var Lt = { exports: {} }, ao = Lt.exports, br;
 function uo() {
   return br || (br = 1, (function(ye, R) {
-    ((N, P) => {
+    ((B, P) => {
       ye.exports = P();
     })(ao, function() {
-      var N = function(e, t) {
-        return (N = Object.setPrototypeOf || ({ __proto__: [] } instanceof Array ? function(n, r) {
+      var B = function(e, t) {
+        return (B = Object.setPrototypeOf || ({ __proto__: [] } instanceof Array ? function(n, r) {
           n.__proto__ = r;
         } : function(n, r) {
           for (var o in r) Object.prototype.hasOwnProperty.call(r, o) && (n[o] = r[o]);
@@ -24,13 +24,13 @@ function uo() {
         for (var r, o = 0, i = t.length; o < i; o++) !r && o in t || ((r = r || Array.prototype.slice.call(t, 0, o))[o] = t[o]);
         return e.concat(r || Array.prototype.slice.call(t));
       }
-      var A = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : oo, z = Object.keys, M = Array.isArray;
+      var S = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : oo, z = Object.keys, M = Array.isArray;
       function X(e, t) {
         return typeof t == "object" && z(t).forEach(function(n) {
           e[n] = t[n];
         }), e;
       }
-      typeof Promise > "u" || A.Promise || (A.Promise = Promise);
+      typeof Promise > "u" || S.Promise || (S.Promise = Promise);
       var ae = Object.getPrototypeOf, wr = {}.hasOwnProperty;
       function te(e, t) {
         return wr.call(e, t);
@@ -60,7 +60,7 @@ function uo() {
         if (!e) throw new Error("Assertion Failed");
       }
       function Sn(e) {
-        A.setImmediate ? setImmediate(e) : setTimeout(e, 0);
+        S.setImmediate ? setImmediate(e) : setTimeout(e, 0);
       }
       function le(e, t) {
         if (typeof t == "string" && te(e, t)) return e[t];
@@ -98,9 +98,9 @@ function uo() {
           return t + e + "Array";
         });
       }))).filter(function(e) {
-        return A[e];
+        return S[e];
       }), Rn = new Set(he.map(function(e) {
-        return A[e];
+        return S[e];
       })), Je = null;
       function Pe(e) {
         return Je = /* @__PURE__ */ new WeakMap(), e = (function t(n) {
@@ -175,18 +175,18 @@ function uo() {
       } }), Ne(pt).from(Fe), Ne(Le).from(Fe);
       var Vt = re.reduce(function(e, t) {
         return e[t] = t + "Error", e;
-      }, {}), Cr = Fe, S = re.reduce(function(e, t) {
+      }, {}), Cr = Fe, A = re.reduce(function(e, t) {
         var n = t + "Error";
         function r(o, i) {
           this.name = n, o ? typeof o == "string" ? (this.message = "".concat(o).concat(i ? `
  ` + i : ""), this.inner = i || null) : typeof o == "object" && (this.message = "".concat(o.name, " ").concat(o.message), this.inner = o) : (this.message = Er[t] || n, this.inner = null);
         }
         return Ne(r).from(Cr), e[t] = r, e;
-      }, {}), qn = (S.Syntax = SyntaxError, S.Type = TypeError, S.Range = RangeError, he.reduce(function(e, t) {
-        return e[t + "Error"] = S[t], e;
+      }, {}), qn = (A.Syntax = SyntaxError, A.Type = TypeError, A.Range = RangeError, he.reduce(function(e, t) {
+        return e[t + "Error"] = A[t], e;
       }, {}));
       he = re.reduce(function(e, t) {
-        return ["Syntax", "Type", "Range"].indexOf(t) === -1 && (e[t + "Error"] = S[t]), e;
+        return ["Syntax", "Type", "Range"].indexOf(t) === -1 && (e[t + "Error"] = A[t]), e;
       }, {});
       function $() {
       }
@@ -387,7 +387,7 @@ function uo() {
         var n = this;
         return e < 1 / 0 ? new E(function(r, o) {
           var i = setTimeout(function() {
-            return o(new S.Timeout(t));
+            return o(new A.Timeout(t));
           }, e);
           n.then(r, o).finally(clearTimeout.bind(null, i));
         }) : this;
@@ -500,11 +500,11 @@ function uo() {
         var n, r, o = I;
         (t ? !J.echoes || wt++ && e === I : !wt || --wt && e === I) || queueMicrotask(t ? function(i) {
           ++_t, J.echoes && --J.echoes != 0 || (J.echoes = J.awaits = J.id = 0), gt.push(I), we(i, !0);
-        }.bind(null, e) : Br), e !== I && (I = e, o === ve && (ve.env = Ln()), Wt) && (n = ve.env.Promise, r = e.env, o.global || e.global) && (Object.defineProperty(A, "Promise", r.PromiseProp), n.all = r.all, n.race = r.race, n.resolve = r.resolve, n.reject = r.reject, r.allSettled && (n.allSettled = r.allSettled), r.any) && (n.any = r.any);
+        }.bind(null, e) : Br), e !== I && (I = e, o === ve && (ve.env = Ln()), Wt) && (n = ve.env.Promise, r = e.env, o.global || e.global) && (Object.defineProperty(S, "Promise", r.PromiseProp), n.all = r.all, n.race = r.race, n.resolve = r.resolve, n.reject = r.reject, r.allSettled && (n.allSettled = r.allSettled), r.any) && (n.any = r.any);
       }
       function Ln() {
-        var e = A.Promise;
-        return Wt ? { Promise: e, PromiseProp: Object.getOwnPropertyDescriptor(A, "Promise"), all: e.all, race: e.race, allSettled: e.allSettled, any: e.any, resolve: e.resolve, reject: e.reject } : {};
+        var e = S.Promise;
+        return Wt ? { Promise: e, PromiseProp: Object.getOwnPropertyDescriptor(S, "Promise"), all: e.all, race: e.race, allSettled: e.allSettled, any: e.any, resolve: e.resolve, reject: e.reject } : {};
       }
       function Se(e, t, n, r, o) {
         var i = I;
@@ -544,9 +544,9 @@ function uo() {
         };
       }
       function Vn() {
-        throw S.Type("Entity instances must never be new:ed. Instances are generated by the framework bypassing the constructor.");
+        throw A.Type("Entity instances must never be new:ed. Instances are generated by the framework bypassing the constructor.");
       }
-      function B(e, t) {
+      function N(e, t) {
         try {
           var n = Yn(e), r = Yn(t);
           if (n !== r) return n === "Array" ? 1 : r === "Array" ? -1 : n === "binary" ? 1 : r === "binary" ? -1 : n === "string" ? 1 : r === "string" ? -1 : n === "Date" ? 1 : r !== "Date" ? NaN : -1;
@@ -560,7 +560,7 @@ function uo() {
               return a === u ? 0 : a < u ? -1 : 1;
             case "Array":
               for (var f = e, s = t, d = f.length, p = s.length, h = d < p ? d : p, c = 0; c < h; ++c) {
-                var v = B(f[c], s[c]);
+                var v = N(f[c], s[c]);
                 if (v !== 0) return v;
               }
               return d === p ? 0 : d < p ? -1 : 1;
@@ -629,7 +629,7 @@ function uo() {
         var r = this._tx || I.trans, o = this.name, i = ue && typeof console < "u" && console.createTask && console.createTask("Dexie: ".concat(e === "readonly" ? "read" : "write", " ").concat(this.name));
         function a(m, f, s) {
           if (s.schema[o]) return t(s.idbtrans, s);
-          throw new S.NotFound("Table " + o + " not part of transaction");
+          throw new A.NotFound("Table " + o + " not part of transaction");
         }
         var u = Ue();
         try {
@@ -659,9 +659,9 @@ function uo() {
                 });
               });
             }
-            if (f._state.openComplete) return G(new S.DatabaseClosed(f._state.dbOpenError));
+            if (f._state.openComplete) return G(new A.DatabaseClosed(f._state.dbOpenError));
             if (!f._state.isBeingOpened) {
-              if (!f._state.autoOpen) return G(new S.DatabaseClosed());
+              if (!f._state.autoOpen) return G(new A.DatabaseClosed());
               f.open().catch($);
             }
             return f._state.dbReadyPromise.then(function() {
@@ -676,7 +676,7 @@ function uo() {
         }
       }, V.prototype.get = function(e, t) {
         var n = this;
-        return e && e.constructor === Object ? this.where(e).first(t) : e == null ? G(new S.Type("Invalid argument to Table.get()")) : this._trans("readonly", function(r) {
+        return e && e.constructor === Object ? this.where(e).first(t) : e == null ? G(new A.Type("Invalid argument to Table.get()")) : this._trans("readonly", function(r) {
           return n.core.get({ trans: r, key: e }).then(function(o) {
             return n.hook.reading.fire(o);
           });
@@ -703,7 +703,7 @@ function uo() {
         !n && ue && console.warn("The query ".concat(JSON.stringify(e), " on ").concat(this.name, " would benefit from a ") + "compound index [".concat(t.join("+"), "]"));
         var r = this.schema.idxByName;
         function o(u, l) {
-          return B(u, l) === 0;
+          return N(u, l) === 0;
         }
         var a = t.reduce(function(f, l) {
           var m = f[0], f = f[1], s = r[l], d = e[l];
@@ -744,7 +744,7 @@ function uo() {
           function f() {
             return a !== null && a.apply(this, arguments) || this;
           }
-          return N(u, l), u.prototype = l === null ? Object.create(l) : (m.prototype = l.prototype, new m()), Object.defineProperty(f.prototype, "db", { get: function() {
+          return B(u, l), u.prototype = l === null ? Object.create(l) : (m.prototype = l.prototype, new m()), Object.defineProperty(f.prototype, "db", { get: function() {
             return t;
           }, enumerable: !1, configurable: !0 }), f.prototype.table = function() {
             return n;
@@ -790,7 +790,7 @@ function uo() {
           });
         });
       }, V.prototype.update = function(e, t) {
-        return typeof e != "object" || M(e) ? this.where(":id").equals(e).modify(t) : (e = le(e, this.schema.primKey.keyPath)) === void 0 ? G(new S.InvalidArgument("Given object does not contain its primary key")) : this.where(":id").equals(e).modify(t);
+        return typeof e != "object" || M(e) ? this.where(":id").equals(e).modify(t) : (e = le(e, this.schema.primKey.keyPath)) === void 0 ? G(new A.InvalidArgument("Given object does not contain its primary key")) : this.where(":id").equals(e).modify(t);
       }, V.prototype.put = function(e, t) {
         var n = this, r = this.schema.primKey, o = r.auto, i = r.keyPath, a = e;
         return i && o && (a = Ot(i)(e)), this._trans("readwrite", function(u) {
@@ -835,8 +835,8 @@ function uo() {
         var r = this, o = Array.isArray(t) ? t : void 0, i = (n = n || (o ? void 0 : t)) ? n.allKeys : void 0;
         return this._trans("readwrite", function(a) {
           var u = r.schema.primKey, m = u.auto, u = u.keyPath;
-          if (u && o) throw new S.InvalidArgument("bulkAdd(): keys argument invalid on tables with inbound keys");
-          if (o && o.length !== e.length) throw new S.InvalidArgument("Arguments objects and keys must have the same length");
+          if (u && o) throw new A.InvalidArgument("bulkAdd(): keys argument invalid on tables with inbound keys");
+          if (o && o.length !== e.length) throw new A.InvalidArgument("Arguments objects and keys must have the same length");
           var l = e.length, m = u && m ? e.map(Ot(u)) : e;
           return r.core.mutate({ trans: a, type: "add", keys: o, values: m, wantResults: i }).then(function(f) {
             var s = f.numFailures, d = f.failures;
@@ -848,8 +848,8 @@ function uo() {
         var r = this, o = Array.isArray(t) ? t : void 0, i = (n = n || (o ? void 0 : t)) ? n.allKeys : void 0;
         return this._trans("readwrite", function(a) {
           var u = r.schema.primKey, m = u.auto, u = u.keyPath;
-          if (u && o) throw new S.InvalidArgument("bulkPut(): keys argument invalid on tables with inbound keys");
-          if (o && o.length !== e.length) throw new S.InvalidArgument("Arguments objects and keys must have the same length");
+          if (u && o) throw new A.InvalidArgument("bulkPut(): keys argument invalid on tables with inbound keys");
+          if (o && o.length !== e.length) throw new A.InvalidArgument("Arguments objects and keys must have the same length");
           var l = e.length, m = u && m ? e.map(Ot(u)) : e;
           return r.core.mutate({ trans: a, type: "put", keys: o, values: m, wantResults: i }).then(function(f) {
             var s = f.numFailures, d = f.failures;
@@ -871,7 +871,7 @@ function uo() {
                 for (var v = 0, b = Object.keys(h); v < b.length; v++) {
                   var y = b[v], g = h[y];
                   if (y === t.schema.primKey.keyPath) {
-                    if (B(g, p) !== 0) throw new S.Constraint("Cannot update primary key in bulkUpdate()");
+                    if (N(g, p) !== 0) throw new A.Constraint("Cannot update primary key in bulkUpdate()");
                   } else ne(c, y, g);
                 }
                 i.push(d), l.push(p), m.push(c);
@@ -928,7 +928,7 @@ function uo() {
             var d = m[s];
             if (M(d)) i(s, m[s][0], m[s][1]);
             else {
-              if (d !== "asap") throw new S.InvalidArgument("Invalid event config");
+              if (d !== "asap") throw new A.InvalidArgument("Invalid event config");
               var p = i(s, Ze, function() {
                 for (var h = arguments.length, c = new Array(h); h--; ) c[h] = arguments[h];
                 p.subscribers.forEach(function(v) {
@@ -960,7 +960,7 @@ function uo() {
         if (e.isPrimKey) return t.primaryKey;
         var n = t.getIndexByKeyPath(e.index);
         if (n) return n;
-        throw new S.Schema("KeyPath " + e.index + " on object store " + t.name + " is not indexed");
+        throw new A.Schema("KeyPath " + e.index + " on object store " + t.name + " is not indexed");
       }
       function Xn(e, t, n) {
         var r = Et(e, t.schema);
@@ -1038,7 +1038,7 @@ function uo() {
         }
         var a = this._ctx.dir === "next" ? 1 : -1;
         function u(l, m) {
-          return B(i(l, o), i(m, o)) * a;
+          return N(i(l, o), i(m, o)) * a;
         }
         return this.toArray(function(l) {
           return l.sort(u);
@@ -1169,7 +1169,7 @@ function uo() {
                 var O = [], _ = [], K = u ? [] : null, C = h ? w : [];
                 if (!h) for (var x = 0; x < g; ++x) {
                   var j = k[x], F = { value: Pe(j), primKey: c[y + x] };
-                  i.call(F, F.value, F) !== !1 && (F.value == null ? C.push(c[y + x]) : u || B(l(j), l(F.value)) === 0 ? (_.push(F.value), u && K.push(c[y + x])) : (C.push(c[y + x]), O.push(F.value)));
+                  i.call(F, F.value, F) !== !1 && (F.value == null ? C.push(c[y + x]) : u || N(l(j), l(F.value)) === 0 ? (_.push(F.value), u && K.push(c[y + x])) : (C.push(c[y + x]), O.push(F.value)));
                 }
                 return Promise.resolve(0 < O.length && a.mutate({ trans: r, type: "add", values: O }).then(function(U) {
                   for (var D in U.failures) C.splice(parseInt(D), 1);
@@ -1381,7 +1381,7 @@ function uo() {
         if (e.length === 0) return We(this);
         if (!e.every(function(y) {
           return y[0] !== void 0 && y[1] !== void 0 && o(y[0], y[1]) <= 0;
-        })) return oe(this, "First argument to inAnyRange() must be an Array of two-value Arrays [lower,upper] where upper must not be lower than lower", S.InvalidArgument);
+        })) return oe(this, "First argument to inAnyRange() must be an Array of two-value Arrays [lower,upper] where upper must not be lower than lower", A.InvalidArgument);
         var l = !b || b.includeLowers !== !1, m = b && b.includeUppers === !0, f, s = o;
         function d(y, g) {
           return s(y[0], g[0]);
@@ -1457,17 +1457,17 @@ function uo() {
           var n = this.db.idbdb, r = this.db._state.dbOpenError;
           if (Xe(!this.idbtrans), !e && !n) switch (r && r.name) {
             case "DatabaseClosedError":
-              throw new S.DatabaseClosed(r);
+              throw new A.DatabaseClosed(r);
             case "MissingAPIError":
-              throw new S.MissingAPI(r.message, r);
+              throw new A.MissingAPI(r.message, r);
             default:
-              throw new S.OpenFailed(r);
+              throw new A.OpenFailed(r);
           }
-          if (!this.active) throw new S.TransactionInactive();
+          if (!this.active) throw new A.TransactionInactive();
           Xe(this._completion._state === null), (e = this.idbtrans = e || (this.db.core || n).transaction(this.storeNames, this.mode, { durability: this.chromeTransactionDurability })).onerror = Y(function(o) {
             ut(o), t._reject(e.error);
           }), e.onabort = Y(function(o) {
-            ut(o), t.active && t._reject(new S.Abort(e.error)), t.active = !1, t.on("abort").fire(o);
+            ut(o), t.active && t._reject(new A.Abort(e.error)), t.active = !1, t.on("abort").fire(o);
           }), e.oncomplete = Y(function() {
             t.active = !1, t._resolve(), "mutatedParts" in e && xe.storagemutated.fire(e.mutatedParts);
           });
@@ -1475,7 +1475,7 @@ function uo() {
         return this;
       }, ce.prototype._promise = function(e, t, n) {
         var r, o = this;
-        return e === "readwrite" && this.mode !== "readwrite" ? G(new S.ReadOnly("Transaction is readonly")) : this.active ? this._locked() ? new E(function(i, a) {
+        return e === "readwrite" && this.mode !== "readwrite" ? G(new A.ReadOnly("Transaction is readonly")) : this.active ? this._locked() ? new E(function(i, a) {
           o._blockedFuncs.push([function() {
             o._promise(e, t, n).then(i, a);
           }, I]);
@@ -1491,7 +1491,7 @@ function uo() {
         }) : ((r = new E(function(i, a) {
           var u = t(i, a, o);
           u && u.then && u.then(i, a);
-        }))._lib = !0, r) : G(new S.TransactionInactive());
+        }))._lib = !0, r) : G(new A.TransactionInactive());
       }, ce.prototype._root = function() {
         return this.parent ? this.parent._root() : this;
       }, ce.prototype.waitFor = function(e) {
@@ -1511,13 +1511,13 @@ function uo() {
           });
         });
       }, ce.prototype.abort = function() {
-        this.active && (this.active = !1, this.idbtrans && this.idbtrans.abort(), this._reject(new S.Abort()));
+        this.active && (this.active = !1, this.idbtrans && this.idbtrans.abort(), this._reject(new A.Abort()));
       }, ce.prototype.table = function(e) {
         var t = this._memoizedTables || (this._memoizedTables = {});
         if (te(t, e)) return t[e];
         var n = this.schema[e];
         if (n) return (n = new this.db.Table(e, n, this)).core = this.db.core.table(e), t[e] = n;
-        throw new S.NotFound("Table " + e + " not part of transaction");
+        throw new A.NotFound("Table " + e + " not part of transaction");
       }, ce);
       function ce() {
       }
@@ -1757,7 +1757,7 @@ function uo() {
                 var g, w, k, O = b, _ = y._cfg.dbschema, K = (Dt(s, O, h), Dt(s, _, h), b = s._dbSchema = _, fn(O, _)), C = (K.add.forEach(function(x) {
                   hn(h, x[0], x[1].primKey, x[1].indexes);
                 }), K.change.forEach(function(x) {
-                  if (x.recreate) throw new S.Upgrade("Not yet support for changing primary key");
+                  if (x.recreate) throw new A.Upgrade("Not yet support for changing primary key");
                   var j = h.objectStore(x.name);
                   x.add.forEach(function(F) {
                     return St(j, F);
@@ -1868,7 +1868,7 @@ function uo() {
             t[i] && (l = t[i].idxByName[f]) && (l.name = m, delete t[i].idxByName[f], t[i].idxByName[m] = l);
           }
         }
-        typeof navigator < "u" && /Safari/.test(navigator.userAgent) && !/(Chrome\/|Edge\/)/.test(navigator.userAgent) && A.WorkerGlobalScope && A instanceof A.WorkerGlobalScope && [].concat(navigator.userAgent.match(/Safari\/(\d*)/))[1] < 604 && (e._hasGetAll = !1);
+        typeof navigator < "u" && /Safari/.test(navigator.userAgent) && !/(Chrome\/|Edge\/)/.test(navigator.userAgent) && S.WorkerGlobalScope && S instanceof S.WorkerGlobalScope && [].concat(navigator.userAgent.match(/Safari\/(\d*)/))[1] < 604 && (e._hasGetAll = !1);
       }
       function ir(e) {
         return e.split(",").map(function(t, n) {
@@ -1881,11 +1881,11 @@ function uo() {
         z(e).forEach(function(r) {
           if (e[r] !== null) {
             var o = n._parseIndexSyntax(e[r]), i = o.shift();
-            if (!i) throw new S.Schema("Invalid schema for table " + r + ": " + e[r]);
-            if (i.unique = !0, i.multi) throw new S.Schema("Primary key cannot be multiEntry*");
+            if (!i) throw new A.Schema("Invalid schema for table " + r + ": " + e[r]);
+            if (i.unique = !0, i.multi) throw new A.Schema("Primary key cannot be multiEntry*");
             o.forEach(function(a) {
-              if (a.auto) throw new S.Schema("Only primary key can be marked as autoIncrement (++)");
-              if (!a.keyPath) throw new S.Schema("Index must have a name and cannot be an empty string");
+              if (a.auto) throw new A.Schema("Only primary key can be marked as autoIncrement (++)");
+              if (!a.keyPath) throw new A.Schema("Index must have a name and cannot be an empty string");
             }), i = n._createTableSchema(r, i, o), t[r] = i;
           }
         });
@@ -1921,14 +1921,14 @@ function uo() {
         X(this, arguments.length ? { d: 1, from: e, to: 1 < arguments.length ? t : e } : { d: 0 });
       };
       function ft(e, t, n) {
-        var r = B(t, n);
+        var r = N(t, n);
         if (!isNaN(r)) {
           if (0 < r) throw RangeError();
           if (mn(e)) return X(e, { from: t, to: n, d: 1 });
           var r = e.l, o = e.r;
-          if (B(n, e.from) < 0) return r ? ft(r, t, n) : e.l = { from: t, to: n, d: 1, l: null, r: null }, ur(e);
-          if (0 < B(t, e.to)) return o ? ft(o, t, n) : e.r = { from: t, to: n, d: 1, l: null, r: null }, ur(e);
-          B(t, e.from) < 0 && (e.from = t, e.l = null, e.d = o ? o.d + 1 : 1), 0 < B(n, e.to) && (e.to = n, e.r = null, e.d = e.l ? e.l.d + 1 : 1), t = !e.r, r && !e.l && ht(e, r), o && t && ht(e, o);
+          if (N(n, e.from) < 0) return r ? ft(r, t, n) : e.l = { from: t, to: n, d: 1, l: null, r: null }, ur(e);
+          if (0 < N(t, e.to)) return o ? ft(o, t, n) : e.r = { from: t, to: n, d: 1, l: null, r: null }, ur(e);
+          N(t, e.from) < 0 && (e.from = t, e.l = null, e.d = o ? o.d + 1 : 1), 0 < N(n, e.to) && (e.to = n, e.r = null, e.d = e.l ? e.l.d + 1 : 1), t = !e.r, r && !e.l && ht(e, r), o && t && ht(e, o);
         }
       }
       function ht(e, t) {
@@ -1940,8 +1940,8 @@ function uo() {
       function ar(e, t) {
         var n = Rt(t), r = n.next();
         if (!r.done) for (var o = r.value, i = Rt(e), a = i.next(o.from), u = a.value; !r.done && !a.done; ) {
-          if (B(u.from, o.to) <= 0 && 0 <= B(u.to, o.from)) return !0;
-          B(o.from, u.from) < 0 ? o = (r = n.next(u.from)).value : u = (a = i.next(o.from)).value;
+          if (N(u.from, o.to) <= 0 && 0 <= N(u.to, o.from)) return !0;
+          N(o.from, u.from) < 0 ? o = (r = n.next(u.from)).value : u = (a = i.next(o.from)).value;
         }
         return !1;
       }
@@ -1950,10 +1950,10 @@ function uo() {
         return { next: function(n) {
           for (var r = 0 < arguments.length; t; ) switch (t.s) {
             case 0:
-              if (t.s = 1, r) for (; t.n.l && B(n, t.n.from) < 0; ) t = { up: t, n: t.n.l, s: 1 };
+              if (t.s = 1, r) for (; t.n.l && N(n, t.n.from) < 0; ) t = { up: t, n: t.n.l, s: 1 };
               else for (; t.n.l; ) t = { up: t, n: t.n.l, s: 1 };
             case 1:
-              if (t.s = 2, !r || B(n, t.n.to) <= 0) return { value: t.n, done: !1 };
+              if (t.s = 2, !r || N(n, t.n.to) <= 0) return { value: t.n, done: !1 };
             case 2:
               if (t.n.r) {
                 t.s = 3, t = { up: t, n: t.n.r, s: 0 };
@@ -1998,7 +1998,7 @@ function uo() {
         }), this;
       }, hasKey: function(e) {
         var t = Rt(this).next(e).value;
-        return t && B(t.from, e) <= 0 && 0 <= B(t.to, e);
+        return t && N(t.from, e) <= 0 && 0 <= N(t.to, e);
       } })[zt] = function() {
         return Rt(this);
       }, re));
@@ -2043,17 +2043,17 @@ function uo() {
         t.isBeingOpened = !0, t.dbOpenError = null, t.openComplete = !1;
         var r = t.openCanceller, o = Math.round(10 * e.verno), i = !1;
         function a() {
-          if (t.openCanceller !== r) throw new S.DatabaseClosed("db.open() was cancelled");
+          if (t.openCanceller !== r) throw new A.DatabaseClosed("db.open() was cancelled");
         }
         function u() {
           return new E(function(d, p) {
-            if (a(), !n) throw new S.MissingAPI();
+            if (a(), !n) throw new A.MissingAPI();
             var h = e.name, c = t.autoSchema || !o ? n.open(h) : n.open(h, o);
-            if (!c) throw new S.MissingAPI();
+            if (!c) throw new A.MissingAPI();
             c.onerror = se(p), c.onblocked = Y(e._fireOnBlocked), c.onupgradeneeded = Y(function(v) {
               var b;
               f = c.transaction, t.autoSchema && !e._options.allowEmptyDB ? (c.onerror = ut, f.abort(), c.result.close(), (b = n.deleteDatabase(h)).onsuccess = b.onerror = Y(function() {
-                p(new S.NoSuchDatabase("Database ".concat(h, " doesnt exist")));
+                p(new A.NoSuchDatabase("Database ".concat(h, " doesnt exist")));
               })) : (f.onerror = se(p), b = v.oldVersion > Math.pow(2, 62) ? 0 : v.oldVersion, s = b < 1, e.idbdb = c.result, i && Wr(e, f), Yr(e, b / 10, f, p));
             }, p), c.onsuccess = Y(function() {
               f = null;
@@ -2262,7 +2262,7 @@ function uo() {
       function lr(e, t, n) {
         try {
           if (!t || t.keys.length < e.length) return null;
-          for (var r = [], o = 0, i = 0; o < t.keys.length && i < e.length; ++o) B(t.keys[o], e[i]) === 0 && (r.push(n ? Pe(t.values[o]) : t.values[o]), ++i);
+          for (var r = [], o = 0, i = 0; o < t.keys.length && i < e.length; ++o) N(t.keys[o], e[i]) === 0 && (r.push(n ? Pe(t.values[o]) : t.values[o]), ++i);
           return r.length === e.length ? r : null;
         } catch {
           return null;
@@ -2298,7 +2298,7 @@ function uo() {
       var Zr = { stack: "dbcore", level: 0, name: "Observability", create: function(e) {
         var t = e.schema.name, n = new ee(e.MIN_KEY, e.MAX_KEY);
         return P(P({}, e), { transaction: function(r, o, i) {
-          if (I.subscr && o !== "readonly") throw new S.ReadOnly("Readwrite transaction in liveQuery context. Querier source: ".concat(I.querier));
+          if (I.subscr && o !== "readonly") throw new A.ReadOnly("Readwrite transaction in liveQuery context. Querier source: ".concat(I.querier));
           return e.transaction(r, o, i);
         }, table: function(r) {
           function o(v) {
@@ -2326,7 +2326,7 @@ function uo() {
               }
               (b || y).forEach(function(q, Q) {
                 var ie = b && U(b[Q]), Q = y && U(y[Q]);
-                B(ie, Q) !== 0 && (ie != null && D(ie), Q != null) && D(Q);
+                N(ie, Q) !== 0 && (ie != null && D(ie), Q != null) && D(Q);
               });
             }))) : K ? (C = { from: (x = K.lower) != null ? x : e.MIN_KEY, to: (_ = K.upper) != null ? _ : e.MAX_KEY }, O.add(C), k.add(C)) : (k.add(n), O.add(n), a.indexes.forEach(function(j) {
               return c(j.name).add(n);
@@ -2390,7 +2390,7 @@ function uo() {
         })), r);
       }
       function On(e, t) {
-        return n = e, ((r = t).lower === void 0 || (r.lowerOpen ? 0 < B(n, r.lower) : 0 <= B(n, r.lower))) && (n = e, (r = t).upper === void 0 || (r.upperOpen ? B(n, r.upper) < 0 : B(n, r.upper) <= 0));
+        return n = e, ((r = t).lower === void 0 || (r.lowerOpen ? 0 < N(n, r.lower) : 0 <= N(n, r.lower))) && (n = e, (r = t).upper === void 0 || (r.upperOpen ? N(n, r.upper) < 0 : N(n, r.upper) <= 0));
         var n, r;
       }
       function pr(e, t, n, r, o, i) {
@@ -2439,17 +2439,17 @@ function uo() {
           }
           return h;
         }, e)) === e) ? e : (r.sort(function(d, p) {
-          return B(s(d), s(p)) || B(m(d), m(p));
+          return N(s(d), s(p)) || N(m(d), m(p));
         }), t.limit && t.limit < 1 / 0 && (r.length > t.limit ? r.length = t.limit : e.length === t.limit && r.length < t.limit && (o.dirty = !0)), i ? Object.freeze(r) : r);
       }
       function yr(e, t) {
-        return B(e.lower, t.lower) === 0 && B(e.upper, t.upper) === 0 && !!e.lowerOpen == !!t.lowerOpen && !!e.upperOpen == !!t.upperOpen;
+        return N(e.lower, t.lower) === 0 && N(e.upper, t.upper) === 0 && !!e.lowerOpen == !!t.lowerOpen && !!e.upperOpen == !!t.upperOpen;
       }
       function eo(e, t) {
         return ((n, r, o, i) => {
           if (n === void 0) return r !== void 0 ? -1 : 0;
           if (r === void 0) return 1;
-          if ((n = B(n, r)) === 0) {
+          if ((n = N(n, r)) === 0) {
             if (o && i) return 0;
             if (o) return 1;
             if (i) return -1;
@@ -2458,7 +2458,7 @@ function uo() {
         })(e.lower, t.lower, e.lowerOpen, t.lowerOpen) <= 0 && 0 <= ((n, r, o, i) => {
           if (n === void 0) return r !== void 0 ? 1 : 0;
           if (r === void 0) return -1;
-          if ((n = B(n, r)) === 0) {
+          if ((n = N(n, r)) === 0) {
             if (o && i) return 0;
             if (o) return -1;
             if (i) return 1;
@@ -2569,8 +2569,8 @@ function uo() {
         } });
       }
       H.prototype.version = function(e) {
-        if (isNaN(e) || e < 0.1) throw new S.Type("Given version is not a positive number");
-        if (e = Math.round(10 * e) / 10, this.idbdb || this._state.isBeingOpened) throw new S.Schema("Cannot add version when database is open");
+        if (isNaN(e) || e < 0.1) throw new A.Type("Given version is not a positive number");
+        if (e = Math.round(10 * e) / 10, this.idbdb || this._state.isBeingOpened) throw new A.Schema("Cannot add version when database is open");
         this.verno = Math.max(this.verno, e);
         var t = this._versions, n = t.filter(function(r) {
           return r._cfg.version === e;
@@ -2579,9 +2579,9 @@ function uo() {
       }, H.prototype._whenReady = function(e) {
         var t = this;
         return this.idbdb && (this._state.openComplete || I.letThrough || this._vip) ? e() : new E(function(n, r) {
-          if (t._state.openComplete) return r(new S.DatabaseClosed(t._state.dbOpenError));
+          if (t._state.openComplete) return r(new A.DatabaseClosed(t._state.dbOpenError));
           if (!t._state.isBeingOpened) {
-            if (!t._state.autoOpen) return void r(new S.DatabaseClosed());
+            if (!t._state.autoOpen) return void r(new A.DatabaseClosed());
             t.open().catch($);
           }
           t._state.dbReadyPromise.then(n, r);
@@ -2618,7 +2618,7 @@ function uo() {
         }));
       }, H.prototype.close = function(t) {
         var t = (t === void 0 ? { disableAutoOpen: !0 } : t).disableAutoOpen, n = this._state;
-        t ? (n.isBeingOpened && n.cancelOpen(new S.DatabaseClosed()), this._close(), n.autoOpen = !1, n.dbOpenError = new S.DatabaseClosed()) : (this._close(), n.autoOpen = this._options.autoOpen || n.isBeingOpened, n.openComplete = !1, n.dbOpenError = null);
+        t ? (n.isBeingOpened && n.cancelOpen(new A.DatabaseClosed()), this._close(), n.autoOpen = !1, n.dbOpenError = new A.DatabaseClosed()) : (this._close(), n.autoOpen = this._options.autoOpen || n.isBeingOpened, n.openComplete = !1, n.dbOpenError = null);
       }, H.prototype.delete = function(e) {
         var t = this, n = (e === void 0 && (e = { disableAutoOpen: !0 }), 0 < arguments.length && typeof arguments[0] != "object"), r = this._state;
         return new E(function(o, i) {
@@ -2630,7 +2630,7 @@ function uo() {
               l = t._deps, m = t.name, pn(f = l.indexedDB) || m === kt || dn(f, l.IDBKeyRange).delete(m).catch($), o();
             }), u.onerror = se(i), u.onblocked = t._fireOnBlocked;
           }
-          if (n) throw new S.InvalidArgument("Invalid closeOptions argument to db.delete()");
+          if (n) throw new A.InvalidArgument("Invalid closeOptions argument to db.delete()");
           r.isBeingOpened ? r.dbReadyPromise.then(a) : a();
         });
       }, H.prototype.backendDB = function() {
@@ -2652,7 +2652,7 @@ function uo() {
       }, enumerable: !1, configurable: !0 }), H.prototype.transaction = function() {
         var e = function(t, n, r) {
           var o = arguments.length;
-          if (o < 2) throw new S.InvalidArgument("Too few arguments");
+          if (o < 2) throw new A.InvalidArgument("Too few arguments");
           for (var i = new Array(o - 1); --o; ) i[o - 1] = arguments[o];
           return r = i.pop(), [t, Dn(i), r];
         }.apply(this, arguments);
@@ -2666,17 +2666,17 @@ function uo() {
             return m;
           }), e == "r" || e === tn) r = tn;
           else {
-            if (e != "rw" && e != nn) throw new S.InvalidArgument("Invalid transaction mode: " + e);
+            if (e != "rw" && e != nn) throw new A.InvalidArgument("Invalid transaction mode: " + e);
             r = nn;
           }
           if (a) {
             if (a.mode === tn && r === nn) {
-              if (!u) throw new S.SubTransaction("Cannot enter a sub-transaction with READWRITE mode when parent transaction is READONLY");
+              if (!u) throw new A.SubTransaction("Cannot enter a sub-transaction with READWRITE mode when parent transaction is READONLY");
               a = null;
             }
             a && o.forEach(function(m) {
               if (a && a.storeNames.indexOf(m) === -1) {
-                if (!u) throw new S.SubTransaction("Table " + m + " not included in parent transaction.");
+                if (!u) throw new A.SubTransaction("Table " + m + " not included in parent transaction.");
                 a = null;
               }
             }), u && a && !a.active && (a = null);
@@ -2702,7 +2702,7 @@ function uo() {
               (v = h.call(c, c)) && (b ? (g = ge.bind(null, null), v.then(g, g)) : typeof v.next == "function" && typeof v.throw == "function" && (v = _n(v)));
             }, y));
             return (v && typeof v.then == "function" ? E.resolve(v).then(function(g) {
-              return c.active ? g : G(new S.PrematureCommit("Transaction committed too early. See http://bit.ly/2kdckMn"));
+              return c.active ? g : G(new A.PrematureCommit("Transaction committed too early. See http://bit.ly/2kdckMn"));
             }) : y.then(function() {
               return v;
             })).then(function(g) {
@@ -2719,7 +2719,7 @@ function uo() {
         }) : this._whenReady(l);
       }, H.prototype.table = function(e) {
         if (te(this._allTables, e)) return this._allTables[e];
-        throw new S.InvalidTable("Table ".concat(e, " does not exist"));
+        throw new A.InvalidTable("Table ".concat(e, " does not exist"));
       };
       var pe = H;
       function H(e, t) {
@@ -2771,13 +2771,13 @@ function uo() {
         })), this.Version = (i = this, at(Qr.prototype, function(s) {
           this.db = i, this._cfg = { version: s, storesSource: null, dbschema: {}, tables: {}, contentUpgrade: null };
         })), this.WhereClause = (a = this, at(tr.prototype, function(s, d, p) {
-          if (this.db = a, this._ctx = { table: s, index: d === ":id" ? null : d, or: p }, this._cmp = this._ascending = B, this._descending = function(h, c) {
-            return B(c, h);
+          if (this.db = a, this._ctx = { table: s, index: d === ":id" ? null : d, or: p }, this._cmp = this._ascending = N, this._descending = function(h, c) {
+            return N(c, h);
           }, this._max = function(h, c) {
-            return 0 < B(h, c) ? h : c;
+            return 0 < N(h, c) ? h : c;
           }, this._min = function(h, c) {
-            return B(h, c) < 0 ? h : c;
-          }, this._IDBKeyRange = a._deps.IDBKeyRange, !this._IDBKeyRange) throw new S.MissingAPI();
+            return N(h, c) < 0 ? h : c;
+          }, this._IDBKeyRange = a._deps.IDBKeyRange, !this._IDBKeyRange) throw new A.MissingAPI();
         })), this.on("versionchange", function(s) {
           0 < s.newVersion ? console.warn("Another connection wants to upgrade database '".concat(u.name, "'. Closing db now to resume the upgrade.")) : console.warn("Another connection wants to delete database '".concat(u.name, "'. Closing db now to resume the delete request.")), u.close({ disableAutoOpen: !1 });
         }), this.on("blocked", function(s) {
@@ -2813,7 +2813,7 @@ function uo() {
         this._subscribe = e;
       }
       try {
-        Mt = { indexedDB: A.indexedDB || A.mozIndexedDB || A.webkitIndexedDB || A.msIndexedDB, IDBKeyRange: A.IDBKeyRange || A.webkitIDBKeyRange };
+        Mt = { indexedDB: S.indexedDB || S.mozIndexedDB || S.webkitIndexedDB || S.msIndexedDB, IDBKeyRange: S.IDBKeyRange || S.webkitIDBKeyRange };
       } catch {
         Mt = { indexedDB: null, IDBKeyRange: null };
       }
@@ -2886,7 +2886,7 @@ function uo() {
             });
           }) : dn(n, t).toCollection().primaryKeys()).then(e);
         } catch {
-          return G(new S.MissingAPI());
+          return G(new A.MissingAPI());
         }
         var t, n;
       }, defineClass: function() {
@@ -2923,7 +2923,7 @@ function uo() {
         typeof t == "string" ? ne(e, t, void 0) : "length" in t && [].map.call(t, function(n) {
           ne(e, n, void 0);
         });
-      }, shallowClone: An, deepClone: Pe, getObjectDiff: xn, cmp: B, asap: Sn, minKey: -1 / 0, addons: [], connections: Ve, errnames: Vt, dependencies: Mt, cache: Re, semVer: "4.3.0", version: "4.3.0".split(".").map(function(e) {
+      }, shallowClone: An, deepClone: Pe, getObjectDiff: xn, cmp: N, asap: Sn, minKey: -1 / 0, addons: [], connections: Ve, errnames: Vt, dependencies: Mt, cache: Re, semVer: "4.3.0", version: "4.3.0".split(".").map(function(e) {
         return parseInt(e);
       }).reduce(function(e, t, n) {
         return e + t / Math.pow(10, 2 * n);
@@ -2953,7 +2953,7 @@ function uo() {
         } }), t);
       }, Bn(ue), P(pe, Object.freeze({ __proto__: null, Dexie: pe, Entity: Vn, PropModification: ot, RangeSet: ee, add: function(e) {
         return new ot({ add: e });
-      }, cmp: B, default: pe, liveQuery: mr, mergeRanges: ht, rangesOverlap: ar, remove: function(e) {
+      }, cmp: N, default: pe, liveQuery: mr, mergeRanges: ht, rangesOverlap: ar, remove: function(e) {
         return new ot({ remove: e });
       }, replacePrefix: function(e, t) {
         return new ot({ replacePrefix: [e, t] });
@@ -2977,7 +2977,7 @@ const {
   add: Fo,
   remove: Lo,
   DexieYProvider: Uo
-} = Oe, co = "datapos-connector-dexie-js", lo = { en: "Dexie.js" }, fo = { en: "The Dexie.js..." }, ho = null, po = "database", yo = { default: { authMethodId: "none", maxConnectionCount: null } }, mo = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#000000" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', vo = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#ffffff" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', bo = null, go = ["abortOperation", "createObject", "dropObject", "findObject", "getRecord", "listNodes", "previewObject", "upsertRecords", "removeRecords", "retrieveRecords"], wo = null, _o = "alpha", xo = "connector", ko = "bidirectional", Oo = "https://dexie.org/cloud/", Po = "https://dexie.org/docs/", Eo = "https://dexie.org/", Co = "0.2.240", Ko = {
+} = Oe, co = "datapos-connector-dexie-js", lo = { en: "Dexie.js" }, fo = { en: "The Dexie.js..." }, ho = null, po = "database", yo = { default: { authMethodId: "none", maxConnectionCount: null } }, mo = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#000000" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', vo = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#ffffff" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', bo = null, go = ["abortOperation", "createObject", "dropObject", "findObject", "getRecord", "listNodes", "previewObject", "upsertRecords", "removeRecords", "retrieveRecords"], wo = null, _o = "alpha", xo = "connector", ko = "bidirectional", Oo = "https://dexie.org/cloud/", Po = "https://dexie.org/docs/", Eo = "https://dexie.org/", Co = "0.2.241", Ko = {
   id: co,
   label: lo,
   description: fo,
@@ -2996,15 +2996,15 @@ const {
   vendorDocumentationURL: Po,
   vendorHomeURL: Eo,
   version: Co
-}, jo = "0.2.240", Io = "Encountered invalid container identifier", Ft = "Encountered invalid folder path", So = "Encountered invalid object path";
+}, jo = "0.2.241", Io = "Encountered invalid container identifier", Ft = "Encountered invalid folder path", So = "Encountered invalid object path";
 class zo {
   abortController;
   config;
   engineUtilities;
   toolConfigs;
   containers;
-  constructor(R, N) {
-    this.abortController = void 0, this.config = Ko, this.config.version = jo, this.engineUtilities = R, this.toolConfigs = N, this.containers = {};
+  constructor(R, B) {
+    this.abortController = void 0, this.config = Ko, this.config.version = jo, this.engineUtilities = R, this.toolConfigs = B, this.containers = {};
   }
   // Abort operation
   abortOperation() {
@@ -3013,30 +3013,34 @@ class zo {
   // Create object
   async createObject(R) {
     console.log("CO 1");
-    const { containerId: N, nodeId: P } = this.establishObjectIdentifiers(R.path), T = await this.establishContainer(N);
+    const { containerId: B, nodeId: P } = this.establishObjectIdentifiers(R.path), T = await this.establishContainer(B);
     if (console.log("CO 2"), T.tables.some((M) => M.name === P)) throw new Error(`Duplicate table '${P}'.`);
     console.log("CO 3"), T.close();
-    const A = new Oe(T.name);
-    A.on("blocked", () => !1), console.log("CO 4");
+    const S = new Oe(T.name);
+    if (S.on("blocked", () => !1), T.tables.length === 0) {
+      await T.delete(), S.version(1).stores({}), this.containers[B] = await S.open();
+      return;
+    }
+    console.log("CO 4");
     const z = {};
     for (const { name: M, schema: X } of T.tables)
       console.log("CO 4.1", M), z[M] = [X.primKey.src, ...X.indexes.map((ae) => ae.src)].join(",");
-    console.log("CO 4.2", T.verno, z), A.version(T.verno).stores(z), console.log("CO 4.3", R.structure), A.version(T.verno + 1).stores({ [P]: R.structure || "" }), console.log("CO 4.4"), this.containers[N] = await A.open(), console.log("CO 5");
+    console.log("CO 4.2", T.verno, z), S.version(T.verno).stores(z), console.log("CO 4.3", R.structure), S.version(T.verno + 1).stores({ [P]: R.structure || "" }), console.log("CO 4.4"), this.containers[B] = await S.open(), console.log("CO 5");
   }
   // Drop object
   async dropObject(R) {
-    const { containerId: N, nodeId: P } = this.establishObjectIdentifiers(R.path), T = await this.establishContainer(N);
+    const { containerId: B, nodeId: P } = this.establishObjectIdentifiers(R.path), T = await this.establishContainer(B);
     if (!T.tables.some((M) => M.name === P)) throw new Error(`Table '${P}' not found.`);
     T.close();
-    const A = new Oe(T.name);
-    if (A.on("blocked", () => !1), T.tables.length === 1) {
-      await T.delete(), A.version(1).stores({}), this.containers[N] = await A.open();
+    const S = new Oe(T.name);
+    if (S.on("blocked", () => !1), T.tables.length === 1) {
+      await T.delete(), S.version(1).stores({}), this.containers[B] = await S.open();
       return;
     }
     const z = {};
     for (const { name: M, schema: X } of T.tables)
       z[M] = [X.primKey.src, ...X.indexes.map((ae) => ae.src)].join(",");
-    A.version(T.verno).stores(z), A.version(T.verno + 1).stores({ [P]: null }), this.containers[N] = await A.open();
+    S.version(T.verno).stores(z), S.version(T.verno + 1).stores({ [P]: null }), this.containers[B] = await S.open();
   }
   // Find object
   async findObject(R) {
@@ -3046,29 +3050,29 @@ class zo {
   }
   // Get record
   async getRecord(R) {
-    const { containerId: N, nodeId: P } = this.establishObjectIdentifiers(R.path), A = await (await this.establishContainer(N)).table(P).get(R.id);
-    if (A) return { record: A };
+    const { containerId: B, nodeId: P } = this.establishObjectIdentifiers(R.path), S = await (await this.establishContainer(B)).table(P).get(R.id);
+    if (S) return { record: S };
     throw new Error("Not found.");
   }
   // List nodes
   async listNodes(R) {
-    const N = R.folderPath.split("/");
-    switch (N.length) {
+    const B = R.folderPath.split("/");
+    switch (B.length) {
       case 1: {
-        if (N[0] != null) throw new Error(`${Ft} '${R.folderPath}'.`);
+        if (B[0] != null) throw new Error(`${Ft} '${R.folderPath}'.`);
         const T = (await Oe.getDatabaseNames()).map(
-          (A) => ({ folderPath: R.folderPath, id: A, label: A, name: A, typeId: "folder" })
+          (S) => ({ folderPath: R.folderPath, id: S, label: S, name: S, typeId: "folder" })
         );
         return { cursor: void 0, isMore: !1, connectionNodeConfigs: T, totalCount: T.length };
       }
       case 2: {
-        if (N[0] != null) throw new Error(`${Ft} '${R.folderPath}'.`);
-        const P = N[1];
+        if (B[0] != null) throw new Error(`${Ft} '${R.folderPath}'.`);
+        const P = B[1];
         if (P == null) throw new Error(`${Ft} '${R.folderPath}'.`);
-        const A = (await this.establishContainer(P)).tables.map(
+        const S = (await this.establishContainer(P)).tables.map(
           (z) => ({ folderPath: R.folderPath, id: z.name, label: z.name, name: z.name, typeId: "object" })
         );
-        return { cursor: void 0, isMore: !1, connectionNodeConfigs: A, totalCount: A.length };
+        return { cursor: void 0, isMore: !1, connectionNodeConfigs: S, totalCount: S.length };
       }
       default:
         throw new Error(`${Ft} '${R.folderPath}'.`);
@@ -3076,8 +3080,8 @@ class zo {
   }
   // Preview object
   async previewObject(R) {
-    const { containerId: N, nodeId: P } = this.establishObjectIdentifiers(R.path);
-    return await (await this.establishContainer(N)).table(P).limit(50).toArray(), {
+    const { containerId: B, nodeId: P } = this.establishObjectIdentifiers(R.path);
+    return await (await this.establishContainer(B)).table(P).limit(50).toArray(), {
       asAt: Date.now(),
       columnConfigs: [],
       dataFormatId: "unknown",
@@ -3096,30 +3100,30 @@ class zo {
   }
   // Upsert records
   async upsertRecords(R) {
-    const { containerId: N, nodeId: P } = this.establishObjectIdentifiers(R.path), T = await this.establishContainer(N), A = R.records;
-    A.length === 1 ? await T.table(P).put(A[0]) : A.length > 1 && await T.table(P).bulkPut(A);
+    const { containerId: B, nodeId: P } = this.establishObjectIdentifiers(R.path), T = await this.establishContainer(B), S = R.records;
+    S.length === 1 ? await T.table(P).put(S[0]) : S.length > 1 && await T.table(P).bulkPut(S);
   }
   // Remove records
   async removeRecords(R) {
-    const { containerId: N, nodeId: P } = this.establishObjectIdentifiers(R.path), T = await this.establishContainer(N), A = R.keys;
-    A.length === 0 ? await T.table(P).clear() : A.length === 1 && A[0] != null ? await T.table(P).delete(A[0]) : await T.table(P).bulkDelete(A);
+    const { containerId: B, nodeId: P } = this.establishObjectIdentifiers(R.path), T = await this.establishContainer(B), S = R.keys;
+    S.length === 0 ? await T.table(P).clear() : S.length === 1 && S[0] != null ? await T.table(P).delete(S[0]) : await T.table(P).bulkDelete(S);
   }
   // Retrieve records
-  async retrieveRecords(R, N, P) {
-    const { containerId: T, nodeId: A } = this.establishObjectIdentifiers(R.path), M = await (await this.establishContainer(T)).table(A).toArray();
+  async retrieveRecords(R, B, P) {
+    const { containerId: T, nodeId: S } = this.establishObjectIdentifiers(R.path), M = await (await this.establishContainer(T)).table(S).toArray();
     console.log("retrieveRecords", M);
   }
   // Helpers ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   async establishContainer(R) {
     if (!this.containers[R]) {
-      const N = new Oe(R);
-      await Oe.exists(N.name) || N.version(1).stores({}), this.containers[R] = await N.open();
+      const B = new Oe(R);
+      await Oe.exists(B.name) || B.version(1).stores({}), this.containers[R] = await B.open();
     }
     return this.containers[R];
   }
   establishObjectIdentifiers(R) {
-    const N = R.split("/"), [, P, T] = N;
-    if (N.length !== 3 || P === void 0 || P === "" || T === void 0 || T === "")
+    const B = R.split("/"), [, P, T] = B;
+    if (B.length !== 3 || P === void 0 || P === "" || T === void 0 || T === "")
       throw new Error(`${So} '${R}'.`);
     return { containerId: P, nodeId: T };
   }
