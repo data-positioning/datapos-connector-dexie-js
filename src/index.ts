@@ -212,6 +212,7 @@ export default class DexieJSConnector implements ExtendedConnectorInterface {
 
     // Retrieve records
     async retrieveRecords(options: RetrieveRecordsOptions, chunk: (records: ParsingRecord[]) => void, complete: (result: RetrieveRecordsSummary) => void): Promise<void> {
+        console.log(11, this);
         const { containerId, nodeId } = this.establishObjectIdentifiers(options.path);
         const container = await this.establishContainer(containerId);
         const records = await container.table<ParsingRecord>(nodeId).toArray();
