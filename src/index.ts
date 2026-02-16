@@ -69,14 +69,11 @@ export class Connector implements ExtendedConnectorInterface {
 
     // Create object
     async createObject(options: CreateObjectOptions): Promise<void> {
-        console.log('CO 1');
         const { containerId, nodeId } = this.establishObjectIdentifiers(options.path);
         const container = await this.establishContainer(containerId);
 
-        console.log('CO 2');
         if (container.tables.some((table) => table.name === nodeId)) throw new Error(`Duplicate table '${nodeId}'.`);
 
-        console.log('CO 3');
         container.close();
         const newContainer = new Dexie(container.name);
         newContainer.on('blocked', () => false); // Silence console warning of blocked event
@@ -88,19 +85,13 @@ export class Connector implements ExtendedConnectorInterface {
             return;
         }
 
-        console.log('CO 4');
         const currentSchema: Record<string, string> = {};
         for (const { name, schema } of container.tables) {
-            console.log('CO 4.1', name);
             currentSchema[name] = [schema.primKey.src, ...schema.indexes.map((index) => index.src)].join(',');
         }
-        console.log('CO 4.2', container.verno, currentSchema);
         newContainer.version(container.verno).stores(currentSchema);
-        console.log('CO 4.3', options.structure);
         newContainer.version(container.verno + 1).stores({ [nodeId]: options.structure || '' });
-        console.log('CO 4.4');
         this.containers[containerId] = await newContainer.open();
-        console.log('CO 5');
     }
 
     // Drop object
@@ -132,12 +123,11 @@ export class Connector implements ExtendedConnectorInterface {
 
     // Find object
     async findObject(options: FindObjectOptions): Promise<FindObjectResult> {
-        console.log('findObject 1', options);
         if (options.containerId == null) throw new Error(`${ERROR_INVALID_CONTAINER_ID} '${options.containerId}'.`);
         const container = await this.establishContainer(options.containerId);
         const table = container.tables.find((table) => table.name === options.nodeId);
-        console.log('findObject 2', table);
-        return { folderPath: options.containerId, object: table };
+        console.log('connector.findObject', table);
+        return { folderPath: options.containerId, object: undefined };
     }
 
     // Get record
@@ -232,7 +222,7 @@ export class Connector implements ExtendedConnectorInterface {
         const { containerId, nodeId } = this.establishObjectIdentifiers(options.path);
         const container = await this.establishContainer(containerId);
         const records = await container.table(nodeId).toArray();
-        console.log('retrieveRecords', records);
+        console.log('connector.retrieveRecords', records);
         // chunk(records);
     }
 
