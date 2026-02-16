@@ -83,7 +83,7 @@ export class Connector implements ExtendedConnectorInterface {
 
         if (container.tables.length === 0) {
             await container.delete();
-            newContainer.version(1).stores({});
+            newContainer.version(1).stores({ [nodeId]: options.structure || '' });
             this.containers[containerId] = await newContainer.open();
             return;
         }
