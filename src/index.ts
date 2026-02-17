@@ -69,19 +69,15 @@ export class Connector implements ExtendedConnectorInterface {
 
     // Create object
     async createObject(options: CreateObjectOptions): Promise<void> {
-        console.log(11);
         const { containerId, nodeId } = this.establishObjectIdentifiers(options.path);
         const container = await this.establishContainer(containerId);
 
-        console.log(22);
         if (container.tables.some((table) => table.name === nodeId)) throw new Error(`Duplicate table '${nodeId}'.`);
 
-        console.log(3);
         container.close();
         const newContainer = new Dexie(container.name);
         newContainer.on('blocked', () => false); // Silence console warning of blocked event
 
-        console.log(44);
         if (container.tables.length === 0) {
             await container.delete();
             newContainer.version(1).stores({ [nodeId]: options.structure || '' });
@@ -89,16 +85,13 @@ export class Connector implements ExtendedConnectorInterface {
             return;
         }
 
-        console.log(55);
         const currentSchema: Record<string, string> = {};
         for (const { name, schema } of container.tables) {
             currentSchema[name] = [schema.primKey.src, ...schema.indexes.map((index) => index.src)].join(',');
         }
-        console.log(77);
         newContainer.version(container.verno).stores(currentSchema);
         newContainer.version(container.verno + 1).stores({ [nodeId]: options.structure || '' });
         this.containers[containerId] = await newContainer.open();
-        console.log(88);
     }
 
     // Drop object
