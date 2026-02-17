@@ -127,7 +127,7 @@ export class Connector implements ExtendedConnectorInterface {
         const container = await this.establishContainer(options.storeId);
         const table = container.tables.find((table) => table.name === options.nodeId);
         console.log('connector.findObject', table);
-        return table ? { path: `/${options.storeId}/${options.nodeId}`, schema: undefined } : { path: undefined, schema: undefined };
+        return table ? { path: `/${options.storeId}/${options.nodeId}` } : { path: undefined };
     }
 
     // Get record
