@@ -123,11 +123,11 @@ export class Connector implements ExtendedConnectorInterface {
 
     // Find object
     async findObject(options: FindObjectOptions): Promise<FindObjectResult> {
-        if (options.containerId == null) throw new Error(`${ERROR_INVALID_CONTAINER_ID} '${options.containerId}'.`);
-        const container = await this.establishContainer(options.containerId);
+        if (options.storeId == null) throw new Error(`${ERROR_INVALID_CONTAINER_ID} '${options.storeId}'.`);
+        const container = await this.establishContainer(options.storeId);
         const table = container.tables.find((table) => table.name === options.nodeId);
         console.log('connector.findObject', table);
-        return { folderPath: options.containerId, object: undefined };
+        return table ? { path: `/${options.storeId}/${options.nodeId}`, schema: undefined } : { path: undefined, schema: undefined };
     }
 
     // Get record

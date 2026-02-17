@@ -24,9 +24,9 @@ function uo() {
         for (var r, o = 0, i = t.length; o < i; o++) !r && o in t || ((r = r || Array.prototype.slice.call(t, 0, o))[o] = t[o]);
         return e.concat(r || Array.prototype.slice.call(t));
       }
-      var S = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : oo, z = Object.keys, F = Array.isArray;
+      var S = typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : typeof window < "u" ? window : oo, $ = Object.keys, F = Array.isArray;
       function X(e, t) {
-        return typeof t == "object" && z(t).forEach(function(n) {
+        return typeof t == "object" && $(t).forEach(function(n) {
           e[n] = t[n];
         }), e;
       }
@@ -36,7 +36,7 @@ function uo() {
         return wr.call(e, t);
       }
       function Be(e, t) {
-        typeof t == "function" && (t = t(ae(e))), (typeof Reflect > "u" ? z : Reflect.ownKeys)(t).forEach(function(n) {
+        typeof t == "function" && (t = t(ae(e))), (typeof Reflect > "u" ? $ : Reflect.ownKeys)(t).forEach(function(n) {
           me(e, n, t[n]);
         });
       }
@@ -122,9 +122,9 @@ function uo() {
       function Ut(e) {
         return Or.call(e).slice(8, -1);
       }
-      var zt = typeof Symbol < "u" ? Symbol.iterator : "@@iterator", Pr = typeof zt == "symbol" ? function(e) {
+      var $t = typeof Symbol < "u" ? Symbol.iterator : "@@iterator", Pr = typeof $t == "symbol" ? function(e) {
         var t;
-        return e != null && (t = e[zt]) && t.apply(e);
+        return e != null && (t = e[$t]) && t.apply(e);
       } : function() {
         return null;
       };
@@ -146,7 +146,7 @@ function uo() {
         } else for (t = arguments.length, n = new Array(t); t--; ) n[t] = arguments[t];
         return n;
       }
-      var $t = typeof Symbol < "u" ? function(e) {
+      var zt = typeof Symbol < "u" ? function(e) {
         return e[Symbol.toStringTag] === "AsyncFunction";
       } : function() {
         return !1;
@@ -188,7 +188,7 @@ function uo() {
       he = re.reduce(function(e, t) {
         return ["Syntax", "Type", "Range"].indexOf(t) === -1 && (e[t + "Error"] = A[t]), e;
       }, {});
-      function $() {
+      function z() {
       }
       function Ze(e) {
         return e;
@@ -204,31 +204,31 @@ function uo() {
         };
       }
       function Cr(e, t) {
-        return e === $ ? t : function() {
+        return e === z ? t : function() {
           var n = e.apply(this, arguments), r = (n !== void 0 && (arguments[0] = n), this.onsuccess), o = this.onerror, i = (this.onsuccess = null, this.onerror = null, t.apply(this, arguments));
           return r && (this.onsuccess = this.onsuccess ? Ke(r, this.onsuccess) : r), o && (this.onerror = this.onerror ? Ke(o, this.onerror) : o), i !== void 0 ? i : n;
         };
       }
       function Ir(e, t) {
-        return e === $ ? t : function() {
+        return e === z ? t : function() {
           e.apply(this, arguments);
           var n = this.onsuccess, r = this.onerror;
           this.onsuccess = this.onerror = null, t.apply(this, arguments), n && (this.onsuccess = this.onsuccess ? Ke(n, this.onsuccess) : n), r && (this.onerror = this.onerror ? Ke(r, this.onerror) : r);
         };
       }
       function Sr(e, t) {
-        return e === $ ? t : function(o) {
+        return e === z ? t : function(o) {
           var r = e.apply(this, arguments), o = (X(o, r), this.onsuccess), i = this.onerror, a = (this.onsuccess = null, this.onerror = null, t.apply(this, arguments));
           return o && (this.onsuccess = this.onsuccess ? Ke(o, this.onsuccess) : o), i && (this.onerror = this.onerror ? Ke(i, this.onerror) : i), r === void 0 ? a === void 0 ? void 0 : a : X(r, a);
         };
       }
       function Ar(e, t) {
-        return e === $ ? t : function() {
+        return e === z ? t : function() {
           return t.apply(this, arguments) !== !1 && e.apply(this, arguments);
         };
       }
       function Yt(e, t) {
-        return e === $ ? t : function() {
+        return e === z ? t : function() {
           var n = e.apply(this, arguments);
           if (n && typeof n.then == "function") {
             for (var r = this, o = arguments.length, i = new Array(o); o--; ) i[o] = arguments[o];
@@ -246,7 +246,7 @@ function uo() {
       }
       var et = {}, Nn = 100, tt = typeof Promise > "u" ? [] : (re = Promise.resolve(), typeof crypto < "u" && crypto.subtle ? [tt = crypto.subtle.digest("SHA-512", new Uint8Array([0])), ae(tt), re] : [re, ae(re), re]), re = tt[0], Ge = tt[1], Ge = Ge && Ge.then, je = re && re.constructor, Wt = !!tt[2], nt = function(e, t) {
         rt.push([e, t]), yt && (queueMicrotask(Rr), yt = !1);
-      }, Qt = !0, yt = !0, Ce = [], mt = [], Gt = Ze, ve = { id: "global", global: !0, ref: 0, unhandleds: [], onunhandled: $, pgp: !1, env: {}, finalize: $ }, I = ve, rt = [], Ie = 0, vt = [];
+      }, Qt = !0, yt = !0, Ce = [], mt = [], Gt = Ze, ve = { id: "global", global: !0, ref: 0, unhandleds: [], onunhandled: z, pgp: !1, env: {}, finalize: z }, I = ve, rt = [], Ie = 0, vt = [];
       function E(e) {
         if (typeof this != "object") throw new TypeError("Promises must be constructed via new");
         this._listeners = [], this._lib = !1;
@@ -262,7 +262,7 @@ function uo() {
                 var a = r._lib && Ue();
                 i && typeof i.then == "function" ? n(r, function(u, l) {
                   i instanceof E ? i._then(u, l) : i.then(u, l);
-                }) : (r._state = !0, r._value = i, Fn(r)), a && ze();
+                }) : (r._state = !0, r._value = i, Fn(r)), a && $e();
               }
             }, Xt.bind(null, r));
           } catch (i) {
@@ -291,7 +291,7 @@ function uo() {
         var n, r;
         mt.push(t), e._state === null && (n = e._lib && Ue(), t = Gt(t), e._state = !1, e._value = t, r = e, Ce.some(function(o) {
           return o._value === r._value;
-        }) || Ce.push(r), Fn(e), n) && ze();
+        }) || Ce.push(r), Fn(e), n) && $e();
       }
       function Fn(e) {
         var t = e._listeners;
@@ -326,14 +326,14 @@ function uo() {
       }
       function Rr() {
         Se(ve, function() {
-          Ue() && ze();
+          Ue() && $e();
         });
       }
       function Ue() {
         var e = Qt;
         return yt = Qt = !1, e;
       }
-      function ze() {
+      function $e() {
         var e, t, n;
         do
           for (; 0 < rt.length; ) for (e = rt, rt = [], n = e.length, t = 0; t < n; ++t) {
@@ -360,7 +360,7 @@ function uo() {
           } catch (i) {
             t && t(i);
           } finally {
-            we(o, !1), r && ze();
+            we(o, !1), r && $e();
           }
         };
       }
@@ -479,14 +479,14 @@ function uo() {
         }, Se(i, e, n, r));
         return i.ref === 0 && i.finalize(), a;
       }
-      function $e() {
+      function ze() {
         return J.id || (J.id = ++Tr), ++J.awaits, J.echoes += Nn, J.id;
       }
       function ge() {
         return !!J.awaits && (--J.awaits == 0 && (J.id = 0), J.echoes = J.awaits * Nn, !0);
       }
       function xt(e) {
-        return J.echoes && e && e.constructor === je ? ($e(), e.then(function(t) {
+        return J.echoes && e && e.constructor === je ? (ze(), e.then(function(t) {
           return ge(), t;
         }, function(t) {
           return ge(), G(t);
@@ -517,7 +517,7 @@ function uo() {
       function Un(e, t, n, r) {
         return typeof e != "function" ? e : function() {
           var o = I;
-          n && $e(), we(t, !0);
+          n && ze(), we(t, !0);
           try {
             return e.apply(this, arguments);
           } finally {
@@ -528,14 +528,14 @@ function uo() {
       function en(e) {
         Promise === je && J.echoes === 0 ? wt === 0 ? e() : enqueueNativeMicroTask(e) : setTimeout(e, 0);
       }
-      ("" + Ge).indexOf("[native code]") === -1 && ($e = ge = $);
-      var G = E.reject, Ae = "￿", de = "Invalid key provided. Keys must be of type string, number, Date or Array<string | number | Date>.", zn = "String expected.", Ve = [], kt = "__dbnames", tn = "readonly", nn = "readwrite";
+      ("" + Ge).indexOf("[native code]") === -1 && (ze = ge = z);
+      var G = E.reject, Ae = "￿", de = "Invalid key provided. Keys must be of type string, number, Date or Array<string | number | Date>.", $n = "String expected.", Ve = [], kt = "__dbnames", tn = "readonly", nn = "readwrite";
       function De(e, t) {
         return e ? t ? function() {
           return e.apply(this, arguments) && t.apply(this, arguments);
         } : e : t;
       }
-      var $n = { type: 3, lower: -1 / 0, lowerOpen: !1, upper: [[]], upperOpen: !1 };
+      var zn = { type: 3, lower: -1 / 0, lowerOpen: !1, upper: [[]], upperOpen: !1 };
       function Ot(e) {
         return typeof e != "string" || /\./.test(e) ? function(t) {
           return t;
@@ -619,7 +619,7 @@ function uo() {
         this["@@propmod"] = e;
       }
       function Gn(e, t) {
-        for (var n = z(t), r = n.length, o = !1, i = 0; i < r; ++i) {
+        for (var n = $(t), r = n.length, o = !1, i = 0; i < r; ++i) {
           var a = n[i], u = t[a], l = le(e, a);
           u instanceof ot ? (ne(e, a, u.execute(l)), o = !0) : l !== u && (ne(e, a, u), o = !0);
         }
@@ -662,7 +662,7 @@ function uo() {
             if (f._state.openComplete) return G(new A.DatabaseClosed(f._state.dbOpenError));
             if (!f._state.isBeingOpened) {
               if (!f._state.autoOpen) return G(new A.DatabaseClosed());
-              f.open().catch($);
+              f.open().catch(z);
             }
             return f._state.dbReadyPromise.then(function() {
               return m(f, s, d, p);
@@ -672,7 +672,7 @@ function uo() {
             return console.trace(m), G(m);
           })), l;
         } finally {
-          u && ze();
+          u && $e();
         }
       }, V.prototype.get = function(e, t) {
         var n = this;
@@ -684,7 +684,7 @@ function uo() {
       }, V.prototype.where = function(e) {
         if (typeof e == "string") return new this.db.WhereClause(this, e);
         if (F(e)) return new this.db.WhereClause(this, "[".concat(e.join("+"), "]"));
-        var t = z(e);
+        var t = $(e);
         if (t.length === 1) return this.where(t[0]).equals(e[t[0]]);
         var n = this.schema.indexes.concat(this.schema.primKey).filter(function(u) {
           if (u.compound && t.every(function(m) {
@@ -816,7 +816,7 @@ function uo() {
       }, V.prototype.clear = function() {
         var e = this;
         return this._trans("readwrite", function(t) {
-          return e.core.mutate({ trans: t, type: "deleteRange", range: $n }).then(function(n) {
+          return e.core.mutate({ trans: t, type: "deleteRange", range: zn }).then(function(n) {
             return Pt(e, null, n);
           });
         }).then(function(t) {
@@ -917,14 +917,14 @@ function uo() {
         return t;
         function i(a, u, l) {
           var m, f;
-          if (typeof a != "object") return u = u || Ar, f = { subscribers: [], fire: l = l || $, subscribe: function(s) {
+          if (typeof a != "object") return u = u || Ar, f = { subscribers: [], fire: l = l || z, subscribe: function(s) {
             f.subscribers.indexOf(s) === -1 && (f.subscribers.push(s), f.fire = u(f.fire, s));
           }, unsubscribe: function(s) {
             f.subscribers = f.subscribers.filter(function(d) {
               return d !== s;
             }), f.fire = f.subscribers.reduce(u, l);
           } }, n[a] = t[a] = f;
-          z(m = a).forEach(function(s) {
+          $(m = a).forEach(function(s) {
             var d = m[s];
             if (F(d)) i(s, m[s][0], m[s][1]);
             else {
@@ -989,9 +989,9 @@ function uo() {
             t && !t(i, function(u) {
               return a = u;
             }, function(u) {
-              i.stop(u), a = $;
+              i.stop(u), a = z;
             }, function(u) {
-              i.fail(u), a = $;
+              i.fail(u), a = z;
             }) || o(i.value, i, function(u) {
               return a = u;
             }), a();
@@ -1154,7 +1154,7 @@ function uo() {
           function o(c, v) {
             var b = v.failures;
             d += c - v.numFailures;
-            for (var y = 0, g = z(b); y < g.length; y++) {
+            for (var y = 0, g = $(b); y < g.length; y++) {
               var w = g[y];
               s.push(b[w]);
             }
@@ -1235,7 +1235,7 @@ function uo() {
         var o, i, a, u, l, m, f, s = n.length;
         if (!n.every(function(c) {
           return typeof c == "string";
-        })) return oe(p, zn);
+        })) return oe(p, $n);
         function d(c) {
           o = c === "next" ? function(b) {
             return b.toUpperCase();
@@ -1324,7 +1324,7 @@ function uo() {
           return _e(void 0, e);
         });
       }, Z.prototype.startsWith = function(e) {
-        return typeof e != "string" ? oe(this, zn) : this.between(e, e + Ae, !0, !0);
+        return typeof e != "string" ? oe(this, $n) : this.between(e, e + Ae, !0, !0);
       }, Z.prototype.startsWithIgnoreCase = function(e) {
         return e === "" ? this.startsWith(e) : jt(this, function(t, n) {
           return t.indexOf(n[0]) === 0;
@@ -1564,7 +1564,7 @@ function uo() {
       function lt(e) {
         return e == null ? ":id" : typeof e == "string" ? e : "[".concat(e.join("+"), "]");
       }
-      function zr(e, t, l) {
+      function $r(e, t, l) {
         function r(h) {
           if (h.type === 3) return null;
           if (h.type === 4) throw new Error("Cannot convert never type to IDBKeyRange");
@@ -1706,13 +1706,13 @@ function uo() {
           throw new Error("Table '".concat(f, "' not found"));
         }, MIN_KEY: -1 / 0, MAX_KEY: ct(t), schema: a };
       }
-      function $r(e, t, n, r) {
-        return n = n.IDBKeyRange, t = zr(t, n, r), { dbcore: e.dbcore.reduce(function(o, i) {
+      function zr(e, t, n, r) {
+        return n = n.IDBKeyRange, t = $r(t, n, r), { dbcore: e.dbcore.reduce(function(o, i) {
           return i = i.create, P(P({}, o), i(o));
         }, t) };
       }
       function Ct(e, t) {
-        var n = t.db, n = $r(e._middlewares, n, e._deps, t);
+        var n = t.db, n = zr(e._middlewares, n, e._deps, t);
         e.core = n.dbcore, e.tables.forEach(function(r) {
           var o = r.name;
           e.core.schema.tables.some(function(i) {
@@ -1769,7 +1769,7 @@ function uo() {
                 }), y._cfg.contentUpgrade);
                 if (K && y._cfg.version > d) return Ct(s, h), p._memoizedTables = {}, g = An(_), j.del.forEach(function(x) {
                   g[x] = O[x];
-                }), ln(s, [s.Transaction.prototype]), It(s, [s.Transaction.prototype], z(g), g), p.schema = g, (w = $t(K)) && $e(), _ = E.follow(function() {
+                }), ln(s, [s.Transaction.prototype]), It(s, [s.Transaction.prototype], $(g), g), p.schema = g, (w = zt(K)) && ze(), _ = E.follow(function() {
                   var x;
                   (k = K(p)) && w && (x = ge.bind(null, null), k.then(x, x));
                 }), k && typeof k.then == "function" ? E.resolve(k) : _.then(function() {
@@ -1792,7 +1792,7 @@ function uo() {
             }));
           }).catch(a);
           var l, m;
-          z(o).forEach(function(f) {
+          $(o).forEach(function(f) {
             hn(n, f, o[f].primKey, o[f].indexes);
           }), Ct(e, n), E.follow(function() {
             return e.on.populate.fire(i);
@@ -1842,7 +1842,7 @@ function uo() {
         });
       }
       function or(e, t) {
-        z(e).forEach(function(n) {
+        $(e).forEach(function(n) {
           t.db.objectStoreNames.contains(n) || (ue && console.debug("Dexie: Creating missing table", n), hn(t, n, e[n].primKey, e[n].indexes));
         });
       }
@@ -1878,7 +1878,7 @@ function uo() {
       }
       Qe.prototype._createTableSchema = sn, Qe.prototype._parseIndexSyntax = ir, Qe.prototype._parseStoresSpec = function(e, t) {
         var n = this;
-        z(e).forEach(function(r) {
+        $(e).forEach(function(r) {
           if (e[r] !== null) {
             var o = n._parseIndexSyntax(e[r]), i = o.shift();
             if (!i) throw new A.Schema("Invalid schema for table " + r + ": " + e[r]);
@@ -1893,9 +1893,9 @@ function uo() {
         var t = this.db, n = (this._cfg.storesSource = this._cfg.storesSource ? X(this._cfg.storesSource, n) : n, t._versions), r = {}, o = {};
         return n.forEach(function(i) {
           X(r, i._cfg.storesSource), o = i._cfg.dbschema = {}, i._parseStoresSpec(r, o);
-        }), t._dbSchema = o, ln(t, [t._allTables, t, t.Transaction.prototype]), It(t, [t._allTables, t, t.Transaction.prototype, this._cfg.tables], z(o), o), t._storeNames = z(o), this;
+        }), t._dbSchema = o, ln(t, [t._allTables, t, t.Transaction.prototype]), It(t, [t._allTables, t, t.Transaction.prototype, this._cfg.tables], $(o), o), t._storeNames = $(o), this;
       }, Qe.prototype.upgrade = function(e) {
-        return this._cfg.contentUpgrade = Yt(this._cfg.contentUpgrade || $, e), this;
+        return this._cfg.contentUpgrade = Yt(this._cfg.contentUpgrade || z, e), this;
       };
       var Qr = Qe;
       function Qe() {
@@ -1974,7 +1974,7 @@ function uo() {
         return (t ? n ? Math.max(t.d, n.d) : t.d : n ? n.d : 0) + 1;
       }
       function Tt(e, t) {
-        return z(t).forEach(function(n) {
+        return $(t).forEach(function(n) {
           e[n] ? ht(e[n], t[n]) : e[n] = (function r(o) {
             var i, a, u = {};
             for (i in o) te(o, i) && (a = o[i], u[i] = !a || typeof a != "object" || Rn.has(a.constructor) ? a : r(a));
@@ -1999,7 +1999,7 @@ function uo() {
       }, hasKey: function(e) {
         var t = Rt(this).next(e).value;
         return t && N(t.from, e) <= 0 && 0 <= N(t.to, e);
-      } })[zt] = function() {
+      } })[$t] = function() {
         return Rt(this);
       }, re));
       var Re = {}, bn = {}, gn = !1;
@@ -2060,7 +2060,7 @@ function uo() {
               var v, b, y, g, w, k, O = e.idbdb = c.result, _ = dt(O.objectStoreNames);
               if (0 < _.length) try {
                 var j = O.transaction((w = _).length === 1 ? w[0] : w, "readonly");
-                if (t.autoSchema) k = O, g = j, (y = e).verno = k.version / 10, g = y._dbSchema = At(0, k, g), y._storeNames = dt(k.objectStoreNames, 0), It(y, [y._allTables], z(g), g);
+                if (t.autoSchema) k = O, g = j, (y = e).verno = k.version / 10, g = y._dbSchema = At(0, k, g), y._storeNames = dt(k.objectStoreNames, 0), It(y, [y._allTables], $(g), g);
                 else if (Dt(e, e._dbSchema, j), b = j, ((b = fn(At(0, (v = e).idbdb, b), v._dbSchema)).add.length || b.change.some(function(K) {
                   return K.add.length || K.change.length;
                 })) && !i) return console.warn("Dexie SchemaDiff: Schema was extended without increasing the number passed to db.version(). Dexie will add missing parts and increment native version number to workaround this."), O.close(), o = O.version + 1, i = !0, d(u());
@@ -2071,7 +2071,7 @@ function uo() {
                 t.vcFired = !0, e.on("versionchange").fire(K);
               }), O.onclose = Y(function() {
                 e.close({ disableAutoOpen: !1 });
-              }), s && (_ = e._deps, w = h, pn(k = _.indexedDB) || w === kt || dn(k, _.IDBKeyRange).put({ name: w }).catch($)), d();
+              }), s && (_ = e._deps, w = h, pn(k = _.indexedDB) || w === kt || dn(k, _.IDBKeyRange).put({ name: w }).catch(z)), d();
             }, p);
           }).catch(function(d) {
             switch (d?.name) {
@@ -2097,7 +2097,7 @@ function uo() {
             return e.on.ready.fire(e.vip);
           })).then(function d() {
             var p;
-            if (0 < t.onReadyBeingFired.length) return p = t.onReadyBeingFired.reduce(Yt, $), t.onReadyBeingFired = [], E.resolve(yn(function() {
+            if (0 < t.onReadyBeingFired.length) return p = t.onReadyBeingFired.reduce(Yt, z), t.onReadyBeingFired = [], E.resolve(yn(function() {
               return p(e.vip);
             })).then(d);
           });
@@ -2188,10 +2188,10 @@ function uo() {
         } });
       } };
       function xn(e, t, n, r) {
-        return n = n || {}, r = r || "", z(e).forEach(function(o) {
+        return n = n || {}, r = r || "", $(e).forEach(function(o) {
           var i, a, u;
           te(t, o) ? (i = e[o], a = t[o], typeof i == "object" && typeof a == "object" && i && a ? (u = Ut(i)) !== Ut(a) ? n[r + o] = t[o] : u === "Object" ? xn(i, a, n, r + o + ".") : i !== a && (n[r + o] = t[o]) : i !== a && (n[r + o] = t[o])) : n[r + o] = void 0;
-        }), z(t).forEach(function(o) {
+        }), $(t).forEach(function(o) {
           te(e, o) || (n[r + o] = t[o]);
         }), n;
       }
@@ -2205,22 +2205,22 @@ function uo() {
             var i = I.trans, a = i.table(t).hook, u = a.deleting, l = a.creating, m = a.updating;
             switch (o.type) {
               case "add":
-                if (l.fire === $) break;
+                if (l.fire === z) break;
                 return i._promise("readwrite", function() {
                   return f(o);
                 }, !0);
               case "put":
-                if (l.fire === $ && m.fire === $) break;
+                if (l.fire === z && m.fire === z) break;
                 return i._promise("readwrite", function() {
                   return f(o);
                 }, !0);
               case "delete":
-                if (u.fire === $) break;
+                if (u.fire === z) break;
                 return i._promise("readwrite", function() {
                   return f(o);
                 }, !0);
               case "deleteRange":
-                if (u.fire === $) break;
+                if (u.fire === z) break;
                 return i._promise("readwrite", function() {
                   return (function s(d, p, h) {
                     return n.query({ trans: d, values: !1, query: { index: r, range: p }, limit: h }).then(function(c) {
@@ -2345,7 +2345,7 @@ function uo() {
           }, getMany: function(h) {
             return [u, new ee().addKeys(h.keys)];
           }, count: o, query: o, openCursor: o };
-          return z(p).forEach(function(h) {
+          return $(p).forEach(function(h) {
             d[h] = function(c) {
               var v = I.subscr, b = !!v, y = fr(I, i) && hr(h, c) ? c.obsSet = {} : v;
               if (b) {
@@ -2582,7 +2582,7 @@ function uo() {
           if (t._state.openComplete) return r(new A.DatabaseClosed(t._state.dbOpenError));
           if (!t._state.isBeingOpened) {
             if (!t._state.autoOpen) return void r(new A.DatabaseClosed());
-            t.open().catch($);
+            t.open().catch(z);
           }
           t._state.dbReadyPromise.then(n, r);
         }).then(e);
@@ -2627,7 +2627,7 @@ function uo() {
             var u = t._deps.indexedDB.deleteDatabase(t.name);
             u.onsuccess = Y(function() {
               var l, m, f;
-              l = t._deps, m = t.name, pn(f = l.indexedDB) || m === kt || dn(f, l.IDBKeyRange).delete(m).catch($), o();
+              l = t._deps, m = t.name, pn(f = l.indexedDB) || m === kt || dn(f, l.IDBKeyRange).delete(m).catch(z), o();
             }), u.onerror = se(i), u.onblocked = t._fireOnBlocked;
           }
           if (n) throw new A.InvalidArgument("Invalid closeOptions argument to db.delete()");
@@ -2646,7 +2646,7 @@ function uo() {
         return this._state.autoSchema;
       }, Object.defineProperty(H.prototype, "tables", { get: function() {
         var e = this;
-        return z(this._allTables).map(function(t) {
+        return $(this._allTables).map(function(t) {
           return e._allTables[t];
         });
       }, enumerable: !1, configurable: !0 }), H.prototype.transaction = function() {
@@ -2697,7 +2697,7 @@ function uo() {
                 return m(f, s, d, null, h);
               })) : G(g);
             }
-            var v, b = $t(h), y = (b && $e(), E.follow(function() {
+            var v, b = zt(h), y = (b && ze(), E.follow(function() {
               var g;
               (v = h.call(c, c)) && (b ? (g = ge.bind(null, null), v.then(g, g)) : typeof v.next == "function" && typeof v.throw == "function" && (v = _n(v)));
             }, y));
@@ -2723,11 +2723,11 @@ function uo() {
       };
       var pe = H;
       function H(e, t) {
-        var n, r, o, i, a, u = this, l = (this._middlewares = {}, this.verno = 0, H.dependencies), l = (this._options = t = P({ addons: H.addons, autoOpen: !0, indexedDB: l.indexedDB, IDBKeyRange: l.IDBKeyRange, cache: "cloned" }, t), this._deps = { indexedDB: t.indexedDB, IDBKeyRange: t.IDBKeyRange }, t.addons), m = (this._dbSchema = {}, this._versions = [], this._storeNames = [], this._allTables = {}, this.idbdb = null, this._novip = this, { dbOpenError: null, isBeingOpened: !1, onReadyBeingFired: null, openComplete: !1, dbReadyResolve: $, dbReadyPromise: null, cancelOpen: $, openCanceller: null, autoSchema: !0, PR1398_maxLoop: 3, autoOpen: t.autoOpen }), f = (m.dbReadyPromise = new E(function(s) {
+        var n, r, o, i, a, u = this, l = (this._middlewares = {}, this.verno = 0, H.dependencies), l = (this._options = t = P({ addons: H.addons, autoOpen: !0, indexedDB: l.indexedDB, IDBKeyRange: l.IDBKeyRange, cache: "cloned" }, t), this._deps = { indexedDB: t.indexedDB, IDBKeyRange: t.IDBKeyRange }, t.addons), m = (this._dbSchema = {}, this._versions = [], this._storeNames = [], this._allTables = {}, this.idbdb = null, this._novip = this, { dbOpenError: null, isBeingOpened: !1, onReadyBeingFired: null, openComplete: !1, dbReadyResolve: z, dbReadyPromise: null, cancelOpen: z, openCanceller: null, autoSchema: !0, PR1398_maxLoop: 3, autoOpen: t.autoOpen }), f = (m.dbReadyPromise = new E(function(s) {
           m.dbReadyResolve = s;
         }), m.openCanceller = new E(function(s, d) {
           m.cancelOpen = d;
-        }), this._state = m, this.name = e, this.on = it(this, "populate", "blocked", "versionchange", "close", { ready: [Yt, $] }), this.once = function(s, d) {
+        }), this._state = m, this.name = e, this.on = it(this, "populate", "blocked", "versionchange", "close", { ready: [Yt, z] }), this.once = function(s, d) {
           var p = function() {
             for (var h = [], c = 0; c < arguments.length; c++) h[c] = arguments[c];
             u.on(s).unsubscribe(p), d.apply(u, h);
@@ -2744,7 +2744,7 @@ function uo() {
           };
         }), this.Collection = (n = this, at(Nr.prototype, function(v, c) {
           this.db = n;
-          var p = $n, h = null;
+          var p = zn, h = null;
           if (c) try {
             p = c();
           } catch (y) {
@@ -2753,7 +2753,7 @@ function uo() {
           var c = v._ctx, v = c.table, b = v.hook.reading.fire;
           this._ctx = { table: v, index: c.index, isPrimKey: !c.index || v.schema.primKey.keyPath && c.index === v.schema.primKey.name, range: p, keysOnly: !1, dir: "next", unique: "", algorithm: null, filter: null, replayFilter: null, justLimit: !0, isMatch: null, offset: 0, limit: 1 / 0, error: h, or: c.or, valueMapper: b !== Ze ? b : null };
         })), this.Table = (r = this, at(Hn.prototype, function(s, d, p) {
-          this.db = r, this._tx = p, this.name = s, this.schema = d, this.hook = r._allTables[s] ? r._allTables[s].hook : it(null, { creating: [Cr, $], reading: [jr, Ze], updating: [Sr, $], deleting: [Ir, $] });
+          this.db = r, this._tx = p, this.name = s, this.schema = d, this.hook = r._allTables[s] ? r._allTables[s].hook : it(null, { creating: [Cr, z], reading: [jr, Ze], updating: [Sr, z], deleting: [Ir, z] });
         })), this.Transaction = (o = this, at(Lr.prototype, function(s, d, p, h, c) {
           var v = this;
           s !== "readonly" && d.forEach(function(b) {
@@ -2819,7 +2819,7 @@ function uo() {
       }
       function mr(e) {
         var t, n = !1, r = new ro(function(o) {
-          var i = $t(e), a, u = !1, l = {}, m = {}, f = { get closed() {
+          var i = zt(e), a, u = !1, l = {}, m = {}, f = { get closed() {
             return u;
           }, unsubscribe: function() {
             u || (u = !0, a && a.abort(), s && xe.storagemutated.unsubscribe(p));
@@ -2832,11 +2832,11 @@ function uo() {
             !u && Mt.indexedDB && (l = {}, c = {}, a && a.abort(), a = new AbortController(), b = ((y) => {
               var g = Ue();
               try {
-                i && $e();
+                i && ze();
                 var w = be(e, y);
                 return w = i ? w.finally(ge) : w;
               } finally {
-                g && ze();
+                g && $e();
               }
             })(v = { subscr: c, signal: a.signal, requery: d, querier: e, trans: null }), Promise.resolve(b).then(function(y) {
               n = !0, t = y, u || v.signal.aborted || (l = {}, ((g) => {
@@ -2977,7 +2977,7 @@ const {
   add: Fo,
   remove: Lo,
   DexieYProvider: Uo
-} = Oe, co = "datapos-connector-dexie-js", lo = { en: "Dexie.js" }, fo = { en: "The Dexie.js..." }, ho = null, po = "database", yo = { default: { authMethodId: "none", maxConnectionCount: null } }, mo = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#000000" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', vo = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#ffffff" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', bo = null, go = ["abortOperation", "createObject", "dropObject", "findObject", "getRecord", "listNodes", "previewObject", "upsertRecords", "removeRecords", "retrieveRecords"], wo = null, _o = "alpha", xo = "connector", ko = "bidirectional", Oo = "https://dexie.org/cloud/", Po = "https://dexie.org/docs/", Eo = "https://dexie.org/", Ko = "0.2.245", jo = {
+} = Oe, co = "datapos-connector-dexie-js", lo = { en: "Dexie.js" }, fo = { en: "The Dexie.js..." }, ho = null, po = "database", yo = { default: { authMethodId: "none", maxConnectionCount: null } }, mo = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#000000" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', vo = '<svg viewBox="123.1505 158.139 852.3977 647.961" width="100%" height="100%" preserveAspectRatio="none"><g transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 0, 949.9999999999999)" fill="#ffffff" stroke="none" id="object-0"><path d="M3345 7913 c-399 -35 -977 -169 -1320 -305 -485 -192 -700 -426 -772 -838 -13 -71 -17 -155 -17 -330 0 -204 3 -250 22 -348 38 -188 112 -318 250 -439 87 -77 137 -110 251 -167 275 -138 684 -272 1116 -364 474 -102 908 -129 1019 -64 47 27 83 96 98 182 8 52 12 215 13 525 l0 450 -600 96 c-660 105 -741 120 -990 184 -314 80 -528 171 -629 269 -95 90 -98 170 -10 260 153 155 531 278 1219 396 529 91 816 168 946 254 129 86 61 191 -149 232 -68 13 -333 17 -447 7z"/><path d="M4590 4565 l0 -3126 1333 4 c1184 3 1346 5 1462 20 657 86 1058 244 1413 555 659 577 1006 1597 952 2798 -21 454 -83 812 -200 1150 -172 496 -398 846 -745 1157 -303 270 -710 451 -1162 516 -293 42 -345 44 -1720 48 l-1333 4 0 -3126z m2585 2376 c261 -23 460 -58 596 -107 328 -117 615 -379 838 -767 174 -304 270 -714 290 -1244 35 -954 -152 -1676 -553 -2138 -117 -135 -210 -207 -372 -288 -168 -84 -366 -148 -549 -177 -231 -37 -357 -42 -1187 -47 l-828 -5 0 2397 0 2397 818 -5 c462 -3 873 -10 947 -16z"/><path d="M1272 5367 c-24 -28 -34 -112 -39 -332 -8 -345 24 -688 81 -870 22 -70 33 -87 83 -137 191 -186 646 -376 1233 -513 213 -50 436 -86 905 -145 220 -27 417 -52 438 -55 l37 -5 0 417 c-1 584 -14 729 -76 803 -46 53 -72 61 -278 76 -456 34 -1023 168 -1624 385 -299 108 -460 191 -605 311 -89 74 -133 92 -155 65z"/><path d="M1272 3697 c-24 -28 -34 -112 -39 -323 -10 -385 31 -768 98 -923 100 -233 823 -533 1601 -665 130 -22 643 -91 966 -129 l112 -14 0 416 c0 441 -10 631 -36 720 -35 122 -67 139 -308 157 -100 8 -253 26 -341 40 -490 80 -1185 283 -1584 464 -105 47 -280 154 -296 181 -12 18 -127 89 -145 89 -10 0 -22 -6 -28 -13z"/></g></svg>', bo = null, go = ["abortOperation", "createObject", "dropObject", "findObject", "getRecord", "listNodes", "previewObject", "upsertRecords", "removeRecords", "retrieveRecords"], wo = null, _o = "alpha", xo = "connector", ko = "bidirectional", Oo = "https://dexie.org/cloud/", Po = "https://dexie.org/docs/", Eo = "https://dexie.org/", Ko = "0.2.246", jo = {
   id: co,
   label: lo,
   description: fo,
@@ -2996,8 +2996,8 @@ const {
   vendorDocumentationURL: Po,
   vendorHomeURL: Eo,
   version: Ko
-}, Co = "0.2.245", Io = "Encountered invalid container identifier", Ft = "Encountered invalid folder path", So = "Encountered invalid object path";
-class zo {
+}, Co = "0.2.246", Io = "Encountered invalid container identifier", Ft = "Encountered invalid folder path", So = "Encountered invalid object path";
+class $o {
   abortController;
   config;
   engineUtilities;
@@ -3020,10 +3020,10 @@ class zo {
       await T.delete(), S.version(1).stores({ [P]: R.structure || "" }), this.containers[B] = await S.open();
       return;
     }
-    const z = {};
+    const $ = {};
     for (const { name: F, schema: X } of T.tables)
-      z[F] = [X.primKey.src, ...X.indexes.map((ae) => ae.src)].join(",");
-    S.version(T.verno).stores(z), S.version(T.verno + 1).stores({ [P]: R.structure || "" }), this.containers[B] = await S.open();
+      $[F] = [X.primKey.src, ...X.indexes.map((ae) => ae.src)].join(",");
+    S.version(T.verno).stores($), S.version(T.verno + 1).stores({ [P]: R.structure || "" }), this.containers[B] = await S.open();
   }
   // Drop object
   async dropObject(R) {
@@ -3035,16 +3035,16 @@ class zo {
       await T.delete(), S.version(1).stores({}), this.containers[B] = await S.open();
       return;
     }
-    const z = {};
+    const $ = {};
     for (const { name: F, schema: X } of T.tables)
-      z[F] = [X.primKey.src, ...X.indexes.map((ae) => ae.src)].join(",");
-    S.version(T.verno).stores(z), S.version(T.verno + 1).stores({ [P]: null }), this.containers[B] = await S.open();
+      $[F] = [X.primKey.src, ...X.indexes.map((ae) => ae.src)].join(",");
+    S.version(T.verno).stores($), S.version(T.verno + 1).stores({ [P]: null }), this.containers[B] = await S.open();
   }
   // Find object
   async findObject(R) {
-    if (R.containerId == null) throw new Error(`${Io} '${R.containerId}'.`);
-    const P = (await this.establishContainer(R.containerId)).tables.find((T) => T.name === R.nodeId);
-    return console.log("connector.findObject", P), { folderPath: R.containerId, object: void 0 };
+    if (R.storeId == null) throw new Error(`${Io} '${R.storeId}'.`);
+    const P = (await this.establishContainer(R.storeId)).tables.find((T) => T.name === R.nodeId);
+    return console.log("connector.findObject", P), P ? { path: `/${R.storeId}/${R.nodeId}`, schema: void 0 } : { path: void 0, schema: void 0 };
   }
   // Get record
   async getRecord(R) {
@@ -3068,7 +3068,7 @@ class zo {
         const P = B[1];
         if (P == null) throw new Error(`${Ft} '${R.folderPath}'.`);
         const S = (await this.establishContainer(P)).tables.map(
-          (z) => ({ folderPath: R.folderPath, id: z.name, label: z.name, name: z.name, typeId: "object" })
+          ($) => ({ folderPath: R.folderPath, id: $.name, label: $.name, name: $.name, typeId: "object" })
         );
         return { cursor: void 0, isMore: !1, connectionNodeConfigs: S, totalCount: S.length };
       }
@@ -3127,6 +3127,6 @@ class zo {
   }
 }
 export {
-  zo as Connector
+  $o as Connector
 };
 //# sourceMappingURL=datapos-connector-dexie-js.es.js.map
