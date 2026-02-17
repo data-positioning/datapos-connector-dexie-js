@@ -221,8 +221,13 @@ export class Connector implements ExtendedConnectorInterface {
     async retrieveRecords(options: RetrieveRecordsOptions, chunk: (records: ParsingRecord[]) => void, complete: (result: RetrieveRecordsSummary) => void): Promise<void> {
         const { containerId, nodeId } = this.establishObjectIdentifiers(options.path);
         const container = await this.establishContainer(containerId);
-        const records = await container.table(nodeId).toArray();
-        console.log('connector.retrieveRecords', records);
+        try {
+            const records = await container.table(nodeId).toArray();
+            console.log('connector.retrieveRecords', records);
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
         // chunk(records);
     }
 
