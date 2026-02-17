@@ -31,6 +31,7 @@ import type { ParsingRecord, PreviewConfig } from '@datapos/datapos-shared/compo
 // Data
 import config from '~/config.json';
 import { version } from '~/package.json';
+import { ConnectorError } from '@datapos/datapos-shared/errors';
 
 // Extend default connector interface with Dexie container map
 interface ExtendedConnectorInterface extends ConnectorInterface {
@@ -226,7 +227,7 @@ export class Connector implements ExtendedConnectorInterface {
             console.log('connector.retrieveRecords', records);
         } catch (error) {
             console.log(error);
-            throw new Error(`Failed to retrieve records from table '${options.path}'.`, { cause: error });
+            throw new ConnectorError(`Failed to access Dexie table with path '${options.path}'.`, 'retrieveRecords', 'datapos-connector-dexie-js', { cause: error });
         }
         // chunk(records);
     }
