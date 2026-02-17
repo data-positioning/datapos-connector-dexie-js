@@ -226,7 +226,9 @@ export class Connector implements ExtendedConnectorInterface {
             const records = await container.table(nodeId).toArray();
             console.log('connector.retrieveRecords', records);
         } catch (error) {
-            throw new ConnectorError(`Failed to access Dexie table with path '${options.path}'.`, 'retrieveRecords', 'datapos-connector-dexie-js', { cause: error });
+            throw new ConnectorError(`Failed to access Dexie table with path '${options.path}'.`, 'dpu-connector-dexie-js.index.retrieveRecords', 'dpu-connector-dexie-js', {
+                cause: error
+            });
         }
         // chunk(records);
     }
