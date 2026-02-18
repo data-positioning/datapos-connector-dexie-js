@@ -6,7 +6,9 @@
 import { Dexie } from 'dexie';
 
 // DPU framework
+import { ConnectorError } from '@datapos/datapos-shared/errors';
 import type { EngineUtilities } from '@datapos/datapos-shared/engine';
+import type { PreviewConfig } from '@datapos/datapos-shared/component/dataView';
 import type { ToolConfig } from '@datapos/datapos-shared/component/tool';
 import type {
     ConnectionNodeConfig,
@@ -22,16 +24,15 @@ import type {
     ListNodesResult,
     PreviewObjectOptions,
     RemoveRecordsOptions,
+    RetrievalTypeId,
     RetrieveRecordsOptions,
     RetrieveRecordsSummary,
     UpsertRecordsOptions
 } from '@datapos/datapos-shared/component/connector';
-import type { ParsingRecord, PreviewConfig } from '@datapos/datapos-shared/component/dataView';
 
 // Data
 import config from '~/config.json';
 import { version } from '~/package.json';
-import { ConnectorError } from '@datapos/datapos-shared/errors';
 
 // Extend default connector interface with Dexie container map
 interface ExtendedConnectorInterface extends ConnectorInterface {
@@ -127,7 +128,7 @@ export class Connector implements ExtendedConnectorInterface {
         if (options.storeId == null) throw new Error(`${ERROR_INVALID_CONTAINER_ID} '${options.storeId}'.`);
         const container = await this.establishContainer(options.storeId);
         const table = container.tables.find((table) => table.name === options.nodeId);
-        // console.log('connector.findObject', table);
+        console.log('connector.findObject', table);
         return table ? { path: `/${options.storeId}/${options.nodeId}` } : { path: undefined };
     }
 
@@ -219,12 +220,16 @@ export class Connector implements ExtendedConnectorInterface {
     }
 
     // Retrieve records
-    async retrieveRecords(options: RetrieveRecordsOptions, chunk: (records: ParsingRecord[]) => void, complete: (result: RetrieveRecordsSummary) => void): Promise<void> {
+    async retrieveRecords(
+        options: RetrieveRecordsOptions,
+        chunk: (typeId: RetrievalTypeId, records: Record<string, unknown>[]) => void,
+        complete: (result: RetrieveRecordsSummary) => void
+    ): Promise<void> {
         try {
             const { containerId, nodeId } = this.establishObjectIdentifiers(options.path);
             const container = await this.establishContainer(containerId);
-            const records = await container.table(nodeId).toArray();
-            chunk(records);
+            const records = await container.table<Record<string, unknown>>(nodeId).toArray();
+            chunk('jsonRecordArray', records);
             complete({ byteCount: 0, commentLineCount: 0, emptyLineCount: 0, lineCount: 0, nonUniformRecordCount: 0, recordCount: records.length });
         } catch (error) {
             throw new ConnectorError(`Failed to access Dexie table with path '${options.path}'.`, 'dpu-connector-dexie-js.index.retrieveRecords', { cause: error });

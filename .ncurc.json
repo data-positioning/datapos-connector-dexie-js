@@ -1,1 +1,1 @@
-{ "reject": ["eslint", "eslint-plugin-unicorn"] }
+{ "reject": ["eslint", "eslint-plugin-sonarjs", "eslint-plugin-unicorn"] }

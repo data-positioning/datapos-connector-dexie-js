@@ -1,8 +1,8 @@
 import { Dexie } from 'dexie';
 import { EngineUtilities } from '@datapos/datapos-shared/engine';
+import { PreviewConfig } from '@datapos/datapos-shared/component/dataView';
 import { ToolConfig } from '@datapos/datapos-shared/component/tool';
-import { ConnectorConfig, ConnectorInterface, CreateObjectOptions, DropObjectOptions, FindObjectOptions, FindObjectResult, GetRecordOptions, GetRecordResult, ListNodesOptions, ListNodesResult, PreviewObjectOptions, RemoveRecordsOptions, RetrieveRecordsOptions, RetrieveRecordsSummary, UpsertRecordsOptions } from '@datapos/datapos-shared/component/connector';
-import { ParsingRecord, PreviewConfig } from '@datapos/datapos-shared/component/dataView';
+import { ConnectorConfig, ConnectorInterface, CreateObjectOptions, DropObjectOptions, FindObjectOptions, FindObjectResult, GetRecordOptions, GetRecordResult, ListNodesOptions, ListNodesResult, PreviewObjectOptions, RemoveRecordsOptions, RetrievalTypeId, RetrieveRecordsOptions, RetrieveRecordsSummary, UpsertRecordsOptions } from '@datapos/datapos-shared/component/connector';
 interface ExtendedConnectorInterface extends ConnectorInterface {
     containers: Record<string, Dexie>;
 }
@@ -22,7 +22,7 @@ export declare class Connector implements ExtendedConnectorInterface {
     previewObject(options: PreviewObjectOptions): Promise<PreviewConfig>;
     upsertRecords(options: UpsertRecordsOptions): Promise<void>;
     removeRecords(options: RemoveRecordsOptions): Promise<void>;
-    retrieveRecords(options: RetrieveRecordsOptions, chunk: (records: ParsingRecord[]) => void, complete: (result: RetrieveRecordsSummary) => void): Promise<void>;
+    retrieveRecords(options: RetrieveRecordsOptions, chunk: (typeId: RetrievalTypeId, records: Record<string, unknown>[]) => void, complete: (result: RetrieveRecordsSummary) => void): Promise<void>;
     private establishContainer;
     private establishObjectIdentifiers;
 }
