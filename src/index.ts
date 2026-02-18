@@ -224,7 +224,6 @@ export class Connector implements ExtendedConnectorInterface {
             const { containerId, nodeId } = this.establishObjectIdentifiers(options.path);
             const container = await this.establishContainer(containerId);
             const records = await container.table(nodeId).toArray();
-            console.log('connector.retrieveRecords', records);
             chunk(records);
             complete({ byteCount: 0, commentLineCount: 0, emptyLineCount: 0, lineCount: 0, nonUniformRecordCount: 0, recordCount: records.length });
         } catch (error) {
