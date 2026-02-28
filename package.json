@@ -1,6 +1,6 @@
 {
     "name": "datapos-connector-dexie-js",
-    "version": "0.2.266",
+    "version": "0.2.267",
     "license": "MIT",
     "author": "Jonathan Terrell <terrell.jm@gmail.com>",
     "private": false,

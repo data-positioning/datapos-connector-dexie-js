@@ -5,7 +5,7 @@
 // External dependencies
 import { Dexie } from 'dexie';
 
-// DPU framework
+// DPUse framework
 import { ConnectorError } from '@datapos/datapos-shared/errors';
 import type { EngineUtilities } from '@datapos/datapos-shared/engine';
 import type { PreviewConfig } from '@datapos/datapos-shared/component/dataView';

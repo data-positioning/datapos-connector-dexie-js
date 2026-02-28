@@ -1,4 +1,4 @@
-// DPU framework
+// DPUse framework
 import dpuse from '@dpuse/eslint-config-dpuse';
 
 // ESLint configuration
